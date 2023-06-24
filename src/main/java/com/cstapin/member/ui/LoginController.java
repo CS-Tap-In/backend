@@ -2,6 +2,7 @@ package com.cstapin.member.ui;
 
 import com.cstapin.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import static com.cstapin.member.dto.MemberRequest.LoginRequest;
 import static com.cstapin.member.dto.MemberResponse.LoginResponse;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class LoginController {

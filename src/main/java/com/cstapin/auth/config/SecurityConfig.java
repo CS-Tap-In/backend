@@ -1,14 +1,15 @@
 package com.cstapin.auth.config;
 
+import com.cstapin.auth.jwt.JwtAuthorizationFilter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -16,16 +17,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -49,14 +48,15 @@ public class SecurityConfig {
         http.httpBasic().disable();
 
         // 7. 커스텀 필터 적용 (시큐리티 필터 교환)
+        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 8. 인증, 권한 필터 설정
         http.authorizeRequests(
                 authorize -> authorize
                         .antMatchers("/api/v1/user/**")
-                        .access("hasRole('USER')")
+                        .hasAuthority("USER")
                         .antMatchers("/api/v1/admin/**")
-                        .access("hasRole('ADMIN')")
+                        .hasAuthority("ADMIN")
                         .anyRequest().permitAll()
 
         );
