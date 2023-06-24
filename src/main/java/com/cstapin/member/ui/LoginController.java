@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.cstapin.member.dto.UserRequest.LoginRequest;
-import static com.cstapin.member.dto.UserResponse.LoginResponse;
+import static com.cstapin.member.dto.MemberRequest.LoginRequest;
+import static com.cstapin.member.dto.MemberResponse.LoginResponse;
 
 @RestController
 @RequiredArgsConstructor

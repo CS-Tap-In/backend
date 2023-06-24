@@ -10,8 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.cstapin.member.dto.UserRequest.LoginRequest;
-import static com.cstapin.member.dto.UserResponse.LoginResponse;
+import static com.cstapin.member.dto.MemberRequest.LoginRequest;
+import static com.cstapin.member.dto.MemberResponse.LoginResponse;
 
 @Slf4j
 @Transactional(readOnly = true)

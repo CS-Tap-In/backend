@@ -2,7 +2,7 @@ package com.cstapin.member.dto;
 
 import lombok.Getter;
 
-public class UserResponse {
+public class MemberResponse {
 
     @Getter
     public static class LoginResponse {
