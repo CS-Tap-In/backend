@@ -1,6 +1,6 @@
 package com.cstapin.auth.ui;
 
-import com.cstapin.member.service.MemberService;
+import com.cstapin.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,12 @@ import static com.cstapin.member.dto.MemberResponse.LoginResponse;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final MemberService memberService;
+    private final AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
 
-        LoginResponse response = memberService.login(request);
+        LoginResponse response = authService.login(request);
         return ResponseEntity.ok().body(response);
     }
 }
