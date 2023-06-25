@@ -1,6 +1,8 @@
 package com.cstapin.auth.service;
 
 import com.cstapin.auth.domain.PrincipalDetails;
+import com.cstapin.auth.domain.Token;
+import com.cstapin.auth.domain.TokenRepository;
 import com.cstapin.auth.jwt.JwtProvider;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.domain.MemberRepository;
@@ -23,7 +25,8 @@ public class AuthService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
+    private final TokenMapper tokenMapper;
+    private final TokenRepository tokenRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -39,7 +42,15 @@ public class AuthService implements UserDetailsService {
                 .filter(m -> m.matchPassword(passwordEncoder, request.getPassword()))
                 .orElseThrow(() -> new AccessDeniedException("권한이 없습니다."));
 
-        return new LoginResponse(jwtProvider.createAccessToken(member), jwtProvider.createRefreshToken(member));
+        Token token = tokenMapper.mapFrom(member);
+
+        tokenRepository.findByMemberId(member.getId())
+                .ifPresentOrElse(
+                        t -> t.updateToken(token.getAccessToken(), token.getRefreshToken()),
+                        () -> tokenRepository.save(token)
+                );
+
+        return new LoginResponse(token);
     }
 
     @Transactional

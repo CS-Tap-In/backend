@@ -1,5 +1,6 @@
 package com.cstapin.member.dto;
 
+import com.cstapin.auth.domain.Token;
 import lombok.Getter;
 
 public class MemberResponse {
@@ -12,6 +13,10 @@ public class MemberResponse {
         public LoginResponse(String accessToken, String refreshToken) {
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
+        }
+
+        public LoginResponse(Token token) {
+            this(token.getAccessToken(), token.getRefreshToken());
         }
     }
 }

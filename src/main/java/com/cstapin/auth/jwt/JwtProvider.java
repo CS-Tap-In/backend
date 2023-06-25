@@ -21,10 +21,6 @@ public class JwtProvider {
         return createToken(member, jwtProperties.getAccessTokenExpirationPeriod(), jwtProperties.getAccessTokenSecretKey());
     }
 
-    public String createRefreshToken(Member member) {
-        return createToken(member, jwtProperties.getRefreshTokenExpirationPeriod(), jwtProperties.getRefreshTokenSecretKey());
-    }
-
     private String createToken(Member member, Long expiredPeriod, String secretKey) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + expiredPeriod);
