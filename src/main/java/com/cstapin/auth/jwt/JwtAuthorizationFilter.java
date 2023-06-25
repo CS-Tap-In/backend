@@ -1,6 +1,6 @@
 package com.cstapin.auth.jwt;
 
-import com.cstapin.auth.service.SecurityUserDetailsService;
+import com.cstapin.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final SecurityUserDetailsService userDetailsService;
+    private final AuthService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

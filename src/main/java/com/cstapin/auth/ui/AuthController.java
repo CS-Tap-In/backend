@@ -1,4 +1,4 @@
-package com.cstapin.member.ui;
+package com.cstapin.auth.ui;
 
 import com.cstapin.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import static com.cstapin.member.dto.MemberResponse.LoginResponse;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class LoginController {
+public class AuthController {
 
     private final MemberService memberService;
 
