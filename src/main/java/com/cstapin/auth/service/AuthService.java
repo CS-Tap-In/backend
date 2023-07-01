@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
 import static com.cstapin.member.dto.MemberRequest.*;
@@ -48,13 +47,8 @@ public class AuthService implements UserDetailsService {
                 .filter(m -> m.matchPassword(passwordEncoder, request.getPassword()))
                 .orElseThrow(() -> new AccessDeniedException("권한이 없습니다."));
 
-        Token token = tokenMapper.mapFrom(member);
-
-        tokenRepository.findByMemberId(member.getId())
-                .ifPresentOrElse(
-                        t -> t.updateToken(token.getAccessToken(), token.getRefreshToken()),
-                        () -> tokenRepository.save(token)
-                );
+        Token token = tokenRepository.save(tokenMapper.mapFrom(member));
+        member.updateToken(token.getId());
 
         return new LoginResponse(token);
     }
@@ -77,8 +71,8 @@ public class AuthService implements UserDetailsService {
         Token token = tokenRepository.findByRefreshToken(request.getRefreshToken())
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 refreshToken 입니다."));
 
-        Member member = memberRepository.findById(token.getMemberId())
-                .orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findByTokenId(token.getId())
+                .orElseThrow(() -> new IllegalStateException("만료된 token 입니다."));
 
         Token newToken = tokenMapper.mapFrom(member);
 

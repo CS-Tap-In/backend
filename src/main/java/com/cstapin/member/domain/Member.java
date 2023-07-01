@@ -1,6 +1,6 @@
 package com.cstapin.member.domain;
 
-import com.cstapin.member.dto.MemberRequest;
+import com.cstapin.auth.domain.Token;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,12 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
-import static com.cstapin.member.dto.MemberRequest.*;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
+
     public enum MemberRole {USER, ADMIN}
 
     @Id
@@ -35,6 +34,9 @@ public class Member {
     @Column(name = "role", length = 20, nullable = false)
     private MemberRole role;
 
+    @Column(name = "token_id", unique = true)
+    private Long tokenId;
+
     public boolean matchPassword(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);
     }
@@ -45,5 +47,9 @@ public class Member {
         this.password = password;
         this.nickname = nickname;
         this.role = role;
+    }
+
+    public void updateToken(Long tokenId) {
+        this.tokenId = tokenId;
     }
 }

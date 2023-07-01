@@ -14,7 +14,6 @@ public class TokenMapper {
 
     public Token mapFrom(Member member) {
         return new Token(
-                member.getId(),
                 jwtProvider.createAccessToken(member),
                 jwtProvider.createRefreshToken()
         );

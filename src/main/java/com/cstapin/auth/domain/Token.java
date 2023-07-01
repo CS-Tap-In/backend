@@ -20,9 +20,6 @@ public class Token {
     @Column(name = "token_id")
     private Long id;
 
-    @Column(name = "member_id", nullable = false)
-    private Long memberId; // one to one 관계
-
     @Column(name = "access_token", nullable = false)
     private String accessToken;
 
@@ -40,25 +37,16 @@ public class Token {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Token(Long memberId,
-                 String accessToken,
-                 String refreshToken,
-                 LocalDateTime createdAt,
-                 LocalDateTime modifiedAt) {
-        this.memberId = memberId;
+    public Token(String accessToken, String refreshToken, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
 
-    public Token(Long memberId, String accessToken, String refreshToken) {
-        this(memberId, accessToken, refreshToken, LocalDateTime.now(), LocalDateTime.now());
-    }
-
-    public void updateToken(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+    public Token(String accessToken, String refreshToken) {
+        this(accessToken, refreshToken, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public boolean isExpired(LocalDateTime now) {
