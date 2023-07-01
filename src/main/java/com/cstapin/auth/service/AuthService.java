@@ -72,10 +72,10 @@ public class AuthService implements UserDetailsService {
     public TokenResponse reissueToken(ReissueTokenRequest request) {
 
         Token token = tokenRepository.findByRefreshToken(request.getRefreshToken())
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 refreshToken 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 refreshToken 입니다."));
 
         Member member = memberRepository.findByTokenId(token.getId())
-                .orElseThrow(() -> new IllegalStateException("만료된 token 입니다."));
+                .orElseThrow(() -> new IllegalStateException("만료된 refresh token 입니다."));
 
         token.updateToken(
                 jwtReissueValidator,
