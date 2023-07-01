@@ -58,6 +58,9 @@ public class SecurityConfig {
 
         );
 
+        // 9. 권한인증에서 실패한 경우에 대한 예외 처리 핸들러
+        http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
+
         return http.build();
     }
 
