@@ -20,6 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
+    private static final String TOKEN_PREFIX = "Bearer ";
     private final JwtUtil jwtUtil;
     private final AuthService userDetailsService;
 
@@ -29,7 +30,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith(JwtProvider.TOKEN_PREFIX)) {
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             String accessToken = authorizationHeader.substring(7);
             jwtUtil.validateAccessToken(accessToken);
             String username = jwtUtil.getUsernameFromAccessToken(accessToken);

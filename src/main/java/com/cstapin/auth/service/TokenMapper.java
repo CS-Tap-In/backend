@@ -6,8 +6,6 @@ import com.cstapin.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 @RequiredArgsConstructor
 public class TokenMapper {
@@ -18,7 +16,7 @@ public class TokenMapper {
         return new Token(
                 member.getId(),
                 jwtProvider.createAccessToken(member),
-                UUID.randomUUID().toString()
+                jwtProvider.createRefreshToken()
         );
     }
 }
