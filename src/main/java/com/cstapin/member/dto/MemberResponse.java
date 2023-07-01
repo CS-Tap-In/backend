@@ -19,4 +19,19 @@ public class MemberResponse {
             this(token.getAccessToken(), token.getRefreshToken());
         }
     }
+
+    @Getter
+    public static class TokenResponse {
+        private final String accessToken;
+        private final String refreshToken;
+
+        public TokenResponse(String accessToken, String refreshToken) {
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
+        }
+
+        public TokenResponse(Token token) {
+            this(token.getAccessToken(), token.getRefreshToken());
+        }
+    }
 }

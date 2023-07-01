@@ -42,4 +42,11 @@ public class MemberRequest {
         @Size(min = 4)
         private String nickname;
     }
+
+    @Getter
+    @Setter
+    public static class ReissueTokenRequest {
+        @NotEmpty
+        private String refreshToken;
+    }
 }

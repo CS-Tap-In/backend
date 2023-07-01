@@ -25,7 +25,7 @@ public class Token {
     @Column(name = "access_token", nullable = false)
     private String accessToken;
 
-    @Column(name = "refresh_token", nullable = false)
+    @Column(name = "refresh_token", nullable = false, unique = true)
     private String refreshToken;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
@@ -39,19 +39,28 @@ public class Token {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Token(Long memberId, String accessToken, String refreshToken, LocalDateTime createdAt) {
+    public Token(Long memberId,
+                 String accessToken,
+                 String refreshToken,
+                 LocalDateTime createdAt,
+                 LocalDateTime modifiedAt) {
         this.memberId = memberId;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public Token(Long memberId, String accessToken, String refreshToken) {
-        this(memberId, accessToken, refreshToken, LocalDateTime.now());
+        this(memberId, accessToken, refreshToken, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public void updateToken(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+    }
+
+    public boolean isExpired(LocalDateTime now) {
+        return this.modifiedAt.plusDays(30).isBefore(now);
     }
 }

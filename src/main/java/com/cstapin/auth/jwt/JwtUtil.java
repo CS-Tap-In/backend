@@ -2,6 +2,7 @@ package com.cstapin.auth.jwt;
 
 import com.cstapin.auth.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -28,5 +29,15 @@ public class JwtUtil {
         if (claims.getExpiration().before(new Date())) {
             throw new IllegalStateException("토큰 만료");
         }
+    }
+
+    public boolean isExpiredToken(String accessToken) {
+        try {
+            String ac = accessToken.substring(7);
+            Jwts.parser().setSigningKey(jwtProperties.getAccessTokenSecretKey()).parse(ac);
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
+        return false;
     }
 }
