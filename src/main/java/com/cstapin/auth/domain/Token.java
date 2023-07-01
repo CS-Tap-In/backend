@@ -53,10 +53,10 @@ public class Token {
         return this.modifiedAt.plusDays(30).isBefore(now);
     }
 
-    public void updateToken(JwtReissueValidator validator, Token token, LocalDateTime time) {
+    public void updateToken(JwtReissueValidator validator, String accessToken, String refreshToken, LocalDateTime time) {
         validator.validate(this, time);
-        this.accessToken = token.getAccessToken();
-        this.refreshToken = token.getRefreshToken();
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
 }

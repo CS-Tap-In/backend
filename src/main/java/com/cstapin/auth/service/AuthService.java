@@ -3,6 +3,7 @@ package com.cstapin.auth.service;
 import com.cstapin.auth.domain.PrincipalDetails;
 import com.cstapin.auth.domain.Token;
 import com.cstapin.auth.domain.TokenRepository;
+import com.cstapin.auth.jwt.JwtProvider;
 import com.cstapin.auth.validator.JwtReissueValidator;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.domain.MemberRepository;
@@ -29,7 +30,7 @@ public class AuthService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenMapper tokenMapper;
+    private final JwtProvider jwtProvider;
     private final TokenRepository tokenRepository;
     private final JwtReissueValidator jwtReissueValidator;
 
@@ -47,7 +48,9 @@ public class AuthService implements UserDetailsService {
                 .filter(m -> m.matchPassword(passwordEncoder, request.getPassword()))
                 .orElseThrow(() -> new AccessDeniedException("권한이 없습니다."));
 
-        Token token = tokenRepository.save(tokenMapper.mapFrom(member));
+        Token token = tokenRepository.save(
+                new Token(jwtProvider.createAccessToken(member), jwtProvider.createRefreshToken())
+        );
         member.updateToken(token.getId());
 
         return new LoginResponse(token);
@@ -74,9 +77,12 @@ public class AuthService implements UserDetailsService {
         Member member = memberRepository.findByTokenId(token.getId())
                 .orElseThrow(() -> new IllegalStateException("만료된 token 입니다."));
 
-        Token newToken = tokenMapper.mapFrom(member);
-
-        token.updateToken(jwtReissueValidator, newToken, LocalDateTime.now());
+        token.updateToken(
+                jwtReissueValidator,
+                jwtProvider.createAccessToken(member),
+                jwtProvider.createRefreshToken(),
+                LocalDateTime.now()
+        );
 
         return new TokenResponse(token);
     }
