@@ -46,7 +46,7 @@ public class AuthService implements UserDetailsService {
     public LoginResponse login(LoginRequest request) {
         Member member = memberRepository.findByUsername(request.getUsername())
                 .filter(m -> m.matchPassword(passwordEncoder, request.getPassword()))
-                .orElseThrow(() -> new IllegalArgumentException("권한이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 아이디와 비밀번호 입니다."));
 
         Token token = tokenRepository.save(
                 new Token(jwtProvider.createAccessToken(member), jwtProvider.createRefreshToken())
