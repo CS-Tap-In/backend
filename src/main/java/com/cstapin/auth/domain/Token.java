@@ -1,5 +1,6 @@
 package com.cstapin.auth.domain;
 
+import com.cstapin.auth.validator.JwtReissueValidator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,4 +64,11 @@ public class Token {
     public boolean isExpired(LocalDateTime now) {
         return this.modifiedAt.plusDays(30).isBefore(now);
     }
+
+    public void updateToken(JwtReissueValidator validator, Token token, LocalDateTime time) {
+        validator.validate(this, time);
+        this.accessToken = token.getAccessToken();
+        this.refreshToken = token.getRefreshToken();
+    }
+
 }

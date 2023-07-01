@@ -33,8 +33,7 @@ public class JwtUtil {
 
     public boolean isExpiredToken(String accessToken) {
         try {
-            String ac = accessToken.substring(7);
-            Jwts.parser().setSigningKey(jwtProperties.getAccessTokenSecretKey()).parse(ac);
+            Jwts.parser().setSigningKey(jwtProperties.getAccessTokenSecretKey()).parse(accessToken);
         } catch (ExpiredJwtException e) {
             return true;
         }
