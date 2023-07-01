@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static com.cstapin.member.dto.MemberRequest.*;
-import static com.cstapin.member.dto.MemberResponse.LoginResponse;
-import static com.cstapin.member.dto.MemberResponse.TokenResponse;
+import static com.cstapin.auth.dto.MemberRequest.*;
+import static com.cstapin.auth.dto.MemberResponse.LoginResponse;
+import static com.cstapin.auth.dto.MemberResponse.TokenResponse;
 
 @Service
 @Slf4j

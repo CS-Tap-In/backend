@@ -1,21 +1,19 @@
 package com.cstapin.auth.ui;
 
-import com.cstapin.auth.jwt.JwtProvider;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.cstapin.member.dto.MemberRequest.*;
-import static com.cstapin.member.dto.MemberResponse.LoginResponse;
-import static com.cstapin.member.dto.MemberResponse.TokenResponse;
+import static com.cstapin.auth.dto.MemberRequest.*;
+import static com.cstapin.auth.dto.MemberResponse.LoginResponse;
+import static com.cstapin.auth.dto.MemberResponse.TokenResponse;
 
 @Slf4j
 @RestController

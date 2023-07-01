@@ -1,4 +1,4 @@
-package com.cstapin.member.dto;
+package com.cstapin.auth.dto;
 
 import com.cstapin.auth.domain.Token;
 import lombok.Getter;
