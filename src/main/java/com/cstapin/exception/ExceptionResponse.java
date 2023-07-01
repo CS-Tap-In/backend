@@ -13,4 +13,10 @@ public class ExceptionResponse {
         this.message = message;
     }
 
+    public String convertToJson() {
+        return "{" +
+                "\"code\": " + "\"" + code + "\",\n" +
+                "\"message\": " + "\"" + message + "\"\n" +
+                "}";
+    }
 }

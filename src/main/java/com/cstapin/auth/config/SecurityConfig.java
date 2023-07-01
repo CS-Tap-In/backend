@@ -1,6 +1,7 @@
 package com.cstapin.auth.config;
 
 import com.cstapin.auth.jwt.JwtAuthorizationFilter;
+import com.cstapin.auth.jwt.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,6 +45,7 @@ public class SecurityConfig {
 
         // 7. 커스텀 필터 적용 (시큐리티 필터 교환)
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtAuthorizationFilter.class);
 
         // 8. 인증, 권한 필터 설정
         http.authorizeRequests(
