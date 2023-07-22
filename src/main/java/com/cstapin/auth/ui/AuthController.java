@@ -36,7 +36,7 @@ public class AuthController {
     public ResponseEntity<Void> join(@Valid @RequestBody JoinRequest request) {
 
         authService.join(request, Member.MemberRole.ADMIN);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/auth/reissue")

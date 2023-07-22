@@ -18,30 +18,30 @@ public class JwtProvider {
     private final JwtProperties jwtProperties;
 
     public String createAccessToken(Member member) {
-        return createToken(member, jwtProperties.getAccessTokenExpirationPeriod(), jwtProperties.getAccessTokenSecretKey());
+        return createToken(
+                member.getUsername(),
+                member.getRole().name(),
+                jwtProperties.getAccessTokenExpirationPeriod(),
+                jwtProperties.getAccessTokenSecretKey()
+        );
     }
 
     public String createRefreshToken() {
         return UUID.randomUUID().toString();
     }
 
-    private String createToken(Member member, Long expiredPeriod, String secretKey) {
+    private String createToken(String username, String role, Long expiredPeriod, String secretKey) {
+        Claims claims = Jwts.claims().setSubject(username);
         Date now = new Date();
         Date validity = new Date(now.getTime() + expiredPeriod);
 
         return Jwts.builder()
-                .setClaims(createClaims(member))
-                .setSubject(member.getUsername())
+                .setClaims(claims)
+                .claim("role", role)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-    }
-
-    private Claims createClaims(Member member) {
-        Claims claims = Jwts.claims();
-        claims.put("id", member.getId());
-        return claims;
     }
 
 }

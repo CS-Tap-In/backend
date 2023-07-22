@@ -20,6 +20,11 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
+    public String getRoleFromAccessToken(String accessToken) {
+        Claims claims = getClaims(accessToken, jwtProperties.getAccessTokenSecretKey());
+        return claims.get("role", String.class);
+    }
+
     private Claims getClaims(String token, String secretKey) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
