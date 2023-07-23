@@ -26,6 +26,21 @@ public class AuthSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 관리자_회원가입_요청(String username, String password, String nickname, String secretKey) {
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        params.put("password", password);
+        params.put("nickname", nickname);
+        params.put("secretKey", secretKey);
+
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().post(PATH_PREFIX + "/join/admin")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 로그인_요청(String username, String password) {
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
