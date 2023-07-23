@@ -1,8 +1,9 @@
-package com.cstapin.auth.dto;
+package com.cstapin.auth.service.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -41,6 +42,8 @@ public class MemberRequest {
         @NotEmpty
         @Size(min = 4)
         private String nickname;
+
+        private String secretKey;
     }
 
     @Getter

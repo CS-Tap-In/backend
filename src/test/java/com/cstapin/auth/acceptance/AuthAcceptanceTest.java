@@ -1,14 +1,13 @@
 package com.cstapin.auth.acceptance;
 
 import com.cstapin.utils.AcceptanceTest;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 
-import static com.cstapin.auth.acceptance.AuthSteps.*;
+import static com.cstapin.auth.acceptance.AuthSteps.관리자_회원가입_요청;
+import static com.cstapin.auth.acceptance.AuthSteps.로그인_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthAcceptanceTest extends AcceptanceTest {
@@ -23,7 +22,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @DisplayName("관리자 회원가입을 한다.")
     void join() {
         //when
-        var response = 관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME);
+        var response = 관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -37,7 +36,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @DisplayName("잘못된 secret key로 회원가입을 하는 경우")
     void joinAdminUserWithIllegalSecretKey() {
         //given
-        var response = 관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
+        var response = 관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, "illegal" + joinAdminSecretKey);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -50,7 +49,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     void login() {
         //given
-        관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME);
+        관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
 
         //then
         var loginResponse = 로그인_요청(USERNAME, PASSWORD);

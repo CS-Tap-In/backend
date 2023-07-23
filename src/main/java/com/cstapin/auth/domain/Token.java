@@ -1,6 +1,5 @@
 package com.cstapin.auth.domain;
 
-import com.cstapin.auth.validator.JwtReissueValidator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

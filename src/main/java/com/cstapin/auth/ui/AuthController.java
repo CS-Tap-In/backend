@@ -5,15 +5,13 @@ import com.cstapin.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.cstapin.auth.dto.MemberRequest.*;
-import static com.cstapin.auth.dto.MemberResponse.LoginResponse;
-import static com.cstapin.auth.dto.MemberResponse.TokenResponse;
+import static com.cstapin.auth.service.dto.MemberRequest.*;
+import static com.cstapin.auth.service.dto.MemberResponse.LoginResponse;
+import static com.cstapin.auth.service.dto.MemberResponse.TokenResponse;
 
 @Slf4j
 @RestController

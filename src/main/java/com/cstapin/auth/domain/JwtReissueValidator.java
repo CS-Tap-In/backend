@@ -1,6 +1,5 @@
-package com.cstapin.auth.validator;
+package com.cstapin.auth.domain;
 
-import com.cstapin.auth.domain.Token;
 import com.cstapin.auth.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
