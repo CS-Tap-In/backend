@@ -3,6 +3,7 @@ package com.cstapin.auth.jwt;
 import com.cstapin.auth.jwt.properties.JwtProperties;
 import com.cstapin.member.domain.Member;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,20 @@ public class JwtProvider {
 
     public String createRefreshToken() {
         return UUID.randomUUID().toString();
+    }
+
+    public String getUsernameFromAccessToken(String accessToken) {
+        Claims claims = getClaims(accessToken, jwtProperties.getAccessTokenSecretKey());
+        return claims.getSubject();
+    }
+
+    public String getRoleFromAccessToken(String accessToken) {
+        Claims claims = getClaims(accessToken, jwtProperties.getAccessTokenSecretKey());
+        return claims.get("role", String.class);
+    }
+
+    private Claims getClaims(String token, String secretKey) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
     private String createToken(String username, String role, Long expiredPeriod, String secretKey) {

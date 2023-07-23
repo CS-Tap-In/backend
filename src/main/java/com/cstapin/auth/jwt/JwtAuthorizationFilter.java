@@ -1,7 +1,6 @@
 package com.cstapin.auth.jwt;
 
 import com.cstapin.auth.domain.UserPrincipal;
-import com.cstapin.auth.service.AuthService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,7 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private static final String TOKEN_PREFIX = "Bearer ";
-    private final JwtUtil jwtUtil;
-    private final AuthService userDetailsService;
+    private final JwtProvider jwtProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -39,8 +37,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 final String accessToken = authorizationHeader.substring(7);
                 UserPrincipal userPrincipal =
                         new UserPrincipal(
-                                jwtUtil.getUsernameFromAccessToken(accessToken),
-                                jwtUtil.getRoleFromAccessToken(accessToken)
+                                jwtProvider.getUsernameFromAccessToken(accessToken),
+                                jwtProvider.getRoleFromAccessToken(accessToken)
                         );
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                         = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
