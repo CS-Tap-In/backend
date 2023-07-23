@@ -1,6 +1,5 @@
 package com.cstapin.auth.domain;
 
-import com.cstapin.auth.validator.JwtReissueValidator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,6 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "token_id")
     private Long id;
 
     @Column(name = "access_token", nullable = false)
@@ -53,7 +51,7 @@ public class Token {
         return this.modifiedAt.plusDays(30).isBefore(now);
     }
 
-    public void updateToken(JwtReissueValidator validator, String accessToken, String refreshToken, LocalDateTime time) {
+    public void update(JwtReissueValidator validator, String accessToken, String refreshToken, LocalDateTime time) {
         validator.validate(this, time);
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

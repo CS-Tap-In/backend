@@ -1,6 +1,6 @@
 package com.cstapin;
 
-import com.cstapin.auth.properties.JwtProperties;
+import com.cstapin.auth.jwt.properties.JwtProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

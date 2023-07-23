@@ -1,13 +1,12 @@
 package com.cstapin.auth.jwt;
 
-import com.cstapin.auth.service.AuthService;
+import com.cstapin.auth.domain.UserPrincipal;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -25,8 +24,7 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private static final String TOKEN_PREFIX = "Bearer ";
-    private final JwtUtil jwtUtil;
-    private final AuthService userDetailsService;
+    private final JwtProvider jwtProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -37,10 +35,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             try {
                 final String accessToken = authorizationHeader.substring(7);
-                final String username = jwtUtil.getUsernameFromAccessToken(accessToken);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserPrincipal userPrincipal =
+                        new UserPrincipal(
+                                jwtProvider.getUsernameFromAccessToken(accessToken),
+                                jwtProvider.getRoleFromAccessToken(accessToken)
+                        );
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                        = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             } catch (ExpiredJwtException e) {

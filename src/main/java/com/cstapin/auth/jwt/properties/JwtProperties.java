@@ -1,4 +1,4 @@
-package com.cstapin.auth.properties;
+package com.cstapin.auth.jwt.properties;
 
 import lombok.Getter;
 import lombok.Setter;
