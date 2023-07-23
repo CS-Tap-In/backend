@@ -1,6 +1,9 @@
 package com.cstapin.auth.acceptance;
 
 import com.cstapin.utils.AcceptanceTest;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,15 +20,18 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     private static final String NICKNAME = "nickname";
     @Value("${props.join.admin}")
     private String joinAdminSecretKey;
+    private ExtractableResponse<Response> 관리자_회원가입_응답;
+
+    @BeforeEach
+    void setupFixture() {
+        관리자_회원가입_응답 = 관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
+    }
 
     @Test
     @DisplayName("관리자 회원가입을 한다.")
     void join() {
-        //when
-        var response = 관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
-
         //then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(관리자_회원가입_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     /**
@@ -50,9 +56,6 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("중복되는 username 으로 회원가입을 하는 경우")
     void joinAdminUserWithDuplicateUsername() {
-        //given
-        관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
-
         //when
         var responseWithDuplicateUsername =
                 관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
@@ -67,11 +70,36 @@ public class AuthAcceptanceTest extends AcceptanceTest {
      */
     @Test
     void login() {
-        //given
-        관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
-
         //then
         var loginResponse = 로그인_요청(USERNAME, PASSWORD);
         assertThat(loginResponse.jsonPath().getString("accessToken")).isNotEmpty();
+    }
+
+    /**
+     * Given: 관리자 회원가입을 한다.
+     * When: 다른 아이디로 로그인 요청을 한다.
+     * Then: 예외를 발생한다.
+     */
+    @Test
+    void loginWithIllegalUsername() {
+        //when
+        var response = 로그인_요청("illegal" + USERNAME, PASSWORD);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    /**
+     * Given: 관리자 회원가입을 한다.
+     * When: 다른 비밀번호로 로그인 요청을 한다.
+     * Then: 예외를 발생한다.
+     */
+    @Test
+    void loginWithIllegalPassword() {
+        //when
+        var response = 로그인_요청(USERNAME, "illegal" + PASSWORD);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }
