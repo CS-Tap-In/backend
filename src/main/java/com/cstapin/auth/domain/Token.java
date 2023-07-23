@@ -51,7 +51,7 @@ public class Token {
         return this.modifiedAt.plusDays(30).isBefore(now);
     }
 
-    public void updateToken(JwtReissueValidator validator, String accessToken, String refreshToken, LocalDateTime time) {
+    public void update(JwtReissueValidator validator, String accessToken, String refreshToken, LocalDateTime time) {
         validator.validate(this, time);
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

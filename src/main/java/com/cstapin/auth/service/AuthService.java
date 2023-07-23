@@ -72,7 +72,7 @@ public class AuthService implements UserDetailsService {
         Member member = memberRepository.findByTokenId(token.getId())
                 .orElseThrow(() -> new IllegalStateException("만료된 refresh token 입니다."));
 
-        token.updateToken(
+        token.update(
                 jwtReissueValidator,
                 jwtProvider.createAccessToken(member),
                 jwtProvider.createRefreshToken(),

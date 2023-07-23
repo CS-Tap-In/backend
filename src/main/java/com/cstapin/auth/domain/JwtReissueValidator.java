@@ -19,7 +19,6 @@ public class JwtReissueValidator {
     public void validate(Token token, LocalDateTime time) {
 
         // accessToken 이 만료된 토큰이 아니면 정상적이지 않은 호출로 간주하고 예외처리한다.
-
         if (!isExpiredToken(token.getAccessToken())) {
             log.warn("accessToken 이 만료되지 않았음에도 token 재발급 api 호출");
             throw new IllegalStateException("비정상적인 호출입니다.");
