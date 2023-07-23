@@ -44,6 +44,25 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
     /**
      * Given: 관리자 회원가입을 한다.
+     * When: 이 전과 같은 username 으로 관리자 회원가입을 한다.
+     * Then: 예외를 발생한다.
+     */
+    @Test
+    @DisplayName("중복되는 username 으로 회원가입을 하는 경우")
+    void joinAdminUserWithDuplicateUsername() {
+        //given
+        관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
+
+        //when
+        var responseWithDuplicateUsername =
+                관리자_회원가입_요청(USERNAME, PASSWORD, NICKNAME, joinAdminSecretKey);
+
+        //then
+        assertThat(responseWithDuplicateUsername.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    /**
+     * Given: 관리자 회원가입을 한다.
      * Then: 로그인을 하면 토큰이 반환된다.
      */
     @Test
