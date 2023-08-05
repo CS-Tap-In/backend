@@ -1,0 +1,28 @@
+= CS-tap-in Application API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[auth]]
+== 인증
+
+=== 일반 로그인
+
+operation::auth-login[snippets='http-request']
+|===
+| key | type | description | required
+| password | String +
+pattern: 영문, 숫자, 특수기호 조합 8~15자 이내  | 비밀번호 | O
+| username | String +
+pattern: 영문/숫자 2~20자 이내 | 아이디 | O
+|===
+
+operation::auth-login[snippets='http-response']
+|===
+| key | type | description | required
+| accessToken | String | access token | O
+| refreshToken | String | refresh token | O
+|===
