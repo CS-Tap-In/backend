@@ -26,3 +26,23 @@ operation::auth-login[snippets='http-response']
 | accessToken | String | access token | O
 | refreshToken | String | refresh token | O
 |===
+
+=== 관리자 회원가입
+
+operation::join-admin[snippets='http-request']
+|===
+| key | type | description | required
+| password | String +
+pattern: 영문, 숫자, 특수기호 조합 8~15자 이내  | 비밀번호 | O
+| username | String +
+pattern: 영문/숫자 2~20자 이내 | 아이디 | O
+|nickname | String +
+pattern: 4자 이상 | 별명 | O
+|secretKey | String | 관리자 비밀 key | O
+|===
+NOTE: secretKey는 관리자에게 문의하세요.
+
+operation::join-admin[snippets='http-response']
+|===
+| key | type | description | required
+|===

@@ -1,5 +1,6 @@
 package com.cstapin.documentation;
 
+import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.auth.service.dto.LoginResponse;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class AuthDocumentation extends Documentation {
+
+    private static final String USERNAME = "youkihoon";
+    private static final String PASSWORD = "password123@";
 
     @MockBean
     private AuthService authService;
@@ -23,6 +27,12 @@ public class AuthDocumentation extends Documentation {
         when(authService.login(any())).thenReturn(response);
 
         //then
-        로그인_요청(getRequestSpecification("auth-login"), "youkihoon", "password123@");
+        로그인_요청(getRequestSpecification("auth-login"), USERNAME, PASSWORD);
+    }
+
+    @Test
+    void joinAdmin() {
+        //then
+        AuthSteps.관리자_회원가입_요청(getRequestSpecification("join-admin"), USERNAME, PASSWORD, "62hoon99", "secret-key");
     }
 }
