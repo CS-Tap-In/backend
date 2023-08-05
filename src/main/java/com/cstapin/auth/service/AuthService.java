@@ -2,6 +2,7 @@ package com.cstapin.auth.service;
 
 import com.cstapin.auth.domain.*;
 import com.cstapin.auth.jwt.JwtProvider;
+import com.cstapin.auth.service.dto.*;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-
-import static com.cstapin.auth.service.dto.MemberRequest.*;
-import static com.cstapin.auth.service.dto.MemberResponse.LoginResponse;
-import static com.cstapin.auth.service.dto.MemberResponse.TokenResponse;
 
 @Service
 @Slf4j
@@ -55,7 +52,7 @@ public class AuthService implements UserDetailsService {
     }
 
     @Transactional
-    public void join(JoinRequest request, Member.MemberRole memberRole) {
+    public void join(JoinAdminRequest request, Member.MemberRole memberRole) {
         joinValidator.validate(request, memberRole);
         memberRepository.save(
                 Member.builder().username(request.getUsername()).nickname(request.getNickname())
