@@ -1,6 +1,8 @@
 package com.cstapin.exception;
 
+import com.cstapin.exception.notfound.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -51,6 +53,14 @@ public class ExceptionHandleController {
 
         ExceptionResponse exceptionResponse = new ExceptionResponse("FORBIDDEN", e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponse> notFoundExceptionHandle(NotFoundException e) {
+        log.warn("[ExceptionHandle]: AccessDeniedException | msg: {}", e.getMessage());
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse("BAD", e.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

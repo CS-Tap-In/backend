@@ -3,11 +3,12 @@ package com.cstapin.auth.service;
 import com.cstapin.auth.domain.*;
 import com.cstapin.auth.jwt.JwtProvider;
 import com.cstapin.auth.service.dto.*;
+import com.cstapin.auth.service.query.TokenQueryService;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.domain.MemberRepository;
+import com.cstapin.member.service.query.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,14 +27,14 @@ public class AuthService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final TokenQueryService tokenQueryService;
     private final TokenRepository tokenRepository;
     private final JwtReissueValidator jwtReissueValidator;
+    private final MemberQueryService memberQueryService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new AccessDeniedException("권한이 없습니다."));
-
+        Member member = memberQueryService.findByUsername(username);
         return new PrincipalDetails(member);
     }
 
@@ -63,12 +64,8 @@ public class AuthService implements UserDetailsService {
     @Transactional
     public TokenResponse reissueToken(ReissueTokenRequest request) {
 
-        Token token = tokenRepository.findByRefreshToken(request.getRefreshToken())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 refreshToken 입니다."));
-
-        Member member = memberRepository.findByTokenId(token.getId())
-                .orElseThrow(() -> new IllegalStateException("만료된 refresh token 입니다."));
-
+        Token token = tokenQueryService.findByRefreshToken(request.getRefreshToken());
+        Member member = memberQueryService.findByTokenId(token.getId());
         token.update(
                 jwtReissueValidator,
                 jwtProvider.createAccessToken(member),

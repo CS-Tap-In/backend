@@ -3,7 +3,6 @@ package com.cstapin.auth.jwt;
 import com.cstapin.auth.jwt.properties.JwtProperties;
 import com.cstapin.member.domain.Member;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
