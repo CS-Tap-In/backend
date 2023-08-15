@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 public class QuizRequest {
-    private Long id;
+
     private Long categoryId;
     private String title;
     private String problem;
