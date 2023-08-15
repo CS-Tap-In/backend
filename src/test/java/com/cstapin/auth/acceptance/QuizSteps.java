@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class QuizSteps {
 
-    private static final String PATH_PREFIX = "/api/v1/quizzes";
+    private static final String PATH_PREFIX_ADMIN = "/api/v1/admin/quizzes";
 
     public static ExtractableResponse<Response> 문제_생성(String accessToken, Map<String, String> params) {
         return 문제_생성(RestAssured.given().log().all().auth().oauth2(accessToken), params);
@@ -24,7 +24,7 @@ public class QuizSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
-                .when().post(PATH_PREFIX)
+                .when().post(PATH_PREFIX_ADMIN)
                 .then().log().all().extract();
     }
 
@@ -44,7 +44,7 @@ public class QuizSteps {
     public static ExtractableResponse<Response> 문제_목록_조회(RequestSpecification requestSpecification) {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(PATH_PREFIX)
+                .when().get(PATH_PREFIX_ADMIN)
                 .then().log().all().extract();
     }
 
@@ -56,7 +56,7 @@ public class QuizSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("id", id)
-                .when().get(PATH_PREFIX)
+                .when().get(PATH_PREFIX_ADMIN)
                 .then().log().all().extract();
     }
 
