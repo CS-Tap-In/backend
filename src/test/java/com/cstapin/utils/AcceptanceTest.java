@@ -11,9 +11,12 @@ public class AcceptanceTest {
 
     @Autowired
     private DatabaseCleanup databaseCleanup;
+    @Autowired
+    private DataLoader dataLoader;
 
     @BeforeEach
     public void setUp() {
         databaseCleanup.execute();
+        dataLoader.loadData();
     }
 }
