@@ -5,6 +5,7 @@ import com.cstapin.quiz.service.QuizAdminService;
 import com.cstapin.quiz.service.dto.QuizRequest;
 import com.cstapin.quiz.service.dto.QuizRequestParams;
 import com.cstapin.quiz.service.dto.QuizResponse;
+import com.cstapin.quiz.service.dto.QuizzesResponse;
 import com.cstapin.support.service.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +34,8 @@ public class QuizAdminController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<QuizResponse>> findQuizzes(@Valid QuizRequestParams requestParams) {
-        Page<QuizResponse> quizzes = quizAdminService.findQuizzes(requestParams);
+    public ResponseEntity<PageResponse<QuizzesResponse>> findQuizzes(@Valid QuizRequestParams requestParams) {
+        Page<QuizzesResponse> quizzes = quizAdminService.findQuizzes(requestParams);
 
         return ResponseEntity.ok().body(new PageResponse<>(quizzes));
     }

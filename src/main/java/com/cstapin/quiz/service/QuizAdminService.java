@@ -7,6 +7,7 @@ import com.cstapin.quiz.domain.QuizRepository;
 import com.cstapin.quiz.service.dto.QuizRequest;
 import com.cstapin.quiz.service.dto.QuizRequestParams;
 import com.cstapin.quiz.service.dto.QuizResponse;
+import com.cstapin.quiz.service.dto.QuizzesResponse;
 import com.cstapin.quiz.service.query.QuizQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ public class QuizAdminService {
         return QuizResponse.from(quiz);
     }
 
-    public Page<QuizResponse> findQuizzes(QuizRequestParams requestParams) {
+    public Page<QuizzesResponse> findQuizzes(QuizRequestParams requestParams) {
         return quizQueryService.findQuizzes(requestParams);
     }
 

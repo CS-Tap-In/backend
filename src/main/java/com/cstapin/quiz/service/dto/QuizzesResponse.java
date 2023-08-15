@@ -17,7 +17,7 @@ public class QuizzesResponse {
     private String problem;
     private LocalDateTime createdAt;
 
-    public static QuizzesResponse of(Quiz quiz) {
+    public static QuizzesResponse from(Quiz quiz) {
         return QuizzesResponse.builder()
                 .id(quiz.getId())
                 .title(quiz.getTitle())
