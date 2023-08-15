@@ -1,7 +1,5 @@
 package com.cstapin.auth.acceptance;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -16,11 +14,11 @@ public class QuizSteps {
 
     private static final String PATH_PREFIX_ADMIN = "/api/v1/admin/quizzes";
 
-    public static ExtractableResponse<Response> 문제_생성(String accessToken, Map<String, String> params) {
+    public static ExtractableResponse<Response> 문제_생성(String accessToken, Map<String, Object> params) {
         return 문제_생성(RestAssured.given().log().all().auth().oauth2(accessToken), params);
     }
 
-    public static ExtractableResponse<Response> 문제_생성(RequestSpecification requestSpecification, Map<String, String> params) {
+    public static ExtractableResponse<Response> 문제_생성(RequestSpecification requestSpecification, Map<String, Object> params) {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
@@ -28,12 +26,12 @@ public class QuizSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> 문제_생성_요청값(Long categoryId, String title, String problem, List<String> answers) {
-        Map<String, String> params = new HashMap<>();
+    public static Map<String, Object> 문제_생성_요청값(Long categoryId, String title, String problem, List<String> answers) {
+        Map<String, Object> params = new HashMap<>();
         params.put("categoryId", categoryId + "");
         params.put("title", title);
         params.put("problem", problem);
-        params.put("answer", listToJsonString(answers));
+        params.put("answer", answers);
         return params;
     }
 
@@ -58,14 +56,5 @@ public class QuizSteps {
                 .pathParam("id", id)
                 .when().get(PATH_PREFIX_ADMIN)
                 .then().log().all().extract();
-    }
-
-    private static String listToJsonString(List<String> answers) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(answers);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Json 문자열 파싱이 실패하였습니다.");
-        }
-    }
+     }
 }
