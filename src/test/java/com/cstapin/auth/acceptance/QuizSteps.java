@@ -54,7 +54,7 @@ public class QuizSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("id", id)
-                .when().get(PATH_PREFIX_ADMIN)
+                .when().get(PATH_PREFIX_ADMIN + "/{id}")
                 .then().log().all().extract();
      }
 }
