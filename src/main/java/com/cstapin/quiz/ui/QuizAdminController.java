@@ -2,10 +2,7 @@ package com.cstapin.quiz.ui;
 
 import com.cstapin.auth.domain.UserPrincipal;
 import com.cstapin.quiz.service.QuizAdminService;
-import com.cstapin.quiz.service.dto.QuizRequest;
-import com.cstapin.quiz.service.dto.QuizRequestParams;
-import com.cstapin.quiz.service.dto.QuizResponse;
-import com.cstapin.quiz.service.dto.QuizzesResponse;
+import com.cstapin.quiz.service.dto.*;
 import com.cstapin.support.service.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -45,6 +43,13 @@ public class QuizAdminController {
         QuizResponse quiz = quizAdminService.findQuiz(quizId);
 
         return ResponseEntity.ok().body(quiz);
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<QuizCategoryResponse>> findQuizzes() {
+        List<QuizCategoryResponse> quizCategories = quizAdminService.findQuizCategory();
+
+        return ResponseEntity.ok().body(quizCategories);
     }
 
 }

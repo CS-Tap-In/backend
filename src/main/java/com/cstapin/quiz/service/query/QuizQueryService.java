@@ -4,7 +4,6 @@ import com.cstapin.exception.notfound.QuizNotFoundException;
 import com.cstapin.quiz.domain.Quiz;
 import com.cstapin.quiz.domain.QuizRepository;
 import com.cstapin.quiz.service.dto.QuizRequestParams;
-import com.cstapin.quiz.service.dto.QuizResponse;
 import com.cstapin.quiz.service.dto.QuizzesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
