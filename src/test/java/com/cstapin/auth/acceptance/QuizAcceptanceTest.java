@@ -54,7 +54,7 @@ public class QuizAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인.jsonPath().getString("accessToken");
 
         //when
-        Map<String, String> 운영체제 = 문제_카테고리_요청값("운영체제");
+        Map<String, String> 운영체제 = 문제_카테고리_요청값("운영체제", "PRIVATE");
         문제_카테고리_생성(accessToken, 운영체제);
 
         //then
