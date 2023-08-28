@@ -1,4 +1,4 @@
-package com.cstapin.member.domain;
+package com.cstapin.quiz.domain;
 
 public enum QuizStatus {
     PUBLIC, PRIVATE, UNAPPROVED, DELETED

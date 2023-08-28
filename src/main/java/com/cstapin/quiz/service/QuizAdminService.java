@@ -3,6 +3,7 @@ package com.cstapin.quiz.service;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.service.query.MemberQueryService;
 import com.cstapin.quiz.domain.Quiz;
+import com.cstapin.quiz.domain.QuizCategory;
 import com.cstapin.quiz.domain.QuizCategoryRepository;
 import com.cstapin.quiz.domain.QuizRepository;
 import com.cstapin.quiz.service.dto.*;
@@ -44,5 +45,10 @@ public class QuizAdminService {
         return quizCategoryRepository.findAll().stream()
                 .map(quizCategory -> new QuizCategoryResponse(quizCategory.getTitle(), quizCategory.getStatus()))
                 .collect(Collectors.toList());
+    }
+
+    public QuizCategoryResponse createQuizCategory(QuizCategoryRequest request) {
+        QuizCategory quizCategory = quizCategoryRepository.save(request.toQuizCategory());
+        return new QuizCategoryResponse(quizCategory.getTitle(), quizCategory.getStatus());
     }
 }

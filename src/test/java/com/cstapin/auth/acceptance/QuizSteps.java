@@ -66,7 +66,7 @@ public class QuizSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
-                .when().post(PATH_PREFIX_ADMIN)
+                .when().post(PATH_PREFIX_ADMIN + "/categories")
                 .then().log().all().extract();
     }
 

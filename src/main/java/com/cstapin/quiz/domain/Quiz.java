@@ -1,7 +1,6 @@
 package com.cstapin.quiz.domain;
 
 import com.cstapin.member.domain.Member;
-import com.cstapin.member.domain.QuizStatus;
 import com.cstapin.support.domain.AbstractEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "quiz")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Quiz extends AbstractEntity {

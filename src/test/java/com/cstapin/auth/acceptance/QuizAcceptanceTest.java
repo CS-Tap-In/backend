@@ -58,7 +58,7 @@ public class QuizAcceptanceTest extends AcceptanceTest {
         문제_카테고리_생성(accessToken, 운영체제);
 
         //then
-        assertThat(문제_카테고리_목록_조회(accessToken).jsonPath().getList("quizCategories")).containsExactly("운영체제");
+        assertThat(문제_카테고리_목록_조회(accessToken).jsonPath().getString("[0].title")).isEqualTo("운영체제");
     }
 
     /**

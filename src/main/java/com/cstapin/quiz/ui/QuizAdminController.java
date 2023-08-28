@@ -52,4 +52,11 @@ public class QuizAdminController {
         return ResponseEntity.ok().body(quizCategories);
     }
 
+    @PostMapping("/categories")
+    public ResponseEntity<QuizCategoryResponse> createQuizzes(@Valid @RequestBody QuizCategoryRequest request) {
+        QuizCategoryResponse quizCategory = quizAdminService.createQuizCategory(request);
+
+        return ResponseEntity.ok().body(quizCategory);
+    }
+
 }

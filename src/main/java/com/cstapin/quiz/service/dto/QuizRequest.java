@@ -1,7 +1,7 @@
 package com.cstapin.quiz.service.dto;
 
 import com.cstapin.member.domain.Member;
-import com.cstapin.member.domain.QuizStatus;
+import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.quiz.domain.Quiz;
 import lombok.Getter;
 

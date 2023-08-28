@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Table(name = "token")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
 public class Token {
