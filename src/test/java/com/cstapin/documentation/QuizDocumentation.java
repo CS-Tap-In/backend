@@ -60,4 +60,18 @@ public class QuizDocumentation extends Documentation {
         Map<String, String> request = 문제_카테고리_요청값("데이터베이스", QuizCategoryStatus.PUBLIC.name());
         문제_카테고리_생성(getRequestSpecification("admin-create-quiz-category"), request);
     }
+
+    @Test
+    void findQuizCategories() {
+        //given
+        List<QuizCategoryResponse> quizCategoryResponses = List.of(
+                new QuizCategoryResponse("운영체제", QuizCategoryStatus.PUBLIC),
+                new QuizCategoryResponse("데이터베이스", QuizCategoryStatus.PRIVATE));
+
+        //when
+        when(quizAdminService.findQuizCategory()).thenReturn(quizCategoryResponses);
+
+        //then
+        문제_카테고리_목록_조회(getRequestSpecification("admin-find-quiz-categories"));
+    }
 }
