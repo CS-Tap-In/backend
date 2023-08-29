@@ -23,6 +23,26 @@ public class QuizResponse {
     private List<String> answer;
     private LocalDateTime createdAt;
 
+    public QuizResponse(Long authorId,
+                        String authorName,
+                        Long categoryId,
+                        String categoryTitle,
+                        Long id,
+                        String title,
+                        String problem,
+                        List<String> answer,
+                        LocalDateTime createdAt) {
+        this.authorId = authorId;
+        this.authorName = authorName;
+        this.categoryId = categoryId;
+        this.categoryTitle = categoryTitle;
+        this.id = id;
+        this.title = title;
+        this.problem = problem;
+        this.answer = answer;
+        this.createdAt = createdAt;
+    }
+
     public static QuizResponse from(Quiz quiz) {
         return QuizResponse.builder()
                 .authorId(quiz.getAuthor().getId())
