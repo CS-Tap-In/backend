@@ -1,6 +1,7 @@
 package com.cstapin.quiz.service.dto;
 
 import com.cstapin.member.domain.Member;
+import com.cstapin.quiz.domain.QuizCategory;
 import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.quiz.domain.Quiz;
 import lombok.Getter;
@@ -15,8 +16,9 @@ public class QuizRequest {
     private String problem;
     private List<String> answer;
 
-    public Quiz toQuiz(Member author) {
+    public Quiz toQuiz(Member author, QuizCategory quizCategory) {
         return Quiz.builder()
+                .quizCategory(quizCategory)
                 .author(author)
                 .title(title)
                 .problem(problem)

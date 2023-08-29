@@ -16,6 +16,10 @@ import javax.persistence.*;
 public class Quiz extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "quiz_category_id", nullable = false)
+    private QuizCategory quizCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private Member author;
 
@@ -30,7 +34,8 @@ public class Quiz extends AbstractEntity {
     private QuizStatus status;
 
     @Builder
-    public Quiz(Member author, String title, String problem, String answer, QuizStatus status) {
+    public Quiz(QuizCategory quizCategory, Member author, String title, String problem, String answer, QuizStatus status) {
+        this.quizCategory = quizCategory;
         this.author = author;
         this.title = title;
         this.problem = problem;
