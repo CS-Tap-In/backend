@@ -1,6 +1,8 @@
 package com.cstapin.documentation;
 
+import com.cstapin.quiz.domain.QuizCategoryStatus;
 import com.cstapin.quiz.service.QuizAdminService;
+import com.cstapin.quiz.service.dto.QuizCategoryResponse;
 import com.cstapin.quiz.service.dto.QuizResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -44,5 +46,18 @@ public class QuizDocumentation extends Documentation {
 
         //then
         문제_상세_조회(getRequestSpecification("admin-find-quiz-details"), 1L);
+    }
+
+    @Test
+    void createQuizCategory() {
+        //given
+        QuizCategoryResponse response = new QuizCategoryResponse("데이터베이스", QuizCategoryStatus.PUBLIC);
+
+        //when
+        when(quizAdminService.createQuizCategory(any())).thenReturn(response);
+
+        //then
+        Map<String, String> request = 문제_카테고리_요청값("데이터베이스", QuizCategoryStatus.PUBLIC.name());
+        문제_카테고리_생성(getRequestSpecification("admin-create-quiz-category"), request);
     }
 }
