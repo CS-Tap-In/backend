@@ -25,6 +25,7 @@ public class QuizAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인.jsonPath().getString("accessToken");
 
         //when
+        문제_카테고리_생성(accessToken, 문제_카테고리_요청값("데이터베이스", "PUBLIC"));
         Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
         ExtractableResponse<Response> 문제_생성_반환값 = 문제_생성(accessToken, 문제_생성_요청값);
 
