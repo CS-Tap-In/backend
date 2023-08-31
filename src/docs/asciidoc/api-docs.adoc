@@ -46,3 +46,22 @@ operation::join-admin[snippets='http-response']
 |===
 | key | type | description | required
 |===
+
+=== [관리자] 퀴즈 생성
+
+operation::admin-create-quiz[snippets='http-request']
+|===
+| key | type | description | required
+| problem | String | 문제 +
+정답이 들어가는 부분은 "\+++"로 대체한다.| O
+| answer | String +
+pattern: 영문/숫자 2~20자 이내 | 아이디 | O
+| title | String +
+pattern: 4자 이상 | 별명 | O
+| categoryId | String | 관리자 비밀 key | O
+|===
+
+operation::admin-create-quiz[snippets='http-response']
+|===
+| key | type | description | required
+|===
