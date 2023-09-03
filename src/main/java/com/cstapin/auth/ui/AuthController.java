@@ -1,17 +1,17 @@
 package com.cstapin.auth.ui;
 
 import com.cstapin.auth.service.AuthService;
+import com.cstapin.auth.service.dto.*;
 import com.cstapin.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
-import static com.cstapin.auth.service.dto.MemberRequest.*;
-import static com.cstapin.auth.service.dto.MemberResponse.LoginResponse;
-import static com.cstapin.auth.service.dto.MemberResponse.TokenResponse;
 
 @Slf4j
 @RestController
@@ -29,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/join/admin")
-    public ResponseEntity<Void> join(@Valid @RequestBody JoinRequest request) {
+    public ResponseEntity<Void> join(@Valid @RequestBody JoinAdminRequest request) {
 
         authService.join(request, Member.MemberRole.ADMIN);
         return ResponseEntity.ok().build();
@@ -42,9 +42,4 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/api/v1/admin/test")
-    public ResponseEntity<TokenResponse> test() {
-
-        return null;
-    }
 }

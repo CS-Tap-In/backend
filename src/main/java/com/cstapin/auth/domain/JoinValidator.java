@@ -1,6 +1,6 @@
 package com.cstapin.auth.domain;
 
-import com.cstapin.auth.service.dto.MemberRequest;
+import com.cstapin.auth.service.dto.JoinAdminRequest;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class JoinValidator {
     @Value("${props.join.admin}")
     private String joinAdminSecretKey;
 
-    public void validate(MemberRequest.JoinRequest request, Member.MemberRole memberRole) {
+    public void validate(JoinAdminRequest request, Member.MemberRole memberRole) {
         if (memberRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new IllegalArgumentException(DUPLICATE_USERNAME);
         }

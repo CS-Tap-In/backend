@@ -1,5 +1,6 @@
 package com.cstapin.utils;
 
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,9 +12,13 @@ public class AcceptanceTest {
 
     @Autowired
     private DatabaseCleanup databaseCleanup;
+    @Autowired
+    private DataLoader dataLoader;
 
     @BeforeEach
     public void setUp() {
+        RestAssured.port = RestAssured.DEFAULT_PORT;
         databaseCleanup.execute();
+        dataLoader.loadData();
     }
 }
