@@ -6,14 +6,25 @@ import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.quiz.domain.Quiz;
 import lombok.Getter;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
 public class QuizRequest {
 
+    @NotNull
     private Long categoryId;
+    @NotBlank
+    @Size(max = 50)
     private String title;
+    @Size(max = 500)
+    @NotBlank
     private String problem;
+    @NotNull
+    @Size(min = 1)
     private List<String> answer;
 
     public QuizRequest() {

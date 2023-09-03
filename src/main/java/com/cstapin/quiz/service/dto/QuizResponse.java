@@ -1,6 +1,7 @@
 package com.cstapin.quiz.service.dto;
 
 import com.cstapin.quiz.domain.Quiz;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,6 +22,7 @@ public class QuizResponse {
     private String title;
     private String problem;
     private List<String> answer;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public QuizResponse(Long authorId,

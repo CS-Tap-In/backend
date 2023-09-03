@@ -73,7 +73,7 @@ public class QuizDocumentation extends Documentation {
         when(quizAdminService.createQuizCategory(any())).thenReturn(response);
 
         //then
-        Map<String, String> request = 문제_카테고리_요청값("데이터베이스", QuizCategoryStatus.PUBLIC.name());
+        Map<String, String> request = 문제_카테고리_요청값("데이터베이스");
         문제_카테고리_생성(getRequestSpecification("admin-create-quiz-category").auth().oauth2(adminAccessToken), request);
     }
 

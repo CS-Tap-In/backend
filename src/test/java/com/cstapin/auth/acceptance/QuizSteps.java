@@ -70,10 +70,9 @@ public class QuizSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> 문제_카테고리_요청값(String title, String status) {
+    public static Map<String, String> 문제_카테고리_요청값(String title) {
         Map<String, String> params = new HashMap<>();
         params.put("title", title);
-        params.put("status", status);
         return params;
     }
 

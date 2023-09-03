@@ -20,8 +20,8 @@ public class QuizCategory extends AbstractEntity {
     @Column(nullable = false, length = 20)
     private QuizCategoryStatus status;
 
-    public QuizCategory(String title, QuizCategoryStatus status) {
+    public QuizCategory(String title) {
         this.title = title;
-        this.status = status;
+        this.status = QuizCategoryStatus.PUBLIC;
     }
 }

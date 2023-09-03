@@ -15,6 +15,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Quiz extends AbstractEntity {
 
+    private static final int ANSWER_LENGTH = 500;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_category_id", nullable = false)
     private QuizCategory quizCategory;
@@ -23,10 +25,13 @@ public class Quiz extends AbstractEntity {
     @JoinColumn(name = "author_id", nullable = false)
     private Member author;
 
+    @Column(nullable = false, length = 50)
     private String title;
 
+    @Column(nullable = false, length = 500)
     private String problem;
 
+    @Column(nullable = false, length = 500)
     private String answer;
 
     @Enumerated(EnumType.STRING)
@@ -35,6 +40,9 @@ public class Quiz extends AbstractEntity {
 
     @Builder
     public Quiz(QuizCategory quizCategory, Member author, String title, String problem, String answer, QuizStatus status) {
+        if (String.join(",", answer).length() > ANSWER_LENGTH) {
+            throw new IllegalArgumentException("답의 길이가 너무 깁니다.");
+        }
         this.quizCategory = quizCategory;
         this.author = author;
         this.title = title;
