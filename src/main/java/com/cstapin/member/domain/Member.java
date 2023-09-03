@@ -1,5 +1,6 @@
 package com.cstapin.member.domain;
 
+import com.cstapin.support.domain.AbstractEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,13 +13,9 @@ import javax.persistence.*;
 @Table(name = "member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends AbstractEntity {
 
     public enum MemberRole {USER, ADMIN}
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(name = "username", length = 50, nullable = false, unique = true)
     private String username;

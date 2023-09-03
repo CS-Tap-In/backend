@@ -1,6 +1,6 @@
 package com.cstapin.quiz.service.dto;
 
-import com.cstapin.quiz.domain.Quiz;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,12 +17,13 @@ public class QuizzesResponse {
     private String problem;
     private LocalDateTime createdAt;
 
-    public static QuizzesResponse from(Quiz quiz) {
-        return QuizzesResponse.builder()
-                .id(quiz.getId())
-                .title(quiz.getTitle())
-                .problem(quiz.getProblem())
-                .createdAt(quiz.getCreatedAt())
-                .build();
+    @QueryProjection
+    public QuizzesResponse(Long categoryId, String categoryTitle, Long id, String title, String problem, LocalDateTime createdAt) {
+        this.categoryId = categoryId;
+        this.categoryTitle = categoryTitle;
+        this.id = id;
+        this.title = title;
+        this.problem = problem;
+        this.createdAt = createdAt;
     }
 }
