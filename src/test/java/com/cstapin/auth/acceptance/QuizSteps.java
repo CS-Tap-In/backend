@@ -35,15 +35,24 @@ public class QuizSteps {
         return params;
     }
 
-    public static ExtractableResponse<Response> 문제_목록_조회(String accessToken) {
-        return 문제_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken));
+    public static ExtractableResponse<Response> 문제_목록_조회(String accessToken, Map<String, String> params) {
+        return 문제_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken), params);
     }
 
-    public static ExtractableResponse<Response> 문제_목록_조회(RequestSpecification requestSpecification) {
+    public static ExtractableResponse<Response> 문제_목록_조회(RequestSpecification requestSpecification, Map<String, String> params) {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .queryParams(params)
                 .when().get(PATH_PREFIX_ADMIN)
                 .then().log().all().extract();
+    }
+
+    public static Map<String, String> 문제_목록_조회_요청값(String searchType, String keyword, Long categoryId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("st", searchType);
+        params.put("keyword", keyword);
+        params.put("category", categoryId + "");
+        return params;
     }
 
     public static ExtractableResponse<Response> 문제_상세_조회(String accessToken, Long id) {
