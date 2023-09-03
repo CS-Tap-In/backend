@@ -52,6 +52,8 @@ public class QuizSteps {
         params.put("st", searchType);
         params.put("keyword", keyword);
         params.put("category", categoryId + "");
+        params.put("page", 1 + "");
+        params.put("size", 10 + "");
         return params;
     }
 
