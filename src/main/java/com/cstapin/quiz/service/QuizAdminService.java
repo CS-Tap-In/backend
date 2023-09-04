@@ -49,6 +49,7 @@ public class QuizAdminService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public QuizCategoryResponse createQuizCategory(QuizCategoryRequest request) {
         QuizCategory quizCategory = quizCategoryRepository.save(request.toQuizCategory());
         return new QuizCategoryResponse(quizCategory.getTitle(), quizCategory.getStatus());

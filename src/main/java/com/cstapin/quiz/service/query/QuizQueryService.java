@@ -20,7 +20,6 @@ public class QuizQueryService {
     }
 
     public Page<QuizzesResponse> findQuizzes(QuizRequestParams requestParams) {
-        return quizRepository.findAll(requestParams.getPageable())
-                .map(QuizzesResponse::from);
+        return quizRepository.findQuizzes(requestParams);
     }
 }

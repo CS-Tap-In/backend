@@ -40,7 +40,7 @@ pattern: 영문, 숫자, 특수기호 조합 8~15자 이내  | 비밀번호 | O
 | username | String +
 pattern: 영문/숫자 2~20자 이내 | 아이디 | O
 |nickname | String +
-pattern: 4자 이상 | 별명 | O
+pattern: 3자 이상 | 별명 | O
 |secretKey | String | 관리자 비밀 key | O
 |===
 NOTE: secretKey는 관리자에게 문의하세요.
@@ -141,4 +141,41 @@ Response body - array
 PRIVATE: 숨김 | 카테고리 상태 +
 숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
 이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
+|===
+
+operation::admin-find-quizzes[snippets='http-request']
+Query params
+|===
+| key | type | description | required
+| st | author: 작성자 +
+title: 제목 | 검색 조건 +
+searchType | X
+| keyword | String | 검색어 | X
+| page | int | 페이지 +
+1페이지 부터 시작합니다. +
+기본값: 1 | X
+| size | int | 사이즈 +
+기본값: 10 | X
+|===
+
+operation::admin-find-quizzes[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| content | List<QuizzesResponse> | 내용 | O
+| size | int | 크기 | O
+| page | long | 페이지 | O
+| totalElements | long | 총 개수 | O
+|===
+
+content
+|===
+| key | type | description | required
+| categoryId | Long | 카테고리 id (pk) | O
+| categoryTitle | String | 카테고리 명 | O
+| id | Long | 퀴즈 id (pk) | O
+| title | String | 퀴즈 제목 | O
+| problem | String | 퀴즈 문제 | O
+| createdAt | LocalDateTime | 퀴즈 생성일 +
+pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===

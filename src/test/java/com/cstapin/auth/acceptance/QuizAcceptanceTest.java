@@ -30,19 +30,9 @@ public class QuizAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 문제_생성_반환값 = 문제_생성(accessToken, 문제_생성_요청값);
 
         //then
-        assertThat(문제_목록_조회(accessToken).jsonPath().getList("content.title")).containsExactly("인덱스");
+        assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "admin", 1L)).jsonPath().getList("content.title")).containsExactly("인덱스");
         assertThat(문제_상세_조회(accessToken, 문제_생성_반환값.jsonPath().getLong("id")).jsonPath().getString("title")).isEqualTo("인덱스");
     }
-
-    /**
-     * 08-15
-     * 앞으로 해야 하는 것
-     * 1. 퀴즈 카테고리 인수 테스트 작성
-     * 2. 퀴즈 카테고리 기능 구현
-     * 3. 퀴즈 카테고리 문서 테스트 작성
-     * 4. QuizRequest Validation Annotation 추가
-     * 5. QuizRequestParams 에 검색 조건 추가 및 기능 구현
-     */
 
     /**
      * When: 카테고리를 등록한다.

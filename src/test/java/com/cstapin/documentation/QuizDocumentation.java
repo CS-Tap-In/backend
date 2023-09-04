@@ -4,12 +4,15 @@ import com.cstapin.quiz.domain.QuizCategoryStatus;
 import com.cstapin.quiz.service.QuizAdminService;
 import com.cstapin.quiz.service.dto.QuizCategoryResponse;
 import com.cstapin.quiz.service.dto.QuizResponse;
+import com.cstapin.quiz.service.dto.QuizzesResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,6 +65,21 @@ public class QuizDocumentation extends Documentation {
 
         //then
         문제_상세_조회(getRequestSpecification("admin-find-quiz-details").auth().oauth2(adminAccessToken), 1L);
+    }
+
+    @Test
+    void findQuizzes() {
+        //given
+        QuizzesResponse response = QuizzesResponse.builder().categoryId(1L).categoryTitle("데이터베이스").id(1L)
+                .title("인덱스").problem("+++은 기본 인덱스이다.").createdAt(LocalDateTime.now()).build();
+
+        Map<String, String> params = 문제_목록_조회_요청값("author", "유기훈", 1L);
+
+        //when
+        when(quizAdminService.findQuizzes(any())).thenReturn(new PageImpl<>(List.of(response), PageRequest.of(0, 10), 1L));
+
+        //then
+        문제_목록_조회(getRequestSpecification("admin-find-quizzes").auth().oauth2(adminAccessToken), params);
     }
 
     @Test

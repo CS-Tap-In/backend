@@ -1,12 +1,11 @@
 package com.cstapin.quiz.service.dto;
 
 import com.cstapin.member.domain.Member;
+import com.cstapin.quiz.domain.Quiz;
 import com.cstapin.quiz.domain.QuizCategory;
 import com.cstapin.quiz.domain.QuizStatus;
-import com.cstapin.quiz.domain.Quiz;
 import lombok.Getter;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
