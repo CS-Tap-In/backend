@@ -50,6 +50,42 @@ operation::join-admin[snippets='http-response']
 [[quiz]]
 == 퀴즈
 
+=== [관리자] 퀴즈 카테고리 생성
+
+operation::admin-create-quiz-category[snippets='http-request']
+Request body
+|===
+| key | type | description | required
+| title | String | 카테고리 명 +
+pattern: 20자 이하 | O
+|===
+
+operation::admin-create-quiz-category[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| title | String | 카테고리 명 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 | 카테고리 상태 +
+숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
+이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
+|===
+
+=== [관리자] 퀴즈 카테고리 목록 조회
+
+operation::admin-find-quiz-categories[snippets='http-request']
+
+operation::admin-find-quiz-categories[snippets='http-response']
+Response body - array
+|===
+| key | type | description | required
+| title | String | 카테고리 명 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 | 카테고리 상태 +
+숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
+이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
+|===
+
 === [관리자] 퀴즈 생성
 
 operation::admin-create-quiz[snippets='http-request']
@@ -107,41 +143,7 @@ Response body
 pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
 
-=== [관리자] 퀴즈 카테고리 생성
-
-operation::admin-create-quiz-category[snippets='http-request']
-Request body
-|===
-| key | type | description | required
-| title | String | 카테고리 명 +
-pattern: 20자 이하 | O
-|===
-
-operation::admin-create-quiz-category[snippets='http-response']
-Response body
-|===
-| key | type | description | required
-| title | String | 카테고리 명 | O
-| status | PUBLIC: 공개 +
-PRIVATE: 숨김 | 카테고리 상태 +
-숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
- 이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
-|===
-
-=== [관리자] 퀴즈 카테고리 목록 조회
-
-operation::admin-find-quiz-categories[snippets='http-request']
-
-operation::admin-find-quiz-categories[snippets='http-response']
-Response body - array
-|===
-| key | type | description | required
-| title | String | 카테고리 명 | O
-| status | PUBLIC: 공개 +
-PRIVATE: 숨김 | 카테고리 상태 +
-숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
-이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
-|===
+=== [관리자] 퀴즈 목록 조회
 
 operation::admin-find-quizzes[snippets='http-request']
 Query params
@@ -179,3 +181,46 @@ content
 | createdAt | LocalDateTime | 퀴즈 생성일 +
 pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
+
+=== [관리자] 퀴즈 수정
+
+operation::admin-update-quiz[snippets='http-request']
+Request body
+|===
+| key | type | description | required
+| problem | String +
+500자 이하| 문제 +
+정답이 들어가는 부분은 "\+++"로 대체한다.| O
+| answer | List<String> +
+최소 1개 이상, 문자열 총 합 500자 이하 | 정답 들 | O
+| title | String +
+pattern: 50자 이하 | 제목 | O
+| categoryId | Long | 카테고리 id (pk) | O
+|===
+
+operation::admin-update-quiz[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| authorId | Long | 작성자 id (pk) | O
+| authorName | String | 작성자 이름 | O
+| categoryId | Long | 카테고리 id (pk) | O
+| categoryTitle | String | 카테고리 명 | O
+| id | Long | 퀴즈 id (pk) | O
+| title | String | 퀴즈 제목 | O
+| problem | String | 퀴즈 문제 | O
+| answer | List<String> | 퀴즈 정답 들 | O
+| createdAt | LocalDateTime | 퀴즈 생성일 +
+pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
+|===
+
+=== [관리자] 퀴즈 삭제
+
+operation::admin-delete-quiz[snippets='http-request']
+Path parameters
+|===
+| key | type | description | required
+| quizId | Long | 퀴즈 id (pk) | O
+|===
+
+operation::admin-delete-quiz[snippets='http-response']
