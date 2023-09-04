@@ -4,6 +4,7 @@ import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,6 +15,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuizAcceptanceTest extends AcceptanceTest {
 
+    private String accessToken;
+    private ExtractableResponse<Response> 문제_생성_반환값;
+
+    @BeforeEach
+    void setUpFixture() {
+        //로그인
+        ExtractableResponse<Response> 로그인 = AuthSteps.로그인_요청("admin", "password123@");
+        accessToken = 로그인.jsonPath().getString("accessToken");
+
+        //카테고리
+        문제_카테고리_생성(accessToken, 문제_카테고리_요청값("데이터베이스"));
+
+        //문제 생성
+        Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
+        문제_생성_반환값 = 문제_생성(accessToken, 문제_생성_요청값);
+    }
+
     /**
      * When: 문제를 등록한다.
      * Then: 문제 목록을 조회하면 조회된다.
@@ -21,15 +39,6 @@ public class QuizAcceptanceTest extends AcceptanceTest {
      */
     @Test
     void createQuiz() {
-        //given
-        ExtractableResponse<Response> 로그인 = AuthSteps.로그인_요청("admin", "password123@");
-        String accessToken = 로그인.jsonPath().getString("accessToken");
-
-        //when
-        문제_카테고리_생성(accessToken, 문제_카테고리_요청값("데이터베이스"));
-        Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
-        ExtractableResponse<Response> 문제_생성_반환값 = 문제_생성(accessToken, 문제_생성_요청값);
-
         //then
         assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "admin", 1L)).jsonPath().getList("content.title")).containsExactly("인덱스");
         assertThat(문제_상세_조회(accessToken, 문제_생성_반환값.jsonPath().getLong("id")).jsonPath().getString("title")).isEqualTo("인덱스");
@@ -41,16 +50,8 @@ public class QuizAcceptanceTest extends AcceptanceTest {
      */
     @Test
     void createQuizCategory() {
-        //given
-        ExtractableResponse<Response> 로그인 = AuthSteps.로그인_요청("admin", "password123@");
-        String accessToken = 로그인.jsonPath().getString("accessToken");
-
-        //when
-        Map<String, String> 운영체제 = 문제_카테고리_요청값("운영체제");
-        문제_카테고리_생성(accessToken, 운영체제);
-
         //then
-        assertThat(문제_카테고리_목록_조회(accessToken).jsonPath().getString("[0].title")).isEqualTo("운영체제");
+        assertThat(문제_카테고리_목록_조회(accessToken).jsonPath().getString("[0].title")).isEqualTo("데이터베이스");
     }
 
     /**
@@ -60,11 +61,12 @@ public class QuizAcceptanceTest extends AcceptanceTest {
      */
     @Test
     void updateQuiz() {
-        //given
-
         //when
+        Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "index", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
+        문제_수정(accessToken, 문제_생성_요청값, 문제_생성_반환값.jsonPath().getLong("id"));
 
         //then
+        assertThat(문제_상세_조회(accessToken, 문제_생성_반환값.jsonPath().getLong("id")).jsonPath().getString("title")).isEqualTo("index");
     }
 
     /**
