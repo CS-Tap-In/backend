@@ -30,7 +30,7 @@ public class QuizAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 문제_생성_반환값 = 문제_생성(accessToken, 문제_생성_요청값);
 
         //then
-        assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "유기훈", 1L)).jsonPath().getList("content.title")).containsExactly("인덱스");
+        assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "admin", 1L)).jsonPath().getList("content.title")).containsExactly("인덱스");
         assertThat(문제_상세_조회(accessToken, 문제_생성_반환값.jsonPath().getLong("id")).jsonPath().getString("title")).isEqualTo("인덱스");
     }
 

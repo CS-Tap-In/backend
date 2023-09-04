@@ -24,7 +24,7 @@ public class JwtReissueValidator {
             throw new IllegalStateException("비정상적인 호출입니다.");
         }
 
-        // modifiedAt이 30일이 넘지 않았는지 확인한다.
+        // updatedAt이 30일이 넘지 않았는지 확인한다.
         if (token.isExpired(time)) {
             throw new IllegalStateException("로그인 한지 30일이 지났습니다. 다시 로그인 해주세요.");
         }

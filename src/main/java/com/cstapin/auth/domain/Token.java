@@ -1,5 +1,6 @@
 package com.cstapin.auth.domain;
 
+import com.cstapin.support.domain.AbstractEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "token")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
-public class Token {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Token extends AbstractEntity {
 
     @Column(name = "access_token", nullable = false)
     private String accessToken;
@@ -25,23 +22,12 @@ public class Token {
     @Column(name = "refresh_token", nullable = false, unique = true)
     private String refreshToken;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime createdAt;
-
-    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime modifiedAt;
-
-    @PreUpdate
-    public void preUpdate() {
-        this.modifiedAt = LocalDateTime.now();
-    }
-
-    public Token(String accessToken, String refreshToken, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public Token(String accessToken, String refreshToken, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
+        super.createdAt = createdAt;
+        super.updatedAt = updatedAt;
     }
 
     public Token(String accessToken, String refreshToken) {
@@ -49,7 +35,7 @@ public class Token {
     }
 
     public boolean isExpired(LocalDateTime now) {
-        return this.modifiedAt.plusDays(30).isBefore(now);
+        return updatedAt.plusDays(30).isBefore(now);
     }
 
     public void update(JwtReissueValidator validator, String accessToken, String refreshToken, LocalDateTime time) {

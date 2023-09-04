@@ -20,7 +20,7 @@ public class JoinAdminRequest {
     private String password;
 
     @NotEmpty
-    @Size(min = 4)
+    @Size(min = 3)
     private String nickname;
 
     private String secretKey;
