@@ -1,4 +1,4 @@
-package com.cstapin.auth.acceptance;
+package com.cstapin.quiz.acceptance;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;

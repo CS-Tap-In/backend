@@ -1,5 +1,6 @@
-package com.cstapin.auth.acceptance;
+package com.cstapin.quiz.acceptance;
 
+import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-import static com.cstapin.auth.acceptance.QuizSteps.*;
+import static com.cstapin.quiz.acceptance.QuizSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuizAcceptanceTest extends AcceptanceTest {
