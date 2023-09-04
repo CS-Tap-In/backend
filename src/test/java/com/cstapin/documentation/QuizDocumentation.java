@@ -21,8 +21,7 @@ import java.util.Map;
 import static com.cstapin.auth.acceptance.AuthSteps.관리자_회원가입_요청;
 import static com.cstapin.auth.acceptance.AuthSteps.로그인_요청;
 import static com.cstapin.quiz.acceptance.QuizSteps.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class QuizDocumentation extends Documentation {
@@ -107,5 +106,25 @@ public class QuizDocumentation extends Documentation {
 
         //then
         문제_카테고리_목록_조회(getRequestSpecification("admin-find-quiz-categories").auth().oauth2(adminAccessToken));
+    }
+
+    @Test
+    void updateQuiz() {
+        //given
+        QuizResponse response = new QuizResponse(1L, "유기훈", 1L, "데이터베이스",
+                1L, "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("pk", "기본키", "기본 키"), LocalDateTime.now());
+
+        //when
+        when(quizAdminService.updateQuiz(any(), anyLong())).thenReturn(response);
+
+        //then
+        Map<String, Object> request = 문제_생성_요청값(1L, "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("pk", "기본키", "기본 키"));
+        문제_수정(getRequestSpecification("admin-update-quiz").auth().oauth2(adminAccessToken), request, 1L);
+    }
+
+    @Test
+    void deleteQuiz() {
+        //then
+        문제_삭제(getRequestSpecification("admin-delete-quiz").auth().oauth2(adminAccessToken), 1L);
     }
 }
