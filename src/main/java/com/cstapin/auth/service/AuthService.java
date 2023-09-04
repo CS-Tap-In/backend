@@ -49,7 +49,7 @@ public class AuthService implements UserDetailsService {
         );
         member.updateToken(token.getId());
 
-        return new LoginResponse(token);
+        return new LoginResponse(token, member.getRole());
     }
 
     @Transactional

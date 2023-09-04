@@ -3,6 +3,7 @@ package com.cstapin.documentation;
 import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.auth.service.dto.LoginResponse;
+import com.cstapin.member.domain.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -21,7 +22,7 @@ public class AuthDocumentation extends Documentation {
     @Test
     void login() {
         //given
-        LoginResponse response = new LoginResponse("adf132abadf023fdfa", "adfaklgadjgadi");
+        LoginResponse response = new LoginResponse("adf132abadf023fdfa", "adfaklgadjgadi", Member.MemberRole.ADMIN);
 
         //when
         when(authService.login(any())).thenReturn(response);

@@ -27,6 +27,8 @@ Response body
 | key | type | description | required
 | accessToken | String | access token | O
 | refreshToken | String | refresh token | O
+| role | USER: 일반 유저 +
+ADMIN: 관리자 | 유저 권한 | O
 |===
 
 === 관리자 회원가입
