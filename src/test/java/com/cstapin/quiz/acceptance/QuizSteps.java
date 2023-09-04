@@ -111,4 +111,16 @@ public class QuizSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 문제_삭제(String accessToken, Long quizId) {
+        return 문제_삭제(RestAssured.given().log().all().auth().oauth2(accessToken), quizId);
+    }
+
+    public static ExtractableResponse<Response> 문제_삭제(RequestSpecification requestSpecification, Long quizId) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("quizId", quizId)
+                .when().delete(PATH_PREFIX_ADMIN + "/{quizId}")
+                .then().log().all().extract();
+    }
+
 }

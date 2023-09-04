@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class QuizAcceptanceTest extends AcceptanceTest {
 
     private String accessToken;
-    private ExtractableResponse<Response> 문제_생성_반환값;
+    private Long 문제_id;
 
     @BeforeEach
     void setUpFixture() {
@@ -29,7 +29,7 @@ public class QuizAcceptanceTest extends AcceptanceTest {
 
         //문제 생성
         Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
-        문제_생성_반환값 = 문제_생성(accessToken, 문제_생성_요청값);
+        문제_id = 문제_생성(accessToken, 문제_생성_요청값).jsonPath().getLong("id");
     }
 
     /**
@@ -41,7 +41,7 @@ public class QuizAcceptanceTest extends AcceptanceTest {
     void createQuiz() {
         //then
         assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "admin", 1L)).jsonPath().getList("content.title")).containsExactly("인덱스");
-        assertThat(문제_상세_조회(accessToken, 문제_생성_반환값.jsonPath().getLong("id")).jsonPath().getString("title")).isEqualTo("인덱스");
+        assertThat(문제_상세_조회(accessToken, 문제_id).jsonPath().getString("title")).isEqualTo("인덱스");
     }
 
     /**
@@ -63,10 +63,10 @@ public class QuizAcceptanceTest extends AcceptanceTest {
     void updateQuiz() {
         //when
         Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "index", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
-        문제_수정(accessToken, 문제_생성_요청값, 문제_생성_반환값.jsonPath().getLong("id"));
+        문제_수정(accessToken, 문제_생성_요청값, 문제_id);
 
         //then
-        assertThat(문제_상세_조회(accessToken, 문제_생성_반환값.jsonPath().getLong("id")).jsonPath().getString("title")).isEqualTo("index");
+        assertThat(문제_상세_조회(accessToken, 문제_id).jsonPath().getString("title")).isEqualTo("index");
     }
 
     /**
@@ -76,11 +76,11 @@ public class QuizAcceptanceTest extends AcceptanceTest {
      */
     @Test
     void deleteQuiz() {
-        //given
-
         //when
+        문제_삭제(accessToken, 문제_id);
 
         //then
+        assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "admin", 1L)).jsonPath().getList("content")).isEmpty();
     }
 
 }
