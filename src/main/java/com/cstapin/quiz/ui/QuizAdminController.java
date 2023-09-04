@@ -39,6 +39,13 @@ public class QuizAdminController {
         return ResponseEntity.ok().body(response);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<QuizResponse> deleteQuiz(@PathVariable(value = "id") Long quizId) {
+        quizAdminService.deleteQuiz(quizId);
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<PageResponse<QuizzesResponse>> findQuizzes(@Valid QuizRequestParams requestParams) {
         Page<QuizzesResponse> quizzes = quizAdminService.findQuizzes(requestParams);

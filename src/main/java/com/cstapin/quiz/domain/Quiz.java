@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -74,5 +73,9 @@ public class Quiz extends AbstractEntity {
         if (answer.length() > ANSWER_LENGTH) {
             throw new IllegalArgumentException("답의 길이가 너무 깁니다.");
         }
+    }
+
+    public void delete() {
+        this.status = QuizStatus.DELETED;
     }
 }

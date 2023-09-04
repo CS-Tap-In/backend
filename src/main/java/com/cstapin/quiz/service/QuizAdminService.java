@@ -46,6 +46,11 @@ public class QuizAdminService {
         return QuizResponse.from(quiz);
     }
 
+    @Transactional
+    public void deleteQuiz(Long quizId) {
+        quizQueryService.findById(quizId).delete();
+    }
+
     public Page<QuizzesResponse> findQuizzes(QuizRequestParams requestParams) {
         return quizQueryService.findQuizzes(requestParams);
     }
