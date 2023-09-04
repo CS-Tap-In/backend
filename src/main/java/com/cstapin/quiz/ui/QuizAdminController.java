@@ -31,6 +31,21 @@ public class QuizAdminController {
         return ResponseEntity.created(URI.create("/api/v1/admin/quizzes/" + response.getId())).body(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<QuizResponse> updateQuiz(@Valid @RequestBody QuizRequest request,
+                                                   @PathVariable(value = "id") Long quizId) {
+        QuizResponse response = quizAdminService.updateQuiz(request, quizId);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<QuizResponse> deleteQuiz(@PathVariable(value = "id") Long quizId) {
+        quizAdminService.deleteQuiz(quizId);
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<PageResponse<QuizzesResponse>> findQuizzes(@Valid QuizRequestParams requestParams) {
         Page<QuizzesResponse> quizzes = quizAdminService.findQuizzes(requestParams);

@@ -36,7 +36,8 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                 .join(quiz.author, member)
                 .where(
                         QuizSearchType.getConditionBySearchType(params.getSearchType(), params.getKeyword()),
-                        eqCategoryId(params.getCategoryId()))
+                        eqCategoryId(params.getCategoryId()),
+                        quiz.status.ne(QuizStatus.DELETED))
                 .limit(params.getPageable().getPageSize())
                 .offset(params.getPageable().getOffset())
                 .fetch();
@@ -47,8 +48,8 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                 .join(quiz.author, member)
                 .where(
                         QuizSearchType.getConditionBySearchType(params.getSearchType(), params.getKeyword()),
-                        eqCategoryId(params.getCategoryId())
-                );
+                        eqCategoryId(params.getCategoryId()),
+                        quiz.status.ne(QuizStatus.DELETED));
 
         return PageableExecutionUtils.getPage(content, params.getPageable(), countQuery::fetchOne);
     }

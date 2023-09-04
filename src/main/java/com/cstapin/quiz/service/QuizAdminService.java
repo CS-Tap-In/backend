@@ -11,6 +11,7 @@ import com.cstapin.quiz.service.query.QuizCategoryQueryService;
 import com.cstapin.quiz.service.query.QuizQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,21 @@ public class QuizAdminService {
         Member author = memberQueryService.findByUsername(username);
         Quiz quiz = quizRepository.save(request.toQuiz(author, quizCategoryQueryService.findById(request.getCategoryId())));
         return QuizResponse.from(quiz);
+    }
+
+    @Transactional
+    public QuizResponse updateQuiz(QuizRequest request, Long quizId) {
+        Quiz quiz = quizQueryService.findById(quizId);
+        quiz.update(request);
+        if (!quiz.matchQuizCategoryId(request.getCategoryId())) {
+            quiz.update(quizCategoryQueryService.findById(request.getCategoryId()));
+        }
+        return QuizResponse.from(quiz);
+    }
+
+    @Transactional
+    public void deleteQuiz(Long quizId) {
+        quizQueryService.findById(quizId).delete();
     }
 
     public Page<QuizzesResponse> findQuizzes(QuizRequestParams requestParams) {

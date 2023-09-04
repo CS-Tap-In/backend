@@ -1,4 +1,4 @@
-package com.cstapin.auth.acceptance;
+package com.cstapin.quiz.acceptance;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -95,6 +95,31 @@ public class QuizSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get(PATH_PREFIX_ADMIN + "/categories")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 문제_수정(String accessToken, Map<String, Object> params, Long quizId) {
+        return 문제_수정(RestAssured.given().log().all().auth().oauth2(accessToken), params, quizId);
+    }
+
+    public static ExtractableResponse<Response> 문제_수정(RequestSpecification requestSpecification, Map<String, Object> params, Long quizId) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .pathParam("quizId", quizId)
+                .when().put(PATH_PREFIX_ADMIN + "/{quizId}")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 문제_삭제(String accessToken, Long quizId) {
+        return 문제_삭제(RestAssured.given().log().all().auth().oauth2(accessToken), quizId);
+    }
+
+    public static ExtractableResponse<Response> 문제_삭제(RequestSpecification requestSpecification, Long quizId) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("quizId", quizId)
+                .when().delete(PATH_PREFIX_ADMIN + "/{quizId}")
                 .then().log().all().extract();
     }
 
