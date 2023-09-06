@@ -4,6 +4,9 @@ import com.cstapin.quiz.domain.search.QuizSearchType;
 import com.cstapin.quiz.service.dto.QQuizzesResponse;
 import com.cstapin.quiz.service.dto.QuizRequestParams;
 import com.cstapin.quiz.service.dto.QuizzesResponse;
+import com.cstapin.support.enums.ConditionYN;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,9 +16,9 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
+import static com.cstapin.member.domain.QMember.member;
 import static com.cstapin.quiz.domain.QQuiz.quiz;
 import static com.cstapin.quiz.domain.QQuizCategory.quizCategory;
-import static com.cstapin.member.domain.QMember.member;
 
 @RequiredArgsConstructor
 public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
@@ -37,7 +40,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                 .where(
                         QuizSearchType.getConditionBySearchType(params.getSearchType(), params.getKeyword()),
                         eqCategoryId(params.getCategoryId()),
-                        quiz.status.ne(QuizStatus.DELETED))
+                        getStatusCondition(params.getStatus(), params.getRejected()))
                 .limit(params.getPageable().getPageSize())
                 .offset(params.getPageable().getOffset())
                 .fetch();
@@ -49,9 +52,24 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                 .where(
                         QuizSearchType.getConditionBySearchType(params.getSearchType(), params.getKeyword()),
                         eqCategoryId(params.getCategoryId()),
-                        quiz.status.ne(QuizStatus.DELETED));
+                        getStatusCondition(params.getStatus(), params.getRejected()));
 
         return PageableExecutionUtils.getPage(content, params.getPageable(), countQuery::fetchOne);
+    }
+
+    private Predicate getStatusCondition(QuizStatus status, ConditionYN rejected) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        if (status != null && !status.equals(QuizStatus.DELETED) && !status.equals(QuizStatus.REJECTED)) {
+            booleanBuilder.or(quiz.status.eq(status));
+        }
+        if (status == null) {
+            booleanBuilder.or(quiz.status.eq(QuizStatus.PUBLIC)).or(quiz.status.eq(QuizStatus.PRIVATE));
+        }
+        if (ConditionYN.Y.equals(rejected)) {
+            booleanBuilder.or(quiz.status.eq(QuizStatus.REJECTED));
+        }
+        return booleanBuilder.getValue();
     }
 
     private BooleanExpression eqCategoryId(Long categoryId) {
