@@ -168,7 +168,8 @@ REJECTED: 반려 |
 기본 값은 PUBLIC + PRIVATE 입니다. | X
 | rejected | Y: 반려된 퀴즈도 노출 +
 N: 반려된 퀴즈 노출 X |
-반려된 퀴즈 노출 여부 | X
+반려된 퀴즈 노출 여부 +
+기본 값: N| X
 |===
 
 operation::admin-find-quizzes[snippets='http-response']

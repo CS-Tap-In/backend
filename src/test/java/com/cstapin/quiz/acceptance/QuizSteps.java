@@ -54,7 +54,7 @@ public class QuizSteps {
         params.put("category", categoryId + "");
         params.put("page", 1 + "");
         params.put("size", 10 + "");
-        params.put("status", "UNAPPROVED");
+        params.put("status", "PRIVATE");
         params.put("rejected", "N");
         return params;
     }
