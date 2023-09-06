@@ -160,6 +160,15 @@ searchType | X
 기본값: 1 | X
 | size | int | 사이즈 +
 기본값: 10 | X
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 |
+문제 상태 +
+기본 값은 PUBLIC + PRIVATE 입니다. | X
+| rejected | Y: 반려된 퀴즈도 노출 +
+N: 반려된 퀴즈 노출 X |
+반려된 퀴즈 노출 여부 | X
 |===
 
 operation::admin-find-quizzes[snippets='http-response']
