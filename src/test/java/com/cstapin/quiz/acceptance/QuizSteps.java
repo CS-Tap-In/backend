@@ -32,6 +32,7 @@ public class QuizSteps {
         params.put("title", title);
         params.put("problem", problem);
         params.put("answer", answers);
+        params.put("status", "PRIVATE");
         return params;
     }
 

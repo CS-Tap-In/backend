@@ -25,6 +25,8 @@ public class QuizRequest {
     @NotNull
     @Size(min = 1)
     private List<String> answer;
+    @NotNull
+    private QuizStatus status;
 
     public QuizRequest() {
     }
@@ -43,7 +45,7 @@ public class QuizRequest {
                 .title(title)
                 .problem(problem)
                 .answer(String.join(",", answer))
-                .status(QuizStatus.PRIVATE)
+                .status(status)
                 .build();
     }
 }
