@@ -102,6 +102,8 @@ Request body
 | title | String +
 pattern: 50자 이하 | 제목 | O
 | categoryId | Long | 카테고리 id (pk) | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 | 문제 상태 | O
 |===
 
 operation::admin-create-quiz[snippets='http-response']
