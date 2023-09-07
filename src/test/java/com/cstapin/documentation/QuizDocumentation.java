@@ -73,7 +73,7 @@ public class QuizDocumentation extends Documentation {
     void findQuizzes() {
         //given
         QuizzesResponse response = QuizzesResponse.builder().categoryId(1L).categoryTitle("데이터베이스").id(1L)
-                .title("인덱스").problem("+++은 기본 인덱스이다.").createdAt(LocalDateTime.now()).build();
+                .title("인덱스").problem("+++은 기본 인덱스이다.").status(QuizStatus.PRIVATE).createdAt(LocalDateTime.now()).build();
 
         Map<String, String> params = 문제_목록_조회_요청값("author", "유기훈", 1L);
 
