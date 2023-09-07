@@ -131,4 +131,18 @@ public class QuizDocumentation extends Documentation {
         //then
         문제_삭제(getRequestSpecification("admin-delete-quiz").auth().oauth2(adminAccessToken), 1L);
     }
+
+    @Test
+    void changeStatusOfQuiz() {
+        //given
+        QuizResponse response = new QuizResponse(1L, "유기훈", 1L, "데이터베이스",
+                1L, "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("pk", "기본키", "기본 키"),
+                QuizStatus.PUBLIC, LocalDateTime.now());
+
+        //when
+        when(quizAdminService.changeStatusOfQuiz(any(), any())).thenReturn(response);
+
+        //then
+        문제_상태_변경(getRequestSpecification("admin-change-status-quiz").auth().oauth2(adminAccessToken), 1L, "PUBLIC");
+    }
 }
