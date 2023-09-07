@@ -138,4 +138,17 @@ public class QuizSteps {
                 .when().patch(PATH_PREFIX_ADMIN + "/{quizId}/status")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 문제들_상태_변경(String accessToken, List<Long> quizIds, String status) {
+        return 문제들_상태_변경(RestAssured.given().log().all().auth().oauth2(accessToken), quizIds, status);
+    }
+
+    public static ExtractableResponse<Response> 문제들_상태_변경(RequestSpecification requestSpecification, List<Long> quizIds, String status) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(Map.of("status", status, "quizIds", quizIds))
+                .when().patch(PATH_PREFIX_ADMIN + "/status")
+                .then().log().all().extract();
+    }
+
 }

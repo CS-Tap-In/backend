@@ -122,11 +122,25 @@ public class QuizAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given: 공개 상태인 문제를 등록한다.
-     * When: 문제를 숨긴다.
-     * Then: 문제를 조회하면 숨김 상태이다.
+     * Given: 숨김 상태인 문제를 등록한다.
      * When: 문제를 공개한다.
      * Then: 문제를 조회하면 공개 상태이다.
+     * When: 문제를 숨긴다.
+     * Then: 문제를 조회하면 숨김 상태이다.
      */
+    @Test
+    void changeStatusOfQuizzes() {
+        //when
+        문제들_상태_변경(accessToken, List.of(문제_id), "PUBLIC");
+
+        //then
+        assertThat(문제_상세_조회(accessToken, 문제_id).jsonPath().getString("status")).isEqualTo("PUBLIC");
+
+        //when
+        문제들_상태_변경(accessToken, List.of(문제_id), "PRIVATE");
+
+        //then
+        assertThat(문제_상세_조회(accessToken, 문제_id).jsonPath().getString("status")).isEqualTo("PRIVATE");
+    }
 
 }
