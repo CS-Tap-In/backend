@@ -33,6 +33,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                         quiz.id,
                         quiz.title,
                         quiz.problem,
+                        quiz.status,
                         quiz.createdAt))
                 .from(quiz)
                 .join(quiz.quizCategory, quizCategory)

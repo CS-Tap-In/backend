@@ -1,6 +1,7 @@
 package com.cstapin.quiz.service.dto;
 
 import com.cstapin.quiz.domain.Quiz;
+import com.cstapin.quiz.domain.QuizStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class QuizResponse {
     private String title;
     private String problem;
     private List<String> answer;
+    private QuizStatus status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
@@ -33,12 +35,14 @@ public class QuizResponse {
                         String title,
                         String problem,
                         List<String> answer,
+                        QuizStatus status,
                         LocalDateTime createdAt) {
         this.authorId = authorId;
         this.authorName = authorName;
         this.categoryId = categoryId;
         this.categoryTitle = categoryTitle;
         this.id = id;
+        this.status = status;
         this.title = title;
         this.problem = problem;
         this.answer = answer;
@@ -50,6 +54,7 @@ public class QuizResponse {
                 .authorId(quiz.getAuthor().getId())
                 .authorName(quiz.getAuthor().getUsername())
                 .id(quiz.getId())
+                .status(quiz.getStatus())
                 .title(quiz.getTitle())
                 .problem(quiz.getProblem())
                 .answer(List.of(quiz.getAnswer().split(",")))

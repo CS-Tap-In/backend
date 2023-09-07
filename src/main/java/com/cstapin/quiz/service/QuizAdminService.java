@@ -70,4 +70,11 @@ public class QuizAdminService {
         QuizCategory quizCategory = quizCategoryRepository.save(request.toQuizCategory());
         return new QuizCategoryResponse(quizCategory.getTitle(), quizCategory.getStatus());
     }
+
+    @Transactional
+    public QuizResponse changeStatusOfQuiz(Long quizId, QuizStatusRequest request) {
+        Quiz quiz = quizQueryService.findById(quizId);
+        quiz.changeStatus(request.getStatus());
+        return QuizResponse.from(quiz);
+    }
 }
