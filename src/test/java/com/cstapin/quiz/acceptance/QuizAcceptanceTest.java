@@ -83,4 +83,24 @@ public class QuizAcceptanceTest extends AcceptanceTest {
         assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "admin", 1L)).jsonPath().getList("content")).isEmpty();
     }
 
+    /**
+     * Given: 미승인 상태인 문제를 등록한다.
+     * When: 문제를 승인한다.
+     * Then: 문제를 조회하면 승인 상태이다.
+     */
+
+    /**
+     * Given: 미승인 상태인 문제를 등록한다.
+     * When: 문제를 반려한다.
+     * Then: 문제를 조회하면 반려 상태이다.
+     */
+
+    /**
+     * Given: 공개 상태인 문제를 등록한다.
+     * When: 문제를 숨긴다.
+     * Then: 문제를 조회하면 숨김 상태이다.
+     * When: 문제를 공개한다.
+     * Then: 문제를 조회하면 공개 상태이다.
+     */
+
 }
