@@ -145,4 +145,10 @@ public class QuizDocumentation extends Documentation {
         //then
         문제_상태_변경(getRequestSpecification("admin-change-status-quiz").auth().oauth2(adminAccessToken), 1L, "PUBLIC");
     }
+
+    @Test
+    void changeStatusOfQuizzes() {
+        //then
+        문제들_상태_변경(getRequestSpecification("admin-change-status-quizzes").auth().oauth2(adminAccessToken), List.of(1L, 2L, 3L), "PRIVATE");
+    }
 }
