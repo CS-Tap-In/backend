@@ -126,4 +126,16 @@ public class QuizSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 문제_상태_변경(String accessToken, Long quizId, String status) {
+        return 문제_상태_변경(RestAssured.given().log().all().auth().oauth2(accessToken), quizId, status);
+    }
+
+    public static ExtractableResponse<Response> 문제_상태_변경(RequestSpecification requestSpecification, Long quizId, String status) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("quizId", quizId)
+                .body(Map.of("status", status))
+                .when().patch(PATH_PREFIX_ADMIN + "/{quizId}/status")
+                .then().log().all().extract();
+    }
 }
