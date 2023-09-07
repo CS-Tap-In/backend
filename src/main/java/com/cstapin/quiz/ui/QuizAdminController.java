@@ -54,6 +54,13 @@ public class QuizAdminController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PatchMapping("/status")
+    public ResponseEntity<Void> changeStatusOfQuizzes(@Valid @RequestBody QuizzesStatusRequest request) {
+        quizAdminService.changeStatusOfQuizzes(request);
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<PageResponse<QuizzesResponse>> findQuizzes(@Valid QuizRequestParams requestParams) {
         Page<QuizzesResponse> quizzes = quizAdminService.findQuizzes(requestParams);

@@ -77,4 +77,9 @@ public class QuizAdminService {
         quiz.changeStatus(request.getStatus());
         return QuizResponse.from(quiz);
     }
+
+    @Transactional
+    public void changeStatusOfQuizzes(QuizzesStatusRequest request) {
+        quizRepository.findByIdIn(request.getQuizIds()).forEach(quiz -> quiz.changeStatus(request.getStatus()));
+    }
 }
