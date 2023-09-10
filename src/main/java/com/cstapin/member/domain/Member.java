@@ -26,6 +26,9 @@ public class Member extends AbstractEntity {
     @Column(name = "nickname", length = 30, nullable = false)
     private String nickname;
 
+    @Column(name = "avatar_url", length = 500)
+    private String avatarUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", length = 20, nullable = false)
     private MemberRole role;
@@ -47,5 +50,9 @@ public class Member extends AbstractEntity {
 
     public void updateToken(Long tokenId) {
         this.tokenId = tokenId;
+    }
+
+    public void updateAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }
