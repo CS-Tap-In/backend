@@ -56,7 +56,7 @@ public class AuthSteps {
 
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
+                .params(params)
                 .when().get(PATH_PREFIX + "/login/github")
                 .then().log().all().extract();
     }
