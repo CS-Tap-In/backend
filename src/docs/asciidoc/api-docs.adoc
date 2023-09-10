@@ -49,10 +49,13 @@ NOTE: secretKey는 관리자에게 문의하세요.
 
 operation::join-admin[snippets='http-response']
 
-=== [유저] 깃허브 회원가입
+=== [유저] 깃허브 로그인
 
 NOTE: 깃허브에서 리다이렉트 해주는 api 입니다. request 는 깃허브로 부터 받습니다.
-response 에 accessToken, refreshToken 을 반환합니다.
+response 에 accessToken, refreshToken 을 반환합니다. +
+유저가 로그인 버튼을 누르면 https://github.com/login/oauth/authorize?client_id=efe1f2bdaf1205677b87
+로 이동시키면 됩니다. 유저가 이 url 에서 로그인을 하면 깃허브가 이 api로 리다이렉트 해줍니다.
+요 api는 유저정보가 DB에 있으면 기존 정보를 사용하고 없으면 회원가입 시킵니다.
 
 operation::auth-login-github[snippets='http-request']
 Request params
