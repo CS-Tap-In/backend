@@ -83,4 +83,64 @@ public class QuizAcceptanceTest extends AcceptanceTest {
         assertThat(문제_목록_조회(accessToken, 문제_목록_조회_요청값("author", "admin", 1L)).jsonPath().getList("content")).isEmpty();
     }
 
+    /**
+     * Given: 미승인 상태인 문제를 등록한다.
+     * When: 문제를 승인한다.
+     * Then: 문제를 조회하면 숨김 상태이다.
+     */
+    @Test
+    void approveQuiz() {
+        //given
+        Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
+        문제_생성_요청값.put("status", "UNAPPROVED");
+        long quizId = 문제_생성(accessToken, 문제_생성_요청값).jsonPath().getLong("id");
+
+        //when
+        문제_상태_변경(accessToken, quizId, "PRIVATE");
+
+        //then
+        assertThat(문제_상세_조회(accessToken, quizId).jsonPath().getString("status")).isEqualTo("PRIVATE");
+    }
+
+    /**
+     * Given: 미승인 상태인 문제를 등록한다.
+     * When: 문제를 반려한다.
+     * Then: 문제를 조회하면 반려 상태이다.
+     */
+    @Test
+    void rejectQuiz() {
+        //given
+        Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"));
+        문제_생성_요청값.put("status", "UNAPPROVED");
+        long quizId = 문제_생성(accessToken, 문제_생성_요청값).jsonPath().getLong("id");
+
+        //when
+        문제_상태_변경(accessToken, quizId, "REJECTED");
+
+        //then
+        assertThat(문제_상세_조회(accessToken, quizId).jsonPath().getString("status")).isEqualTo("REJECTED");
+    }
+
+    /**
+     * Given: 숨김 상태인 문제를 등록한다.
+     * When: 문제를 공개한다.
+     * Then: 문제를 조회하면 공개 상태이다.
+     * When: 문제를 숨긴다.
+     * Then: 문제를 조회하면 숨김 상태이다.
+     */
+    @Test
+    void changeStatusOfQuizzes() {
+        //when
+        문제들_상태_변경(accessToken, List.of(문제_id), "PUBLIC");
+
+        //then
+        assertThat(문제_상세_조회(accessToken, 문제_id).jsonPath().getString("status")).isEqualTo("PUBLIC");
+
+        //when
+        문제들_상태_변경(accessToken, List.of(문제_id), "PRIVATE");
+
+        //then
+        assertThat(문제_상세_조회(accessToken, 문제_id).jsonPath().getString("status")).isEqualTo("PRIVATE");
+    }
+
 }

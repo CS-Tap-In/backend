@@ -27,9 +27,11 @@ Response body
 | key | type | description | required
 | accessToken | String | access token | O
 | refreshToken | String | refresh token | O
+| role | USER: 일반 유저 +
+ADMIN: 관리자 | 유저 권한 | O
 |===
 
-=== 관리자 회원가입
+=== [관리자] 관리자 회원가입
 
 operation::join-admin[snippets='http-request']
 Request body
@@ -46,6 +48,29 @@ pattern: 3자 이상 | 별명 | O
 NOTE: secretKey는 관리자에게 문의하세요.
 
 operation::join-admin[snippets='http-response']
+
+=== [유저] 깃허브 로그인
+
+NOTE: 깃허브에서 리다이렉트 해주는 api 입니다. request 는 깃허브로 부터 받습니다.
+response 에 accessToken, refreshToken 을 반환합니다. +
+유저가 로그인 버튼을 누르면 https://github.com/login/oauth/authorize?client_id=efe1f2bdaf1205677b87
+로 이동시키면 됩니다. 유저가 이 url 에서 로그인을 하면 깃허브가 이 api로 리다이렉트 해줍니다.
+요 api는 유저정보가 DB에 있으면 기존 정보를 사용하고 없으면 회원가입 시킵니다.
+
+operation::auth-login-github[snippets='http-request']
+Request params
+|===
+| key | type | description | required
+| code | String | 깃허브가 리다이렉트 하면서 주는 code | O
+|===
+operation::auth-login-github[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| accessToken | String | access token | O
+| refreshToken | String | refresh token | O
+| role | USER: 일반 유저 | 유저 권한 | O
+|===
 
 [[quiz]]
 == 퀴즈
@@ -100,6 +125,8 @@ Request body
 | title | String +
 pattern: 50자 이하 | 제목 | O
 | categoryId | Long | 카테고리 id (pk) | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 | 문제 상태 | O
 |===
 
 operation::admin-create-quiz[snippets='http-response']
@@ -139,6 +166,10 @@ Response body
 | title | String | 퀴즈 제목 | O
 | problem | String | 퀴즈 문제 | O
 | answer | List<String> | 퀴즈 정답 들 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 | 문제 상태 | O
 | createdAt | LocalDateTime | 퀴즈 생성일 +
 pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
@@ -158,6 +189,16 @@ searchType | X
 기본값: 1 | X
 | size | int | 사이즈 +
 기본값: 10 | X
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 |
+문제 상태 +
+기본 값은 PUBLIC + PRIVATE 입니다. | X
+| rejected | Y: 반려된 퀴즈도 노출 +
+N: 반려된 퀴즈 노출 X |
+반려된 퀴즈 노출 여부 +
+기본 값: N| X
 |===
 
 operation::admin-find-quizzes[snippets='http-response']
@@ -178,6 +219,10 @@ content
 | id | Long | 퀴즈 id (pk) | O
 | title | String | 퀴즈 제목 | O
 | problem | String | 퀴즈 문제 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 | 문제 상태 | O
 | createdAt | LocalDateTime | 퀴즈 생성일 +
 pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===

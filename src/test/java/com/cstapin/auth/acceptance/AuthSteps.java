@@ -50,4 +50,15 @@ public class AuthSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 로그인_요청_깃허브(RequestSpecification requestSpecification, String code) {
+        Map<String, String> params = new HashMap<>();
+        params.put("code", code);
+
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .params(params)
+                .when().get(PATH_PREFIX + "/login/github")
+                .then().log().all().extract();
+    }
+
 }

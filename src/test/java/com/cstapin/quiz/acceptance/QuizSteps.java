@@ -32,6 +32,7 @@ public class QuizSteps {
         params.put("title", title);
         params.put("problem", problem);
         params.put("answer", answers);
+        params.put("status", "PRIVATE");
         return params;
     }
 
@@ -54,6 +55,8 @@ public class QuizSteps {
         params.put("category", categoryId + "");
         params.put("page", 1 + "");
         params.put("size", 10 + "");
+        params.put("status", "PRIVATE");
+        params.put("rejected", "N");
         return params;
     }
 
@@ -120,6 +123,31 @@ public class QuizSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("quizId", quizId)
                 .when().delete(PATH_PREFIX_ADMIN + "/{quizId}")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 문제_상태_변경(String accessToken, Long quizId, String status) {
+        return 문제_상태_변경(RestAssured.given().log().all().auth().oauth2(accessToken), quizId, status);
+    }
+
+    public static ExtractableResponse<Response> 문제_상태_변경(RequestSpecification requestSpecification, Long quizId, String status) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("quizId", quizId)
+                .body(Map.of("status", status))
+                .when().patch(PATH_PREFIX_ADMIN + "/{quizId}/status")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 문제들_상태_변경(String accessToken, List<Long> quizIds, String status) {
+        return 문제들_상태_변경(RestAssured.given().log().all().auth().oauth2(accessToken), quizIds, status);
+    }
+
+    public static ExtractableResponse<Response> 문제들_상태_변경(RequestSpecification requestSpecification, List<Long> quizIds, String status) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(Map.of("status", status, "quizIds", quizIds))
+                .when().patch(PATH_PREFIX_ADMIN + "/status")
                 .then().log().all().extract();
     }
 

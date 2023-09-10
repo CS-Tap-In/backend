@@ -78,4 +78,8 @@ public class Quiz extends AbstractEntity {
     public void delete() {
         this.status = QuizStatus.DELETED;
     }
+
+    public void changeStatus(QuizStatus status) {
+        this.status = status;
+    }
 }

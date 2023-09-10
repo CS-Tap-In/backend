@@ -40,8 +40,23 @@ public class QuizAdminController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<QuizResponse> deleteQuiz(@PathVariable(value = "id") Long quizId) {
+    public ResponseEntity<Void> deleteQuiz(@PathVariable(value = "id") Long quizId) {
         quizAdminService.deleteQuiz(quizId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<QuizResponse> changeStatusOfQuiz(@PathVariable(value = "id") Long quizId,
+                                                           @Valid @RequestBody QuizStatusRequest request) {
+        QuizResponse response = quizAdminService.changeStatusOfQuiz(quizId, request);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PatchMapping("/status")
+    public ResponseEntity<Void> changeStatusOfQuizzes(@Valid @RequestBody QuizzesStatusRequest request) {
+        quizAdminService.changeStatusOfQuizzes(request);
 
         return ResponseEntity.ok().build();
     }

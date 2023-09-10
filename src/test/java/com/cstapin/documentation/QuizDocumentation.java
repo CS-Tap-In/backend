@@ -1,6 +1,7 @@
 package com.cstapin.documentation;
 
 import com.cstapin.quiz.domain.QuizCategoryStatus;
+import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.quiz.service.QuizAdminService;
 import com.cstapin.quiz.service.dto.QuizCategoryResponse;
 import com.cstapin.quiz.service.dto.QuizResponse;
@@ -43,7 +44,8 @@ public class QuizDocumentation extends Documentation {
     void createQuiz() {
         //given
         QuizResponse response = new QuizResponse(1L, "유기훈", 1L, "데이터베이스",
-                1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"), LocalDateTime.now());
+                1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"),
+                QuizStatus.PRIVATE, LocalDateTime.now());
 
         //when
         when(quizAdminService.createQuiz(any(), anyString())).thenReturn(response);
@@ -57,7 +59,8 @@ public class QuizDocumentation extends Documentation {
     void findQuiz() {
         //given
         QuizResponse response = new QuizResponse(1L, "유기훈", 1L, "데이터베이스",
-                1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"), LocalDateTime.now());
+                1L, "인덱스", "+++은 기본 인덱스이다.", List.of("pk", "기본키", "기본 키"),
+                QuizStatus.PRIVATE, LocalDateTime.now());
 
         //when
         when(quizAdminService.findQuiz(any())).thenReturn(response);
@@ -70,7 +73,7 @@ public class QuizDocumentation extends Documentation {
     void findQuizzes() {
         //given
         QuizzesResponse response = QuizzesResponse.builder().categoryId(1L).categoryTitle("데이터베이스").id(1L)
-                .title("인덱스").problem("+++은 기본 인덱스이다.").createdAt(LocalDateTime.now()).build();
+                .title("인덱스").problem("+++은 기본 인덱스이다.").status(QuizStatus.PRIVATE).createdAt(LocalDateTime.now()).build();
 
         Map<String, String> params = 문제_목록_조회_요청값("author", "유기훈", 1L);
 
@@ -112,7 +115,8 @@ public class QuizDocumentation extends Documentation {
     void updateQuiz() {
         //given
         QuizResponse response = new QuizResponse(1L, "유기훈", 1L, "데이터베이스",
-                1L, "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("pk", "기본키", "기본 키"), LocalDateTime.now());
+                1L, "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("pk", "기본키", "기본 키"),
+                QuizStatus.PRIVATE, LocalDateTime.now());
 
         //when
         when(quizAdminService.updateQuiz(any(), anyLong())).thenReturn(response);
@@ -126,5 +130,25 @@ public class QuizDocumentation extends Documentation {
     void deleteQuiz() {
         //then
         문제_삭제(getRequestSpecification("admin-delete-quiz").auth().oauth2(adminAccessToken), 1L);
+    }
+
+    @Test
+    void changeStatusOfQuiz() {
+        //given
+        QuizResponse response = new QuizResponse(1L, "유기훈", 1L, "데이터베이스",
+                1L, "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("pk", "기본키", "기본 키"),
+                QuizStatus.PUBLIC, LocalDateTime.now());
+
+        //when
+        when(quizAdminService.changeStatusOfQuiz(any(), any())).thenReturn(response);
+
+        //then
+        문제_상태_변경(getRequestSpecification("admin-change-status-quiz").auth().oauth2(adminAccessToken), 1L, "PUBLIC");
+    }
+
+    @Test
+    void changeStatusOfQuizzes() {
+        //then
+        문제들_상태_변경(getRequestSpecification("admin-change-status-quizzes").auth().oauth2(adminAccessToken), List.of(1L, 2L, 3L), "PRIVATE");
     }
 }
