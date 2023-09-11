@@ -33,6 +33,9 @@ public class Member extends AbstractEntity {
     @Column(name = "role", length = 20, nullable = false)
     private MemberRole role;
 
+    @Column(name = "daily_goal")
+    private int dailyGoal = 10;
+
     @Column(name = "token_id", unique = true)
     private Long tokenId;
 

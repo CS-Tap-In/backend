@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 
 public class MemberSteps {
 
-    private static final String PATH_PREFIX = "/api/v1/member";
+    private static final String PATH_PREFIX_USER = "/api/v1/user/members";
 
     public static ExtractableResponse<Response> 프로필_조회(String accessToken) {
         return 프로필_조회(RestAssured.given().log().all(), accessToken);
@@ -18,7 +18,7 @@ public class MemberSteps {
         return requestSpecification
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(PATH_PREFIX + "/profile")
+                .when().get(PATH_PREFIX_USER + "/profiles")
                 .then().log().all().extract();
     }
 
