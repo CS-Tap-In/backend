@@ -40,7 +40,6 @@ public class Member extends AbstractEntity {
         return passwordEncoder.matches(password, this.password);
     }
 
-    @Builder
     public Member(String username, String password, String nickname, MemberRole role) {
         this.username = username;
         this.password = password;
@@ -48,11 +47,17 @@ public class Member extends AbstractEntity {
         this.role = role;
     }
 
+    @Builder
+    public Member(String username, String password, String nickname, MemberRole role, String avatarUrl) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.role = role;
+        this.avatarUrl = avatarUrl;
+    }
+
     public void updateToken(Long tokenId) {
         this.tokenId = tokenId;
     }
 
-    public void updateAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
 }

@@ -60,9 +60,8 @@ public class AuthService implements UserDetailsService {
 
         Member member = memberRepository.findByUsername(githubUsernamePrefix + githubProfile.getId())
                 .orElseGet(() -> memberRepository.save(Member.builder().username(githubUsernamePrefix + githubProfile.getId())
-                        .nickname(githubProfile.getName()).password("").role(Member.MemberRole.USER).build()));
-
-        member.updateAvatarUrl(githubProfile.getAvatarUrl());
+                        .nickname(githubProfile.getName()).password("").role(Member.MemberRole.USER)
+                        .avatarUrl(githubProfile.getAvatarUrl()).build()));
 
         return updateToken(member);
     }
