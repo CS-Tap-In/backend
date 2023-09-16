@@ -10,7 +10,6 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import static com.cstapin.auth.acceptance.AuthSteps.관리자_회원가입_요청;
 import static com.cstapin.auth.acceptance.AuthSteps.로그인_요청;
 import static com.cstapin.quiz.acceptance.QuizSteps.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -30,13 +28,10 @@ public class QuizDocumentation extends Documentation {
     @MockBean
     private QuizAdminService quizAdminService;
     private String adminAccessToken;
-    @Value("${props.join.admin}")
-    private String joinAdminSecretKey;
 
     @BeforeEach
     void setUp() {
-        관리자_회원가입_요청("admin", "Admin123@", "admin", joinAdminSecretKey);
-        ExtractableResponse<Response> 로그인_응답 = 로그인_요청("admin", "Admin123@");
+        ExtractableResponse<Response> 로그인_응답 = 로그인_요청("admin", "password123@");
         adminAccessToken = 로그인_응답.jsonPath().getString("accessToken");
     }
 

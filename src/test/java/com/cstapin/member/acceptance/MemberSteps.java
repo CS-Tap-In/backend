@@ -11,12 +11,11 @@ public class MemberSteps {
     private static final String PATH_PREFIX_USER = "/api/v1/user/members";
 
     public static ExtractableResponse<Response> 프로필_조회(String accessToken) {
-        return 프로필_조회(RestAssured.given().log().all(), accessToken);
+        return 프로필_조회(RestAssured.given().log().all().auth().oauth2(accessToken));
     }
 
-    public static ExtractableResponse<Response> 프로필_조회(RequestSpecification requestSpecification, String accessToken) {
+    public static ExtractableResponse<Response> 프로필_조회(RequestSpecification requestSpecification) {
         return requestSpecification
-                .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get(PATH_PREFIX_USER + "/profiles")
                 .then().log().all().extract();

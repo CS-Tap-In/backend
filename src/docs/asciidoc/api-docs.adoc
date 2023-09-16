@@ -269,3 +269,21 @@ Path parameters
 |===
 
 operation::admin-delete-quiz[snippets='http-response']
+
+[[member]]
+== 멤버
+
+=== [유저] 프로필 조회
+
+operation::user-find-profile[snippets='http-request']
+
+operation::user-find-profile[snippets='http-response']
+Response Body
+|===
+| key | type | description | required
+| memberId | Long | 멤버 고유 id (pk) | O
+| nickname | String | 멤버 별칭 | O
+| avatarUrl | String | 아바타 url | O
+| completeQuizCount | int | 당일 완료한 퀴즈 개수 | O
+| dailyGoal | int | 하루 퀴즈 풀이 목표치 | O
+|===
