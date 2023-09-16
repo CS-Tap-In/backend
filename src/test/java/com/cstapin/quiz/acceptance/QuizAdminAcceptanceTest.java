@@ -13,7 +13,7 @@ import java.util.Map;
 import static com.cstapin.quiz.acceptance.QuizSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class QuizAcceptanceTest extends AcceptanceTest {
+public class QuizAdminAcceptanceTest extends AcceptanceTest {
 
     private String accessToken;
     private Long 문제_id;
