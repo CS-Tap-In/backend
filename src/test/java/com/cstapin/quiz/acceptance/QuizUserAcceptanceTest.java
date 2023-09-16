@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 public class QuizUserAcceptanceTest extends AcceptanceTest {
 
     private String accessToken;
+    private String adminAccessToken;
 
     @BeforeEach
     void setUpFixture() {
@@ -24,8 +25,12 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 로그인 = AuthSteps.로그인_요청("user", "password123@");
         accessToken = 로그인.jsonPath().getString("accessToken");
 
+        //관리자 로그인
+        ExtractableResponse<Response> 관리자_로그인 = AuthSteps.로그인_요청("admin", "password123@");
+        adminAccessToken = 관리자_로그인.jsonPath().getString("accessToken");
+
         //카테고리
-        문제_카테고리_생성(accessToken, 문제_카테고리_요청값("데이터베이스"));
+        문제_카테고리_생성(adminAccessToken, 문제_카테고리_요청값("데이터베이스"));
     }
 
     /**

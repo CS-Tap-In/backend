@@ -25,8 +25,7 @@ public class QuizRequest {
     @NotNull
     @Size(min = 1)
     private List<String> answer;
-    @NotNull
-    private QuizStatus status;
+    private QuizStatus status = QuizStatus.UNAPPROVED;
 
     public QuizRequest() {
     }

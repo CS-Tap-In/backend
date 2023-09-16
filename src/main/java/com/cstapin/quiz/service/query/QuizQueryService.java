@@ -7,6 +7,7 @@ import com.cstapin.quiz.service.dto.QuizRequestParams;
 import com.cstapin.quiz.service.dto.QuizzesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,5 +22,10 @@ public class QuizQueryService {
 
     public Page<QuizzesResponse> findQuizzes(QuizRequestParams requestParams) {
         return quizRepository.findQuizzes(requestParams);
+    }
+
+    public Page<QuizzesResponse> findQuizzesByAuthor(Long authorId, Pageable pageable) {
+        return quizRepository.findByAuthorId(authorId, pageable)
+                .map(QuizzesResponse::from);
     }
 }
