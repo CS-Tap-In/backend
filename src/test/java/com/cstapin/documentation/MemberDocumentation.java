@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static com.cstapin.member.acceptance.MemberSteps.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static com.cstapin.auth.acceptance.AuthSteps.로그인_요청;
@@ -35,6 +36,12 @@ public class MemberDocumentation extends Documentation {
         when(memberService.findProfile(anyString())).thenReturn(response);
 
         //then
-        MemberSteps.프로필_조회(getRequestSpecification("user-find-profile").auth().oauth2(userAccessToken));
+        프로필_조회(getRequestSpecification("user-find-profile").auth().oauth2(userAccessToken));
+    }
+
+    @Test
+    void changeDailyGoal() {
+        //then
+        하루_퀴즈_목표치_변경(getRequestSpecification("user-change-dailyGoal").auth().oauth2(userAccessToken), 20);
     }
 }
