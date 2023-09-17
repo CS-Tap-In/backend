@@ -4,13 +4,12 @@ import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.cstapin.member.acceptance.MemberSteps.프로필_조회;
 import static com.cstapin.member.acceptance.MemberSteps.하루_퀴즈_목표치_변경;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MemberAcceptanceTest extends AcceptanceTest {
 
