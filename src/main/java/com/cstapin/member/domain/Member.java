@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "member")
 @Getter
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends AbstractEntity {
 
@@ -63,4 +65,7 @@ public class Member extends AbstractEntity {
         this.tokenId = tokenId;
     }
 
+    public void changeDailyGoal(int dailyGoal) {
+        this.dailyGoal = dailyGoal;
+    }
 }
