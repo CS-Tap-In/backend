@@ -58,7 +58,7 @@ response 에 accessToken, refreshToken 을 반환합니다. +
 요 api는 유저정보가 DB에 있으면 기존 정보를 사용하고 없으면 회원가입 시킵니다.
 
 operation::auth-login-github[snippets='http-request']
-Request params
+Request Body
 |===
 | key | type | description | required
 | code | String | 깃허브가 리다이렉트 하면서 주는 code | O
