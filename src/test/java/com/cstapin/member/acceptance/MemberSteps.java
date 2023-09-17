@@ -6,6 +6,8 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
 
+import java.util.Map;
+
 public class MemberSteps {
 
     private static final String PATH_PREFIX_USER = "/api/v1/user/members";
@@ -18,6 +20,18 @@ public class MemberSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get(PATH_PREFIX_USER + "/profiles")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 하루_퀴즈_목표치_변경(String accessToken, int dailyGoal) {
+        return 하루_퀴즈_목표치_변경(RestAssured.given().log().all().auth().oauth2(accessToken), dailyGoal);
+    }
+
+    public static ExtractableResponse<Response> 하루_퀴즈_목표치_변경(RequestSpecification requestSpecification, int dailyGoal) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(Map.of("dailyGoal", dailyGoal))
+                .when().patch(PATH_PREFIX_USER + "/daily-goal")
                 .then().log().all().extract();
     }
 
