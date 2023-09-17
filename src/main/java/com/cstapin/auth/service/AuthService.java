@@ -3,6 +3,7 @@ package com.cstapin.auth.service;
 import com.cstapin.auth.domain.*;
 import com.cstapin.auth.jwt.JwtProvider;
 import com.cstapin.auth.oauth2.github.GithubClient;
+import com.cstapin.auth.oauth2.github.GithubCodeRequest;
 import com.cstapin.auth.oauth2.github.GithubProfileResponse;
 import com.cstapin.auth.service.dto.*;
 import com.cstapin.auth.service.query.TokenQueryService;
@@ -54,15 +55,14 @@ public class AuthService implements UserDetailsService {
     }
 
     @Transactional
-    public LoginResponse loginFromGithub(String code) {
-        String accessTokenFromGithub = githubClient.getAccessTokenFromGithub(code);
+    public LoginResponse loginFromGithub(GithubCodeRequest request) {
+        String accessTokenFromGithub = githubClient.getAccessTokenFromGithub(request.getCode());
         GithubProfileResponse githubProfile = githubClient.getGithubProfileFromGithub(accessTokenFromGithub);
 
         Member member = memberRepository.findByUsername(githubUsernamePrefix + githubProfile.getId())
                 .orElseGet(() -> memberRepository.save(Member.builder().username(githubUsernamePrefix + githubProfile.getId())
-                        .nickname(githubProfile.getName()).password("").role(Member.MemberRole.USER).build()));
-
-        member.updateAvatarUrl(githubProfile.getAvatarUrl());
+                        .nickname(githubProfile.getName()).password("").role(Member.MemberRole.USER)
+                        .avatarUrl(githubProfile.getAvatarUrl()).build()));
 
         return updateToken(member);
     }

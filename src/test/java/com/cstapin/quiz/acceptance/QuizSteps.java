@@ -13,6 +13,7 @@ import java.util.Map;
 public class QuizSteps {
 
     private static final String PATH_PREFIX_ADMIN = "/api/v1/admin/quizzes";
+    private static final String PATH_PREFIX_USER = "/api/v1/user/quizzes";
 
     public static ExtractableResponse<Response> 문제_생성(String accessToken, Map<String, Object> params) {
         return 문제_생성(RestAssured.given().log().all().auth().oauth2(accessToken), params);
@@ -151,4 +152,35 @@ public class QuizSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 유저가_문제_생성(String accessToken, Map<String, Object> params) {
+        return 유저가_문제_생성(RestAssured.given().log().all().auth().oauth2(accessToken), params);
+    }
+
+    public static ExtractableResponse<Response> 유저가_문제_생성(RequestSpecification requestSpecification, Map<String, Object> params) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().post(PATH_PREFIX_USER)
+                .then().log().all().extract();
+    }
+
+    public static Map<String, Object> 유저가_문제_생성_요청값(Long categoryId, String title, String problem, List<String> answers) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("categoryId", categoryId + "");
+        params.put("title", title);
+        params.put("problem", problem);
+        params.put("answer", answers);
+        return params;
+    }
+
+    public static ExtractableResponse<Response> 내가_만든_문제_목록_조회(String accessToken) {
+        return 내가_만든_문제_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken));
+    }
+
+    public static ExtractableResponse<Response> 내가_만든_문제_목록_조회(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH_PREFIX_USER + "/my/making")
+                .then().log().all().extract();
+    }
 }

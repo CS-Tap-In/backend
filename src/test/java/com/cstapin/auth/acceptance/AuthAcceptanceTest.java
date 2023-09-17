@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthAcceptanceTest extends AcceptanceTest {
 
-    private static final String USERNAME = "user";
+    private static final String USERNAME = "adminUser";
     private static final String PASSWORD = "password123@";
     private static final String NICKNAME = "nickname";
     @Value("${props.join.admin}")

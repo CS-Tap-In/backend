@@ -58,7 +58,7 @@ response 에 accessToken, refreshToken 을 반환합니다. +
 요 api는 유저정보가 DB에 있으면 기존 정보를 사용하고 없으면 회원가입 시킵니다.
 
 operation::auth-login-github[snippets='http-request']
-Request params
+Request Body
 |===
 | key | type | description | required
 | code | String | 깃허브가 리다이렉트 하면서 주는 code | O
@@ -141,6 +141,11 @@ Response body
 | title | String | 퀴즈 제목 | O
 | problem | String | 퀴즈 문제 | O
 | answer | List<String> | 퀴즈 정답 들 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 +
+REMOVE: 삭제 | 문제 상태 | O
 | createdAt | LocalDateTime | 퀴즈 생성일 +
 pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
@@ -269,3 +274,100 @@ Path parameters
 |===
 
 operation::admin-delete-quiz[snippets='http-response']
+
+=== [유저] 퀴즈 생성
+
+operation::user-create-quiz[snippets='http-request']
+Request body
+|===
+| key | type | description | required
+| problem | String +
+500자 이하| 문제 +
+정답이 들어가는 부분은 "\+++"로 대체한다.| O
+| answer | List<String> +
+최소 1개 이상, 문자열 총 합 500자 이하 | 정답 들 | O
+| title | String +
+pattern: 50자 이하 | 제목 | O
+| categoryId | Long | 카테고리 id (pk) | O
+|===
+
+operation::user-create-quiz[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| authorId | Long | 작성자 id (pk) | O
+| authorName | String | 작성자 이름 | O
+| categoryId | Long | 카테고리 id (pk) | O
+| categoryTitle | String | 카테고리 명 | O
+| id | Long | 퀴즈 id (pk) | O
+| title | String | 퀴즈 제목 | O
+| problem | String | 퀴즈 문제 | O
+| answer | List<String> | 퀴즈 정답 들 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 +
+REMOVE: 삭제 | 문제 상태 | O
+| createdAt | LocalDateTime | 퀴즈 생성일 +
+pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
+|===
+
+=== [유저] 내가 만든 퀴즈 목록 조회
+
+operation::user-find-quiz-by-author[snippets='http-request']
+
+operation::user-find-quiz-by-author[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| content | List<QuizzesResponse> | 내용 | O
+| size | int | 크기 | O
+| page | long | 페이지 | O
+| totalElements | long | 총 개수 | O
+|===
+
+content
+|===
+| key | type | description | required
+| categoryId | Long | 카테고리 id (pk) | O
+| categoryTitle | String | 카테고리 명 | O
+| id | Long | 퀴즈 id (pk) | O
+| title | String | 퀴즈 제목 | O
+| problem | String | 퀴즈 문제 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 +
+REMOVE: 삭제 | 문제 상태 | O
+| createdAt | LocalDateTime | 퀴즈 생성일 +
+pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
+|===
+
+[[member]]
+== 멤버
+
+=== [유저] 프로필 조회
+
+operation::user-find-profile[snippets='http-request']
+
+operation::user-find-profile[snippets='http-response']
+Response Body
+|===
+| key | type | description | required
+| memberId | Long | 멤버 고유 id (pk) | O
+| nickname | String | 멤버 별칭 | O
+| avatarUrl | String | 아바타 url | O
+| completeQuizCount | int | 당일 완료한 퀴즈 개수 | O
+| dailyGoal | int | 하루 퀴즈 풀이 목표치 | O
+|===
+
+=== [유저] 퀴즈 하루 목표치 변경
+
+operation::user-change-dailyGoal[snippets='http-request']
+Request Body
+|===
+| key | type | description | required
+| dailyGoal | int | 하루 퀴즈 풀이 목표치 | O
+|===
+
+operation::user-change-dailyGoal[snippets='http-response']

@@ -1,12 +1,16 @@
 package com.cstapin.auth.ui;
 
+import com.cstapin.auth.oauth2.github.GithubCodeRequest;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.auth.service.dto.*;
 import com.cstapin.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -25,9 +29,9 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/login/github")
-    public ResponseEntity<LoginResponse> loginFromGithub(@RequestParam(value = "code") String code) {
-        LoginResponse response = authService.loginFromGithub(code);
+    @PostMapping("/login/github")
+    public ResponseEntity<LoginResponse> loginFromGithub(@Valid @RequestBody GithubCodeRequest request) {
+        LoginResponse response = authService.loginFromGithub(request);
 
         return ResponseEntity.ok().body(response);
     }

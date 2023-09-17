@@ -17,6 +17,8 @@ public class DataLoader {
     private PasswordEncoder passwordEncoder;
 
     public void loadData() {
-        memberRepository.save(new Member("admin", passwordEncoder.encode("password123@"), "admin", Member.MemberRole.ADMIN));
+        memberRepository.save(new Member("admin", passwordEncoder.encode("password123@"), "admin", Member.MemberRole.ADMIN, ""));
+        memberRepository.save(Member.builder().username("user").nickname("user").password(passwordEncoder.encode("password123@"))
+                .role(Member.MemberRole.USER).avatarUrl("http://avatar.com/1").build());
     }
 }
