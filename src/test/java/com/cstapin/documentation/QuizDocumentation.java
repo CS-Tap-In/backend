@@ -39,7 +39,7 @@ public class QuizDocumentation extends Documentation {
         adminAccessToken = 로그인_응답.jsonPath().getString("accessToken");
 
         ExtractableResponse<Response> 유저_로그인_응답 = 로그인_요청("user", "password123@");
-        userAccessToken = 로그인_응답.jsonPath().getString("accessToken");
+        userAccessToken = 유저_로그인_응답.jsonPath().getString("accessToken");
     }
 
     @Test
