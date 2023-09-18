@@ -183,4 +183,15 @@ public class QuizSteps {
                 .when().get(PATH_PREFIX_USER + "/my/making")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 오늘의_문제_선정(String accessToken) {
+        return 오늘의_문제_선정(RestAssured.given().log().all().auth().oauth2(accessToken));
+    }
+
+    public static ExtractableResponse<Response> 오늘의_문제_선정(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post(PATH_PREFIX_USER + "/daily")
+                .then().log().all().extract();
+    }
 }
