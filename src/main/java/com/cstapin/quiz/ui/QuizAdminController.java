@@ -98,4 +98,11 @@ public class QuizAdminController {
         return ResponseEntity.ok().body(quizCategory);
     }
 
+    @DeleteMapping("/categories/{id}")
+    public ResponseEntity<QuizCategoryResponse> deleteQuizCategory(@PathVariable(value = "id") Long quizCategoryId) {
+        quizAdminService.deleteQuizCategory(quizCategoryId);
+
+        return ResponseEntity.ok().build();
+    }
+
 }

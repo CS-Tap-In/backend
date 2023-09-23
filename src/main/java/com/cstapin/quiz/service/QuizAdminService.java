@@ -78,6 +78,11 @@ public class QuizAdminService {
     }
 
     @Transactional
+    public void deleteQuizCategory(Long quizCategoryId) {
+        quizCategoryQueryService.findById(quizCategoryId).delete();
+    }
+
+    @Transactional
     public QuizResponse changeStatusOfQuiz(Long quizId, QuizStatusRequest request) {
         Quiz quiz = quizQueryService.findById(quizId);
         quiz.changeStatus(request.getStatus());
