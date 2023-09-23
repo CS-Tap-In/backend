@@ -199,7 +199,7 @@ public class QuizDocumentation extends Documentation {
     @Test
     void deleteQuizCategory() {
         //then
-        문제_카테고리_삭제(getRequestSpecification("admin-update-quiz-category").auth().oauth2(adminAccessToken), 1L);
+        문제_카테고리_삭제(getRequestSpecification("admin-delete-quiz-category").auth().oauth2(adminAccessToken), 1L);
     }
 
 }
