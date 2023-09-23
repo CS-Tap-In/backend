@@ -7,6 +7,7 @@ import com.cstapin.support.service.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +86,14 @@ public class QuizAdminController {
     @PostMapping("/categories")
     public ResponseEntity<QuizCategoryResponse> createQuizCategory(@Valid @RequestBody QuizCategoryRequest request) {
         QuizCategoryResponse quizCategory = quizAdminService.createQuizCategory(request);
+
+        return new ResponseEntity<>(quizCategory, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/categories/{id}")
+    public ResponseEntity<QuizCategoryResponse> updateQuizCategory(@Valid @RequestBody QuizCategoryRequest request,
+                                                                   @PathVariable(value = "id") Long quizCategoryId) {
+        QuizCategoryResponse quizCategory = quizAdminService.updateQuizCategory(quizCategoryId, request);
 
         return ResponseEntity.ok().body(quizCategory);
     }

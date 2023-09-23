@@ -1,5 +1,6 @@
 package com.cstapin.quiz.domain;
 
+import com.cstapin.quiz.service.dto.QuizCategoryRequest;
 import com.cstapin.support.domain.AbstractEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -42,5 +43,9 @@ public class QuizCategory extends AbstractEntity {
             throw new IllegalStateException("공개, 숨김, 미인증 상태의 퀴즈가 속한 카테고리는 삭제 불가능합니다.");
         }
         this.status = QuizCategoryStatus.DELETED;
+    }
+
+    public void update(QuizCategoryRequest request) {
+        this.title = request.getTitle();
     }
 }

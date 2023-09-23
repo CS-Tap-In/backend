@@ -71,6 +71,13 @@ public class QuizAdminService {
     }
 
     @Transactional
+    public QuizCategoryResponse updateQuizCategory(Long quizCategoryId, QuizCategoryRequest request) {
+        QuizCategory quizCategory = quizCategoryQueryService.findById(quizCategoryId);
+        quizCategory.update(request);
+        return QuizCategoryResponse.from(quizCategory);
+    }
+
+    @Transactional
     public QuizResponse changeStatusOfQuiz(Long quizId, QuizStatusRequest request) {
         Quiz quiz = quizQueryService.findById(quizId);
         quiz.changeStatus(request.getStatus());
