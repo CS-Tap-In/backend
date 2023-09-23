@@ -143,4 +143,43 @@ public class QuizAdminAcceptanceTest extends AcceptanceTest {
         assertThat(문제_상세_조회(accessToken, 문제_id).jsonPath().getString("status")).isEqualTo("PRIVATE");
     }
 
+    /**
+     * Given: 카테고리를 생성한다.
+     * When: 카테고리를 수정한다.
+     * Then: 카테고리 목록을 조회하면 수정된 이름으로 조회된다.
+     */
+    @Test
+    void updateQuizCategory() {
+        //given
+        long 문제_카테고리_id = 문제_카테고리_생성(accessToken, 문제_카테고리_요청값("네트워크로와상")).jsonPath().getLong("id");
+
+        //when
+        문제_카테고리_수정(accessToken, 문제_카테고리_id, 문제_카테고리_요청값("네트워크"));
+
+        //then
+        assertThat(문제_카테고리_목록_조회(accessToken).jsonPath().getString("[1].title")).isEqualTo("네트워크");
+    }
+
+
+    /**
+     * Given: 카테고리를 생성한다.
+     * Then: 카테고리 목록을 조회하면 조회된다.
+     * When: 카테고리를 삭제한다.
+     * Then: 카테고리 목록을 조회하면 조회되지 않는다.
+     */
+    @Test
+    void deleteQuizCategory() {
+        //given
+        long 문제_카테고리_id = 문제_카테고리_생성(accessToken, 문제_카테고리_요청값("네트워크")).jsonPath().getLong("id");
+
+        //then
+        assertThat(문제_카테고리_목록_조회(accessToken).jsonPath().getString("[1].title")).isEqualTo("네트워크");
+
+        //when
+        문제_카테고리_삭제(accessToken, 문제_카테고리_id);
+
+        //then
+        assertThat(문제_카테고리_목록_조회(accessToken).jsonPath().getList(".").size()).isEqualTo(1);
+    }
+
 }
