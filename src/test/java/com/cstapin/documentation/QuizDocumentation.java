@@ -183,4 +183,23 @@ public class QuizDocumentation extends Documentation {
         내가_만든_문제_목록_조회(getRequestSpecification("user-find-quiz-by-author").auth().oauth2(userAccessToken));
     }
 
+    @Test
+    void updateQuizCategory() {
+        //given
+        QuizCategoryResponse response = new QuizCategoryResponse(1L, "데이터베이스", QuizCategoryStatus.PUBLIC);
+
+        //when
+        when(quizAdminService.updateQuizCategory(anyLong(), any())).thenReturn(response);
+
+        //then
+        Map<String, String> request = 문제_카테고리_요청값("데이터베이스");
+        문제_카테고리_수정(getRequestSpecification("admin-update-quiz-category").auth().oauth2(adminAccessToken), 1L, request);
+    }
+
+    @Test
+    void deleteQuizCategory() {
+        //then
+        문제_카테고리_삭제(getRequestSpecification("admin-update-quiz-category").auth().oauth2(adminAccessToken), 1L);
+    }
+
 }
