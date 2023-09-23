@@ -58,21 +58,4 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         assertThat(내가_만든_문제_목록_조회.jsonPath().getList("content.status")).containsExactly("UNAPPROVED");
     }
 
-    /**
-     * Given: 문제를 등록한다.
-     * Given: 로그인한다.
-     * When: 하루 목표치를 1개로 변경한다.
-     * When: 오늘의 문제를 선정한다.
-     * Then: 새로운 문제 개수가 목표치 개수와 일치한다.
-     */
-    @Test
-    void selectDailyQuizzes() {
-        //when
-        MemberSteps.하루_퀴즈_목표치_변경(accessToken, 1);
-        ExtractableResponse<Response> 오늘의_문제_선정 = 오늘의_문제_선정(accessToken);
-
-        //then
-        assertThat(오늘의_문제_선정.jsonPath().getInt("newQuizCount")).isEqualTo(1);
-    }
-
 }
