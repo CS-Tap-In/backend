@@ -89,6 +89,7 @@ operation::admin-create-quiz-category[snippets='http-response']
 Response body
 |===
 | key | type | description | required
+| id | Long | 퀴즈 카테고리 id (pk) | O
 | title | String | 카테고리 명 | O
 | status | PUBLIC: 공개 +
 PRIVATE: 숨김 | 카테고리 상태 +
