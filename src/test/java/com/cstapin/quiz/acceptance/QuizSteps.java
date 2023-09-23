@@ -91,6 +91,31 @@ public class QuizSteps {
         return params;
     }
 
+    public static ExtractableResponse<Response> 문제_카테고리_수정(String accessToken, Long id, Map<String, String> params) {
+        return 문제_카테고리_수정(RestAssured.given().log().all().auth().oauth2(accessToken), id, params);
+    }
+
+    public static ExtractableResponse<Response> 문제_카테고리_수정(RequestSpecification requestSpecification, Long id, Map<String, String> params) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("id", id)
+                .body(params)
+                .when().put(PATH_PREFIX_ADMIN + "/categories/{id}")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 문제_카테고리_삭제(String accessToken, Long id) {
+        return 문제_카테고리_삭제(RestAssured.given().log().all().auth().oauth2(accessToken), id);
+    }
+
+    public static ExtractableResponse<Response> 문제_카테고리_삭제(RequestSpecification requestSpecification, Long id) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("id", id)
+                .when().delete(PATH_PREFIX_ADMIN + "/categories/{id}")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 문제_카테고리_목록_조회(String accessToken) {
         return 문제_카테고리_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken));
     }
@@ -181,6 +206,17 @@ public class QuizSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get(PATH_PREFIX_USER + "/my/making")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 오늘의_문제_선정(String accessToken) {
+        return 오늘의_문제_선정(RestAssured.given().log().all().auth().oauth2(accessToken));
+    }
+
+    public static ExtractableResponse<Response> 오늘의_문제_선정(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post(PATH_PREFIX_USER + "/daily")
                 .then().log().all().extract();
     }
 }

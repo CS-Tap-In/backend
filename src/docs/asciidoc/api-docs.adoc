@@ -89,6 +89,7 @@ operation::admin-create-quiz-category[snippets='http-response']
 Response body
 |===
 | key | type | description | required
+| id | Long | 퀴즈 카테고리 id (pk) | O
 | title | String | 카테고리 명 | O
 | status | PUBLIC: 공개 +
 PRIVATE: 숨김 | 카테고리 상태 +
@@ -110,6 +111,40 @@ PRIVATE: 숨김 | 카테고리 상태 +
 숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
 이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
 |===
+
+=== [관리자] 퀴즈 카테고리 수정
+
+operation::admin-update-quiz-category[snippets='http-request']
+Request params
+|===
+| key | type | description | required
+| quizCategoryId | Long | 퀴즈 카테고리 id (pk) | O
+|===
+
+Request body
+|===
+| key | type | description | required
+| title | String | 카테고리 명 +
+pattern: 20자 이하 | O
+|===
+
+operation::admin-update-quiz-category[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| id | Long | 퀴즈 카테고리 id (pk) | O
+| title | String | 카테고리 명 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 | 카테고리 상태 | O
+|===
+
+=== [관리자] 퀴즈 카테고리 삭제
+
+operation::admin-delete-quiz-category[snippets='http-request']
+
+operation::admin-delete-quiz-category[snippets='http-response']
+
+NOTE: 공개, 숨김, 미인증 상태의 퀴즈가 속한 카테고리는 삭제 불가능합니다.
 
 === [관리자] 퀴즈 생성
 

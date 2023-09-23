@@ -1,10 +1,10 @@
 package com.cstapin.quiz.acceptance;
 
 import com.cstapin.auth.acceptance.AuthSteps;
+import com.cstapin.member.acceptance.MemberSteps;
 import com.cstapin.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.cstapin.quiz.acceptance.QuizSteps.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuizUserAcceptanceTest extends AcceptanceTest {
 
@@ -31,6 +31,11 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
 
         //카테고리
         문제_카테고리_생성(adminAccessToken, 문제_카테고리_요청값("데이터베이스"));
+
+        //문제 생성
+        Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "트랜잭션", "***연산은 한개의 논리적 단위(트랜잭션)에 대한 작업이 성공적으로 끝났고...",
+                List.of("Commit", "커밋"));
+        문제_생성(adminAccessToken, 문제_생성_요청값);
     }
 
     /**
