@@ -76,14 +76,14 @@ public class QuizAdminController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<QuizCategoryResponse>> findQuizzes() {
-        List<QuizCategoryResponse> quizCategories = quizAdminService.findQuizCategory();
+    public ResponseEntity<List<QuizCategoryResponse>> findQuizCategories() {
+        List<QuizCategoryResponse> quizCategories = quizAdminService.findQuizCategories();
 
         return ResponseEntity.ok().body(quizCategories);
     }
 
     @PostMapping("/categories")
-    public ResponseEntity<QuizCategoryResponse> createQuizzes(@Valid @RequestBody QuizCategoryRequest request) {
+    public ResponseEntity<QuizCategoryResponse> createQuizCategory(@Valid @RequestBody QuizCategoryRequest request) {
         QuizCategoryResponse quizCategory = quizAdminService.createQuizCategory(request);
 
         return ResponseEntity.ok().body(quizCategory);

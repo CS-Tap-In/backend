@@ -58,16 +58,16 @@ public class QuizAdminService {
         return QuizResponse.from(quizQueryService.findById(quizId));
     }
 
-    public List<QuizCategoryResponse> findQuizCategory() {
+    public List<QuizCategoryResponse> findQuizCategories() {
         return quizCategoryRepository.findAll().stream()
-                .map(quizCategory -> new QuizCategoryResponse(quizCategory.getTitle(), quizCategory.getStatus()))
+                .map(QuizCategoryResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public QuizCategoryResponse createQuizCategory(QuizCategoryRequest request) {
         QuizCategory quizCategory = quizCategoryRepository.save(request.toQuizCategory());
-        return new QuizCategoryResponse(quizCategory.getTitle(), quizCategory.getStatus());
+        return QuizCategoryResponse.from(quizCategory);
     }
 
     @Transactional
