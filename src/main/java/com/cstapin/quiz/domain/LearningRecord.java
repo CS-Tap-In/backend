@@ -39,6 +39,10 @@ public class LearningRecord {
         this.createdAt = createdAt;
     }
 
+    public static LearningRecord of(Long memberId, Quiz quiz) {
+        return new LearningRecord(memberId, quiz, LearningStatus.NONE, LocalDateTime.now());
+    }
+
     public boolean isSuccess() {
         return LearningStatus.SUCCESS.equals(status);
     }

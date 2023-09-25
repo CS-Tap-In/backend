@@ -2,6 +2,7 @@ package com.cstapin.quiz.acceptance;
 
 import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.member.acceptance.MemberSteps;
+import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -35,7 +36,8 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         //문제 생성
         Map<String, Object> 문제_생성_요청값 = 문제_생성_요청값(1L, "트랜잭션", "***연산은 한개의 논리적 단위(트랜잭션)에 대한 작업이 성공적으로 끝났고...",
                 List.of("Commit", "커밋"));
-        문제_생성(adminAccessToken, 문제_생성_요청값);
+        long 문제_id = 문제_생성(adminAccessToken, 문제_생성_요청값).jsonPath().getLong("id");
+        문제_상태_변경(adminAccessToken, 문제_id, QuizStatus.PUBLIC.name());
     }
 
     /**

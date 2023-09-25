@@ -56,7 +56,7 @@ public class DailyQuizSelectorMockTest {
     @Test
     void 제일_최근에_풀었을_때_틀린_문제들은_모두_뽑는다() {
         //when
-        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal);
+        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal).getTotalQuizzes();
 
         //then
         assertThat(quizzes).contains(최근에틀린퀴즈1, 최근에틀린퀴즈2);
@@ -65,7 +65,7 @@ public class DailyQuizSelectorMockTest {
     @Test
     void 사분의삼_비율이_안되면_이전에_틀린_문제들을_뽑아온다() {
         //when
-        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal);
+        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal).getTotalQuizzes();
 
         //then
         assertThat(quizzes).contains(최근에틀린퀴즈1, 최근에틀린퀴즈2, 이전에틀린퀴즈1);
@@ -84,7 +84,7 @@ public class DailyQuizSelectorMockTest {
         );
 
         //when
-        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal);
+        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal).getTotalQuizzes();
 
         //then
         assertThat(quizzes).contains(최근에틀린퀴즈1, 최근에틀린퀴즈2, 최근에틀린퀴즈3);
@@ -99,7 +99,7 @@ public class DailyQuizSelectorMockTest {
         );
 
         //when
-        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal);
+        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal).getTotalQuizzes();
 
         //then
         assertThat(quizzes).contains(최근에틀린퀴즈1, 최근에틀린퀴즈2, 이전에틀린퀴즈1, 푼적없는퀴즈1, 푼적없는퀴즈2);
@@ -111,7 +111,7 @@ public class DailyQuizSelectorMockTest {
         when(learningRecordQueryService.findUnSolvedQuiz(memberId)).thenReturn(List.of());
 
         //when
-        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal);
+        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal).getTotalQuizzes();
 
         //then
         assertThat(quizzes).contains(최근에틀린퀴즈1, 최근에틀린퀴즈2, 이전에틀린퀴즈1, 최근에맞은퀴즈1, 최근에맞은퀴즈2);
@@ -135,10 +135,10 @@ public class DailyQuizSelectorMockTest {
         );
 
         //when
-        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal);
+        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal).getTotalQuizzes();
 
         //then
-        assertThat(quizzes).contains(최근에틀린퀴즈1, 최근에틀린퀴즈2);
+        assertThat(quizzes).contains(최근에틀린퀴즈1, 최근에틀린퀴즈2, 푼적없는퀴즈1, 푼적없는퀴즈2, 푼적없는퀴즈3);
         assertThat(quizzes).doesNotContain(이전에틀린퀴즈1);
     }
 
