@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class MemberSteps {
 
+    private static final String PATH_PREFIX_ADMIN = "/api/v1/admin/members";
     private static final String PATH_PREFIX_USER = "/api/v1/user/members";
 
     public static ExtractableResponse<Response> 프로필_조회(String accessToken) {
@@ -32,6 +33,18 @@ public class MemberSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(Map.of("dailyGoal", dailyGoal))
                 .when().patch(PATH_PREFIX_USER + "/daily-goal")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 회원_목록_조회(String accessToken, String username) {
+        return 회원_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken), username);
+    }
+
+    public static ExtractableResponse<Response> 회원_목록_조회(RequestSpecification requestSpecification, String username) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .params(Map.of("username", username))
+                .when().get(PATH_PREFIX_ADMIN)
                 .then().log().all().extract();
     }
 
