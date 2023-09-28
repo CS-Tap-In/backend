@@ -141,6 +141,11 @@ PRIVATE: 숨김 | 카테고리 상태 | O
 === [관리자] 퀴즈 카테고리 삭제
 
 operation::admin-delete-quiz-category[snippets='http-request']
+Request params
+|===
+| key | type | description | required
+| quizCategoryId | Long | 퀴즈 카테고리 id (pk) | O
+|===
 
 operation::admin-delete-quiz-category[snippets='http-response']
 
