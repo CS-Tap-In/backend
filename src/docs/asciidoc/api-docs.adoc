@@ -383,6 +383,26 @@ REMOVE: 삭제 | 문제 상태 | O
 pattern: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
 
+=== [유저] 오늘의 문제 선정
+
+operation::user-select-daily-quizzes[snippets='http-request']
+
+operation::user-select-daily-quizzes[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| reviewQuizCount | int | 복습 퀴즈 개수 | O
+| newQuizCount | int | 새로운 퀴즈 개수 | O
+| quizCategories | List<DailyQuizzesSummaryResponse> | 카테고리 별 퀴즈 개수 | O
+|===
+
+DailyQuizzesSummaryResponse
+|===
+| key | type | description | required
+| quizCategoryTitle | String | 퀴즈 카테고리 명 | O
+| count | int | 개수 | O
+|===
+
 [[member]]
 == 멤버
 
