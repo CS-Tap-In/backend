@@ -36,14 +36,10 @@ public class MemberSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 회원_목록_조회(String accessToken, String username) {
-        return 회원_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken), username);
-    }
-
     public static ExtractableResponse<Response> 회원_목록_조회(RequestSpecification requestSpecification, String username) {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .params(Map.of("username", username))
+                .params(Map.of("username", username, "page", 1, "size", 10))
                 .when().get(PATH_PREFIX_ADMIN)
                 .then().log().all().extract();
     }
