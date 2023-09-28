@@ -2,10 +2,13 @@ package com.cstapin.member.service;
 
 
 import com.cstapin.member.service.dto.DailyGoalRequest;
+import com.cstapin.member.service.dto.MembersRequest;
+import com.cstapin.member.service.dto.MembersResponse;
 import com.cstapin.member.service.dto.ProfileResponse;
 import com.cstapin.member.service.query.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,5 +28,9 @@ public class MemberService {
     @Transactional
     public void changeDailyGoal(String username, DailyGoalRequest request) {
         memberQueryService.findByUsername(username).changeDailyGoal(request.getDailyGoal());
+    }
+
+    public Page<MembersResponse> findMembers(MembersRequest request) {
+        return memberQueryService.findMembers(request);
     }
 }
