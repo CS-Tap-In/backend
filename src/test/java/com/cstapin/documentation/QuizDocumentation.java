@@ -4,9 +4,7 @@ import com.cstapin.quiz.domain.QuizCategoryStatus;
 import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.quiz.service.QuizAdminService;
 import com.cstapin.quiz.service.QuizUserService;
-import com.cstapin.quiz.service.dto.QuizCategoryResponse;
-import com.cstapin.quiz.service.dto.QuizResponse;
-import com.cstapin.quiz.service.dto.QuizzesResponse;
+import com.cstapin.quiz.service.dto.*;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -200,6 +198,21 @@ public class QuizDocumentation extends Documentation {
     void deleteQuizCategory() {
         //then
         문제_카테고리_삭제(getRequestSpecification("admin-delete-quiz-category").auth().oauth2(adminAccessToken), 1L);
+    }
+
+    @Test
+    void selectDailyQuizzes() {
+        //given
+        DailyQuizzesSummaryResponse response = new DailyQuizzesSummaryResponse(3, 2,
+                List.of(new SelectedQuizCategoryCountResponse("데이터베이스", 1),
+                        new SelectedQuizCategoryCountResponse("운영체제", 2),
+                        new SelectedQuizCategoryCountResponse("네트워크", 2)));
+
+        //when
+        when(quizUserService.selectDailyQuizzes(anyString())).thenReturn(response);
+
+        //then
+        오늘의_문제_선정(getRequestSpecification("user-select-daily-quizzes").auth().oauth2(userAccessToken));
     }
 
 }

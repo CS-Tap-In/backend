@@ -2,6 +2,7 @@ package com.cstapin.quiz.ui;
 
 import com.cstapin.auth.domain.UserPrincipal;
 import com.cstapin.quiz.service.QuizUserService;
+import com.cstapin.quiz.service.dto.DailyQuizzesSummaryResponse;
 import com.cstapin.quiz.service.dto.QuizRequest;
 import com.cstapin.quiz.service.dto.QuizResponse;
 import com.cstapin.quiz.service.dto.QuizzesResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -39,6 +41,13 @@ public class QuizUserController {
         Page<QuizzesResponse> quizzes = quizUserService.findQuizzesByAuthor(userPrincipal.getUsername(), pageRequest.getPageable());
 
         return ResponseEntity.ok().body(new PageResponse<>(quizzes));
+    }
+
+    @PostMapping("/daily")
+    public ResponseEntity<DailyQuizzesSummaryResponse> selectDailyQuizzes(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        DailyQuizzesSummaryResponse response = quizUserService.selectDailyQuizzes(userPrincipal.getUsername());
+
+        return ResponseEntity.ok().body(response);
     }
 
 }

@@ -3,7 +3,10 @@ package com.cstapin.member.service.query;
 import com.cstapin.exception.notfound.MemberNotFoundException;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.domain.MemberRepository;
+import com.cstapin.member.service.dto.MembersRequest;
+import com.cstapin.member.service.dto.MembersResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,5 +21,9 @@ public class MemberQueryService {
 
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username).orElseThrow(MemberNotFoundException::new);
+    }
+
+    public Page<MembersResponse> findMembers(MembersRequest request) {
+        return memberRepository.findMembers(request).map(MembersResponse::from);
     }
 }

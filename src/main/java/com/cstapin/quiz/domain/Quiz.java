@@ -16,7 +16,7 @@ import java.util.Objects;
 @Table(name = "quiz")
 @Getter
 @DynamicUpdate
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor
 public class Quiz extends AbstractEntity {
 
     private static final int ANSWER_LENGTH = 500;

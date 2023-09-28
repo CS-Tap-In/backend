@@ -5,12 +5,8 @@ import com.cstapin.auth.domain.UserPrincipal;
 import com.cstapin.member.service.MemberService;
 import com.cstapin.member.service.dto.DailyGoalRequest;
 import com.cstapin.member.service.dto.ProfileResponse;
-import com.cstapin.quiz.service.dto.QuizRequestParams;
-import com.cstapin.quiz.service.dto.QuizzesResponse;
-import com.cstapin.support.service.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +17,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/user/members")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberUserController {
 
     private final MemberService memberService;
 
