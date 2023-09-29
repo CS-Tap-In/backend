@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,4 +17,8 @@ public interface QuizRepository extends JpaRepository<Quiz, Long>, QuizRepositor
 
     @EntityGraph(attributePaths = {"quizCategory"})
     Page<Quiz> findByAuthorId(Long authorId, Pageable pageable);
+
+    @Modifying(clearAutomatically = true)
+    @Query("update Quiz q set q.status = :status where q.id in :quizIds")
+    void changeStatus(@Param(value = "quizIds") List<Long> quizIds, @Param(value = "status") QuizStatus status);
 }
