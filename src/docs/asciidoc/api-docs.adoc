@@ -453,6 +453,25 @@ DailyQuizzesSummaryResponse
 | count | int | 개수 | O
 |===
 
+=== [유저] 오늘의 문제 선정
+
+operation::user-find-daily-quizzes[snippets='http-request']
+
+operation::user-find-daily-quizzes[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| learningRecordId | Long | 학습 기록 id (pk) | O
+| learningStatus | SUCCESS: 정답을 한 번에 맞춤 +
+FAILURE: 틀림 +
+NONE: 풀지 않음 | 문제 학습 상태 | O
+| quizId | Long | 문제 id (pk) | O
+| quizCategoryTitle | String | 문제 카테고리 명 | O
+| quizTitle | String | 퀴즈 제목 | O
+| problem | String | 퀴즈 문제 | O
+| answer | List<String> | 퀴즈 정답 들 | O
+|===
+
 [[member]]
 == 멤버
 
