@@ -219,4 +219,15 @@ public class QuizSteps {
                 .when().post(PATH_PREFIX_USER + "/daily")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 오늘의_문제_목록_조회(String accessToken) {
+        return 오늘의_문제_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken));
+    }
+
+    public static ExtractableResponse<Response> 오늘의_문제_목록_조회(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH_PREFIX_USER + "/daily")
+                .then().log().all().extract();
+    }
 }

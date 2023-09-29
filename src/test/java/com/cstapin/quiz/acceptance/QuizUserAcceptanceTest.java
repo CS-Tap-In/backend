@@ -77,4 +77,22 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         assertThat(오늘의_문제_선정.jsonPath().getInt("newQuizCount")).isEqualTo(1);
     }
 
+    /**
+     * Given: 문제를 등록한다.
+     * Given: 로그인한다.
+     * When: 오늘의 문제를 선정한다.
+     * Then: 오늘의 문제 목록의 사이즈와 문제 선정 시 반환 된 문제 개수의 합이 같다.
+     */
+    @Test
+    void findDailyQuizzes() {
+        //when
+        ExtractableResponse<Response> 오늘의_문제_선정 = 오늘의_문제_선정(accessToken);
+        int newQuizCount = 오늘의_문제_선정.jsonPath().getInt("newQuizCount");
+        int reviewQuizCount = 오늘의_문제_선정.jsonPath().getInt("reviewQuizCount");
+
+        //then
+        assertThat(오늘의_문제_목록_조회(accessToken).jsonPath().getList(".").size())
+                .isEqualTo(newQuizCount + reviewQuizCount);
+    }
+
 }
