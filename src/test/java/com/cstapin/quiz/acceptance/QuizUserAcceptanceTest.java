@@ -83,6 +83,7 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
      * When: 오늘의 문제를 선정한다.
      * Then: 오늘의 문제 목록의 사이즈와 문제 선정 시 반환 된 문제 개수의 합이 같다.
      */
+    // TODO 오늘의 문제 선정이 23:59:59에 되고 오늘의 문제 목록 조회가 00:00:01이 되면 에러가 발생한다.
     @Test
     void findDailyQuizzes() {
         //when

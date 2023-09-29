@@ -3,10 +3,7 @@ package com.cstapin.quiz.service;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.service.query.MemberQueryService;
 import com.cstapin.quiz.domain.*;
-import com.cstapin.quiz.service.dto.DailyQuizzesSummaryResponse;
-import com.cstapin.quiz.service.dto.QuizRequest;
-import com.cstapin.quiz.service.dto.QuizResponse;
-import com.cstapin.quiz.service.dto.QuizzesResponse;
+import com.cstapin.quiz.service.dto.*;
 import com.cstapin.quiz.service.query.QuizCategoryQueryService;
 import com.cstapin.quiz.service.query.QuizQueryService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,5 +52,10 @@ public class QuizUserService {
         learningRecordRepository.saveAll(learningRecords);
 
         return DailyQuizzesSummaryResponse.from(dailySelectedQuizzes);
+    }
+
+    public List<DailyQuizzesResponse> findDailyQuizzes(String username) {
+        Member member = memberQueryService.findByUsername(username);
+        return learningRecordRepository.findByMemberIdAndLocalDate(member.getId(), LocalDate.now());
     }
 }

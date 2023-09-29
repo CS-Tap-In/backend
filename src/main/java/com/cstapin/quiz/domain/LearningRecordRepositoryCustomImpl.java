@@ -1,8 +1,11 @@
 package com.cstapin.quiz.domain;
 
+import com.cstapin.quiz.service.dto.DailyQuizzesResponse;
+import com.cstapin.quiz.service.dto.QDailyQuizzesResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.cstapin.quiz.domain.QLearningRecord.learningRecord;
@@ -40,6 +43,26 @@ public class LearningRecordRepositoryCustomImpl implements LearningRecordReposit
                 .where(
                         quiz.id.notIn(solvedQuizIds),
                         quiz.status.eq(QuizStatus.PUBLIC)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<DailyQuizzesResponse> findByMemberIdAndLocalDate(Long memberId, LocalDate date) {
+        return queryFactory
+                .select(new QDailyQuizzesResponse(
+                        learningRecord.id,
+                        learningRecord.status,
+                        learningRecord.quiz.id,
+                        learningRecord.quiz.quizCategory.title,
+                        learningRecord.quiz.title,
+                        learningRecord.quiz.problem,
+                        learningRecord.quiz.answer
+                ))
+                .from(learningRecord)
+                .where(
+                        learningRecord.memberId.eq(memberId),
+                        learningRecord.createdAt.after(date.atStartOfDay())
                 )
                 .fetch();
     }
