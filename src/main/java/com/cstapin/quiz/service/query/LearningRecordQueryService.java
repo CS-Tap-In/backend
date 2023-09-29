@@ -1,5 +1,6 @@
 package com.cstapin.quiz.service.query;
 
+import com.cstapin.exception.notfound.LearningRecordNotFoundException;
 import com.cstapin.quiz.domain.LearningRecord;
 import com.cstapin.quiz.domain.LearningRecordRepository;
 import com.cstapin.quiz.domain.Quiz;
@@ -20,5 +21,9 @@ public class LearningRecordQueryService {
 
     public List<Quiz> findUnSolvedQuiz(Long memberId) {
         return learningRecordRepository.findUnSolvedQuiz(memberId);
+    }
+
+    public LearningRecord findById(Long learningRecordId) {
+        return learningRecordRepository.findById(learningRecordId).orElseThrow(LearningRecordNotFoundException::new);
     }
 }
