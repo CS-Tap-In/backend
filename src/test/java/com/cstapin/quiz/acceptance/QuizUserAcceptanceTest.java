@@ -2,6 +2,7 @@ package com.cstapin.quiz.acceptance;
 
 import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.member.acceptance.MemberSteps;
+import com.cstapin.quiz.domain.LearningStatus;
 import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;
@@ -82,6 +83,8 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
      * Given: 로그인한다.
      * When: 오늘의 문제를 선정한다.
      * Then: 오늘의 문제 목록의 사이즈와 문제 선정 시 반환 된 문제 개수의 합이 같다.
+     * When: 문제 풀이 기록을 SUCCESS로 등록한다.
+     * Then: 오늘의 문제 목록을 조회하면 SUCCESS 상태이다.
      */
     // TODO 오늘의 문제 선정이 23:59:59에 되고 오늘의 문제 목록 조회가 00:00:01이 되면 에러가 발생한다.
     @Test
@@ -92,8 +95,18 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         int reviewQuizCount = 오늘의_문제_선정.jsonPath().getInt("reviewQuizCount");
 
         //then
-        assertThat(오늘의_문제_목록_조회(accessToken).jsonPath().getList(".").size())
+        ExtractableResponse<Response> 오늘의_문제_목록_조회 = 오늘의_문제_목록_조회(accessToken);
+        assertThat(오늘의_문제_목록_조회.jsonPath().getList(".").size())
                 .isEqualTo(newQuizCount + reviewQuizCount);
+
+        //when
+        long 학습_기록_id = 오늘의_문제_목록_조회.jsonPath().getLong("[0].learningRecordId");
+        문제_풀이_기록_등록(accessToken, 학습_기록_id, LearningStatus.SUCCESS);
+
+        //then
+        ExtractableResponse<Response> 오늘의_문제_목록_다시_조회 = 오늘의_문제_목록_조회(accessToken);
+        assertThat(오늘의_문제_목록_다시_조회.jsonPath().getString("[0].learningStatus"))
+                .isEqualTo(LearningStatus.SUCCESS.name());
     }
 
 }
