@@ -453,7 +453,7 @@ DailyQuizzesSummaryResponse
 | count | int | 개수 | O
 |===
 
-=== [유저] 오늘의 문제 선정
+=== [유저] 오늘의 문제 목록 조회
 
 operation::user-find-daily-quizzes[snippets='http-request']
 
@@ -471,6 +471,19 @@ NONE: 풀지 않음 | 문제 학습 상태 | O
 | problem | String | 퀴즈 문제 | O
 | answer | List<String> | 퀴즈 정답 들 | O
 |===
+
+=== [유저] 문제 풀이 기록 등록
+
+operation::user-update-learning-record-status[snippets='http-request']
+Path params
+|===
+| key | type | description | required
+| learningStatus | SUCCESS: 정답을 한 번에 맞춤 +
+FAILURE: 틀림 +
+NONE: 풀지 않음 | 문제 학습 상태 | O
+|===
+
+operation::user-update-learning-record-status[snippets='http-response']
 
 [[member]]
 == 멤버
