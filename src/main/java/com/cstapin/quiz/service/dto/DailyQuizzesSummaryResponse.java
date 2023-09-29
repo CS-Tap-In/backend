@@ -15,11 +15,11 @@ public class DailyQuizzesSummaryResponse {
 
     private final int reviewQuizCount;
     private final int newQuizCount;
-    private final List<SelectedQuizCategoryCountResponse> quizCategories;
+    private final List<QuizCategoryCountResponse> quizCategories;
 
     public DailyQuizzesSummaryResponse(int reviewQuizCount,
                                        int newQuizCount,
-                                       List<SelectedQuizCategoryCountResponse> quizCategories) {
+                                       List<QuizCategoryCountResponse> quizCategories) {
         this.reviewQuizCount = reviewQuizCount;
         this.newQuizCount = newQuizCount;
         this.quizCategories = quizCategories;
@@ -34,8 +34,8 @@ public class DailyQuizzesSummaryResponse {
         selectedQuizCategories.forEach(quizCategory ->
                 quizCategoryMap.put(quizCategory, quizCategoryMap.getOrDefault(quizCategory, 0) + 1));
 
-        List<SelectedQuizCategoryCountResponse> selectedQuizCategoryCounts = quizCategoryMap.keySet().stream()
-                .map(quizCategory -> new SelectedQuizCategoryCountResponse(quizCategory.getTitle(), quizCategoryMap.get(quizCategory)))
+        List<QuizCategoryCountResponse> selectedQuizCategoryCounts = quizCategoryMap.keySet().stream()
+                .map(quizCategory -> new QuizCategoryCountResponse(quizCategory.getTitle(), quizCategoryMap.get(quizCategory)))
                 .collect(Collectors.toList());
 
         return new DailyQuizzesSummaryResponse(

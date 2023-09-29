@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,5 +66,19 @@ public class QuizUserService {
         Member member = memberQueryService.findByUsername(username);
         LearningRecord learningRecord = learningRecordQueryService.findById(learningRecordId);
         learningRecord.updateStatus(member.getId(), request.getLearningStatus());
+    }
+
+    public List<LearningRecordsResponse> findLearningRecords(String username) {
+        Member member = memberQueryService.findByUsername(username);
+
+        Map<Long, Long> quizCountByQuizCategoryMap = learningRecordRepository.findStudyQuizCountByQuizCategory(member.getId())
+                .stream().collect(Collectors.toMap(QuizCountByCategoryId::getQuizCategoryId, QuizCountByCategoryId::getCount));
+
+        List<QuizCountByCategoryId> allQuizCountByQuizCategoryIds = quizRepository.findQuizCountByQuizCategory();
+
+        return allQuizCountByQuizCategoryIds.stream().map(dto -> new LearningRecordsResponse(
+                dto.getQuizCategoryTitle(),
+                quizCountByQuizCategoryMap.getOrDefault(dto.getQuizCategoryId(), 0L),
+                dto.getCount())).collect(Collectors.toList());
     }
 }

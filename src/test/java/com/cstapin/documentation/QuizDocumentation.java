@@ -205,9 +205,9 @@ public class QuizDocumentation extends Documentation {
     void selectDailyQuizzes() {
         //given
         DailyQuizzesSummaryResponse response = new DailyQuizzesSummaryResponse(3, 2,
-                List.of(new SelectedQuizCategoryCountResponse("데이터베이스", 1),
-                        new SelectedQuizCategoryCountResponse("운영체제", 2),
-                        new SelectedQuizCategoryCountResponse("네트워크", 2)));
+                List.of(new QuizCategoryCountResponse("데이터베이스", 1),
+                        new QuizCategoryCountResponse("운영체제", 2),
+                        new QuizCategoryCountResponse("네트워크", 2)));
 
         //when
         when(quizUserService.selectDailyQuizzes(anyString())).thenReturn(response);

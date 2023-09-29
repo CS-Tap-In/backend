@@ -27,6 +27,7 @@ public class LearningRecord {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LearningStatus status;
 

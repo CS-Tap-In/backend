@@ -63,4 +63,11 @@ public class QuizUserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/learning-records")
+    public ResponseEntity<List<LearningRecordsResponse>> findLearningRecords(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        List<LearningRecordsResponse> response = quizUserService.findLearningRecords(userPrincipal.getUsername());
+
+        return ResponseEntity.ok().body(response);
+    }
+
 }

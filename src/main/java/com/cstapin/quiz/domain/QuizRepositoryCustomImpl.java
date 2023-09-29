@@ -1,9 +1,7 @@
 package com.cstapin.quiz.domain;
 
 import com.cstapin.quiz.domain.search.QuizSearchType;
-import com.cstapin.quiz.service.dto.QQuizzesResponse;
-import com.cstapin.quiz.service.dto.QuizRequestParams;
-import com.cstapin.quiz.service.dto.QuizzesResponse;
+import com.cstapin.quiz.service.dto.*;
 import com.cstapin.support.enums.ConditionYN;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -56,6 +54,18 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                         getStatusCondition(params.getStatus(), params.getRejected()));
 
         return PageableExecutionUtils.getPage(content, params.getPageable(), countQuery::fetchOne);
+    }
+
+    @Override
+    public List<QuizCountByCategoryId> findQuizCountByQuizCategory() {
+        return queryFactory
+                .select(new QQuizCountByCategoryId(quizCategory.title, quizCategory.id, quiz.count()))
+                .from(quiz)
+                .join(quiz.quizCategory, quizCategory)
+                .where(quiz.status.eq(QuizStatus.PUBLIC),
+                        quizCategory.status.eq(QuizCategoryStatus.PUBLIC))
+                .groupBy(quiz.quizCategory.id)
+                .fetch();
     }
 
     private Predicate getStatusCondition(QuizStatus status, ConditionYN rejected) {
