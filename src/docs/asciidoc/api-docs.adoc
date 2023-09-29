@@ -315,6 +315,22 @@ Path parameters
 
 operation::admin-delete-quiz[snippets='http-response']
 
+=== [관리자] 퀴즈 상태 변경
+
+operation::admin-change-status-quizzes[snippets='http-request']
+Request body
+|===
+| key | type | description | required
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 +
+UNAPPROVED: 미승인 +
+REJECTED: 반려 +
+REMOVE: 삭제 | 문제 상태 | O
+| quizIds | List<Long> | 퀴즈 고유 id (pk) 리스트 | O
+|===
+
+operation::admin-change-status-quizzes[snippets='http-response']
+
 === [유저] 퀴즈 생성
 
 operation::user-create-quiz[snippets='http-request']
