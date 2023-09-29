@@ -242,7 +242,7 @@ public class QuizSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("learningRecordId", learningRecordId)
                 .body(Map.of("learningStatus", status.name()))
-                .when().post(PATH_PREFIX_USER + "/daily/learningRecords/{learningRecordId}")
+                .when().post(PATH_PREFIX_USER + "/daily/learning-records/{learningRecordId}")
                 .then().log().all().extract();
     }
 }

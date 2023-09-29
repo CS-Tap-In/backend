@@ -54,7 +54,7 @@ public class QuizUserController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/daily/learningRecords/{learningRecordId}")
+    @PostMapping("/daily/learning-records/{learningRecordId}")
     public ResponseEntity<Void> updateLearningRecordStatus(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                            @PathVariable Long learningRecordId,
                                                            @Valid @RequestBody LearningRecordStatusRequest request) {
