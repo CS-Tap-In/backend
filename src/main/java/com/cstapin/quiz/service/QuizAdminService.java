@@ -91,6 +91,6 @@ public class QuizAdminService {
 
     @Transactional
     public void changeStatusOfQuizzes(QuizzesStatusRequest request) {
-        quizRepository.findByIdIn(request.getQuizIds()).forEach(quiz -> quiz.changeStatus(request.getStatus()));
+        quizRepository.changeStatus(request.getQuizIds(), request.getStatus());
     }
 }
