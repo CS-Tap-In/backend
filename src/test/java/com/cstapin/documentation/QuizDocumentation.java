@@ -229,4 +229,11 @@ public class QuizDocumentation extends Documentation {
         //then
         오늘의_문제_목록_조회(getRequestSpecification("user-find-daily-quizzes").auth().oauth2(userAccessToken));
     }
+
+    @Test
+    void updateLearningRecordStatus() {
+        //then
+        문제_풀이_기록_등록(getRequestSpecification("user-update-learning-record-status").auth().oauth2(userAccessToken),
+                1L, LearningStatus.SUCCESS);
+    }
 }
