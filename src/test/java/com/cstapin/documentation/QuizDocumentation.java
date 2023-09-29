@@ -1,5 +1,6 @@
 package com.cstapin.documentation;
 
+import com.cstapin.quiz.domain.LearningStatus;
 import com.cstapin.quiz.domain.QuizCategoryStatus;
 import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.quiz.service.QuizAdminService;
@@ -215,4 +216,17 @@ public class QuizDocumentation extends Documentation {
         오늘의_문제_선정(getRequestSpecification("user-select-daily-quizzes").auth().oauth2(userAccessToken));
     }
 
+    @Test
+    void findDailyQuizzes() {
+        //given
+        DailyQuizzesResponse response = new DailyQuizzesResponse(1L, LearningStatus.FAILURE, 1L,
+                "데이터베이스", "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.",
+                "pk,기본키,기본 키");
+
+        //when
+        when(quizUserService.findDailyQuizzes(anyString())).thenReturn(List.of(response));
+
+        //then
+        오늘의_문제_목록_조회(getRequestSpecification("user-find-daily-quizzes").auth().oauth2(userAccessToken));
+    }
 }
