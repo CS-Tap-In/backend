@@ -33,4 +33,9 @@ public class MemberService {
     public Page<MembersResponse> findMembers(MembersRequest request) {
         return memberQueryService.findMembers(request);
     }
+
+    @Transactional
+    public void withdrawMember(String username) {
+        memberQueryService.findByUsername(username).withdraw();
+    }
 }
