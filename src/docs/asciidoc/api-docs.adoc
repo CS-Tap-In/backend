@@ -49,6 +49,20 @@ NOTE: secretKey는 관리자에게 문의하세요.
 
 operation::join-admin[snippets='http-response']
 
+=== [유저] 일반 회원가입
+
+operation::join-normal-user[snippets='http-request']
+Request body
+|===
+| key | type | description | required
+| password | String +
+pattern: 영문, 숫자, 특수기호 조합 8~15자 이내  | 비밀번호 | O
+| username | String +
+pattern: 영문/숫자 2~20자 이내 | 아이디 | O
+|nickname | String +
+pattern: 3자 이상 | 별명 | O
+|===
+
 === [유저] 깃허브 로그인
 
 NOTE: 깃허브에서 리다이렉트 해주는 api 입니다. request 는 깃허브로 부터 받습니다.
