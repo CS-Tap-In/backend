@@ -1,5 +1,6 @@
 package com.cstapin.auth.ui;
 
+import com.cstapin.auth.domain.UserPrincipal;
 import com.cstapin.auth.oauth2.github.GithubCodeRequest;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.auth.service.dto.*;
@@ -7,6 +8,7 @@ import com.cstapin.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,4 +59,10 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/withdrawal")
+    public ResponseEntity<Void> withdrawMember(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        authService.withdrawMember(userPrincipal.getUsername());
+        return ResponseEntity.ok().build();
+    }
 }

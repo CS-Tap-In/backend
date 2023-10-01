@@ -91,6 +91,11 @@ public class AuthService implements UserDetailsService {
         return new TokenResponse(token);
     }
 
+    @Transactional
+    public void withdrawMember(String username) {
+        memberQueryService.findByUsername(username).withdraw();
+    }
+
     private LoginResponse updateToken(Member member) {
         Token token = tokenRepository.save(
                 new Token(jwtProvider.createAccessToken(member), jwtProvider.createRefreshToken())
