@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/join/admin")
-    public ResponseEntity<Void> join(@Valid @RequestBody JoinAdminRequest request) {
+    public ResponseEntity<Void> joinAdmin(@Valid @RequestBody JoinRequest request) {
 
         authService.join(request, Member.MemberRole.ADMIN);
         return ResponseEntity.ok().build();
@@ -48,6 +48,13 @@ public class AuthController {
 
         TokenResponse response = authService.reissueToken(requestBody);
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/join/user")
+    public ResponseEntity<Void> joinUser(@Valid @RequestBody JoinRequest request) {
+
+        authService.join(request, Member.MemberRole.USER);
+        return ResponseEntity.ok().build();
     }
 
 }

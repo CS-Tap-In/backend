@@ -115,4 +115,21 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         var loginResponse = 로그인_요청("newUser", "newPassword12@");
         assertThat(loginResponse.jsonPath().getString("accessToken")).isNotEmpty();
     }
+
+    /**
+     * Given: 회원가입을 한다.
+     * When: 같은 아이디로 회원가입을 하면
+     * Then: 예외가 발생한다.
+     */
+    @Test
+    void joinNormalUserWithDuplicateUsername() {
+        //given
+        일반_회원가입_요청("newUser", "newPassword12@", "newUser");
+
+        //when
+        var loginResponse = 일반_회원가입_요청("newUser", "newPassword12@", "newUser");
+
+        //then
+        assertThat(loginResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
 }

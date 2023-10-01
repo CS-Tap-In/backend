@@ -68,7 +68,7 @@ public class AuthService implements UserDetailsService {
     }
 
     @Transactional
-    public void join(JoinAdminRequest request, Member.MemberRole memberRole) {
+    public void join(JoinRequest request, Member.MemberRole memberRole) {
         joinValidator.validate(request, memberRole);
         memberRepository.save(
                 Member.builder().username(request.getUsername()).nickname(request.getNickname())
