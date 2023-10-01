@@ -61,6 +61,10 @@ public class Member extends AbstractEntity {
         this.avatarUrl = avatarUrl;
     }
 
+    public void withdraw() {
+        this.username = "withdrawal_" + this.username;
+    }
+
     public void updateToken(Long tokenId) {
         this.tokenId = tokenId;
     }

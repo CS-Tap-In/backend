@@ -61,4 +61,22 @@ public class AuthSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 일반_회원가입_요청(String username, String password, String nickname) {
+        return 일반_회원가입_요청(RestAssured.given().log().all(), username, password, nickname);
+    }
+
+    public static ExtractableResponse<Response> 일반_회원가입_요청(RequestSpecification requestSpecification,
+                                                            String username, String password, String nickname) {
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        params.put("password", password);
+        params.put("nickname", nickname);
+
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().post(PATH_PREFIX + "/join/user")
+                .then().log().all().extract();
+    }
+
 }

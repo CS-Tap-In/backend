@@ -2,10 +2,7 @@ package com.cstapin.quiz.ui;
 
 import com.cstapin.auth.domain.UserPrincipal;
 import com.cstapin.quiz.service.QuizUserService;
-import com.cstapin.quiz.service.dto.DailyQuizzesSummaryResponse;
-import com.cstapin.quiz.service.dto.QuizRequest;
-import com.cstapin.quiz.service.dto.QuizResponse;
-import com.cstapin.quiz.service.dto.QuizzesResponse;
+import com.cstapin.quiz.service.dto.*;
 import com.cstapin.support.service.dto.PageRequest;
 import com.cstapin.support.service.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +43,29 @@ public class QuizUserController {
     @PostMapping("/daily")
     public ResponseEntity<DailyQuizzesSummaryResponse> selectDailyQuizzes(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         DailyQuizzesSummaryResponse response = quizUserService.selectDailyQuizzes(userPrincipal.getUsername());
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/daily")
+    public ResponseEntity<List<DailyQuizzesResponse>> findDailyQuizzes(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        List<DailyQuizzesResponse> response = quizUserService.findDailyQuizzes(userPrincipal.getUsername());
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/daily/learning-records/{learningRecordId}")
+    public ResponseEntity<Void> updateLearningRecordStatus(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                           @PathVariable Long learningRecordId,
+                                                           @Valid @RequestBody LearningRecordStatusRequest request) {
+        quizUserService.updateLearningRecordStatus(userPrincipal.getUsername(), learningRecordId, request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/learning-records")
+    public ResponseEntity<List<LearningRecordsResponse>> findLearningRecords(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        List<LearningRecordsResponse> response = quizUserService.findLearningRecords(userPrincipal.getUsername());
 
         return ResponseEntity.ok().body(response);
     }

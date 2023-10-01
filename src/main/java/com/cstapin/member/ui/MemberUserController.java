@@ -35,4 +35,11 @@ public class MemberUserController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/withdrawal")
+    public ResponseEntity<Void> withdrawMember(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        memberService.withdrawMember(userPrincipal.getUsername());
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,5 +1,6 @@
 package com.cstapin.quiz.acceptance;
 
+import com.cstapin.quiz.domain.LearningStatus;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -217,6 +218,39 @@ public class QuizSteps {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post(PATH_PREFIX_USER + "/daily")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 오늘의_문제_목록_조회(String accessToken) {
+        return 오늘의_문제_목록_조회(RestAssured.given().log().all().auth().oauth2(accessToken));
+    }
+
+    public static ExtractableResponse<Response> 오늘의_문제_목록_조회(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH_PREFIX_USER + "/daily")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 문제_풀이_기록_등록(String accessToken, Long learningRecordId, LearningStatus status) {
+        return 문제_풀이_기록_등록(RestAssured.given().log().all().auth().oauth2(accessToken), learningRecordId, status);
+    }
+
+    public static ExtractableResponse<Response> 문제_풀이_기록_등록(RequestSpecification requestSpecification,
+                                                            Long learningRecordId, LearningStatus status) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("learningRecordId", learningRecordId)
+                .body(Map.of("learningStatus", status.name()))
+                .when().post(PATH_PREFIX_USER + "/daily/learning-records/{learningRecordId}")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 학습한_퀴즈_개수_조회(RequestSpecification requestSpecification) {
+
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH_PREFIX_USER + "/learning-records")
                 .then().log().all().extract();
     }
 }

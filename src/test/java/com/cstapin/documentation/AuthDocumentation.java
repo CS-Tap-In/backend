@@ -49,4 +49,11 @@ public class AuthDocumentation extends Documentation {
         //then
         로그인_요청_깃허브(getRequestSpecification("auth-login-github"), "cda12gk31");
     }
+
+    @Test
+    void joinUser() {
+        //then
+        AuthSteps.일반_회원가입_요청(getRequestSpecification("join-normal-user"), USERNAME, PASSWORD, "62hoon99");
+    }
+
 }

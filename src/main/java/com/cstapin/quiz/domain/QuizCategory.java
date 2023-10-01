@@ -25,7 +25,7 @@ public class QuizCategory extends AbstractEntity {
     private QuizCategoryStatus status;
 
     @OneToMany(mappedBy = "quizCategory")
-    @Where(clause = "status = 'PUBLIC' and status = 'PRIVATE' and status = 'UNAPPROVED'")
+    @Where(clause = "status = 'PUBLIC' or status = 'PRIVATE' or status = 'UNAPPROVED'")
     private List<Quiz> quizzes = new ArrayList<>();
 
     public QuizCategory(String title, List<Quiz> quizzes) {

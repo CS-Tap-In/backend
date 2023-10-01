@@ -66,4 +66,10 @@ public class MemberDocumentation extends Documentation {
         //then
         회원_목록_조회(getRequestSpecification("admin-find-members").auth().oauth2(adminAccessToken), "youkihoon");
     }
+
+    @Test
+    void withdrawMember() {
+        //then
+        회원탈퇴_요청(getRequestSpecification("user-withdrawal").auth().oauth2(userAccessToken));
+    }
 }

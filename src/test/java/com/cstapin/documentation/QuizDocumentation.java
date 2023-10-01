@@ -1,5 +1,6 @@
 package com.cstapin.documentation;
 
+import com.cstapin.quiz.domain.LearningStatus;
 import com.cstapin.quiz.domain.QuizCategoryStatus;
 import com.cstapin.quiz.domain.QuizStatus;
 import com.cstapin.quiz.service.QuizAdminService;
@@ -204,9 +205,9 @@ public class QuizDocumentation extends Documentation {
     void selectDailyQuizzes() {
         //given
         DailyQuizzesSummaryResponse response = new DailyQuizzesSummaryResponse(3, 2,
-                List.of(new SelectedQuizCategoryCountResponse("데이터베이스", 1),
-                        new SelectedQuizCategoryCountResponse("운영체제", 2),
-                        new SelectedQuizCategoryCountResponse("네트워크", 2)));
+                List.of(new QuizCategoryCountResponse("데이터베이스", 1),
+                        new QuizCategoryCountResponse("운영체제", 2),
+                        new QuizCategoryCountResponse("네트워크", 2)));
 
         //when
         when(quizUserService.selectDailyQuizzes(anyString())).thenReturn(response);
@@ -215,4 +216,37 @@ public class QuizDocumentation extends Documentation {
         오늘의_문제_선정(getRequestSpecification("user-select-daily-quizzes").auth().oauth2(userAccessToken));
     }
 
+    @Test
+    void findDailyQuizzes() {
+        //given
+        DailyQuizzesResponse response = new DailyQuizzesResponse(1L, LearningStatus.FAILURE, 1L,
+                "데이터베이스", "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.",
+                "pk,기본키,기본 키");
+
+        //when
+        when(quizUserService.findDailyQuizzes(anyString())).thenReturn(List.of(response));
+
+        //then
+        오늘의_문제_목록_조회(getRequestSpecification("user-find-daily-quizzes").auth().oauth2(userAccessToken));
+    }
+
+    @Test
+    void updateLearningRecordStatus() {
+        //then
+        문제_풀이_기록_등록(getRequestSpecification("user-update-learning-record-status").auth().oauth2(userAccessToken),
+                1L, LearningStatus.SUCCESS);
+    }
+
+    @Test
+    void findLearningRecords() {
+        //given
+        List<LearningRecordsResponse> response = List.of(new LearningRecordsResponse("데이터베이스", 3, 15),
+                new LearningRecordsResponse("운영체제", 4, 12));
+
+        //when
+        when(quizUserService.findLearningRecords(anyString())).thenReturn(response);
+
+        //then
+        학습한_퀴즈_개수_조회(getRequestSpecification("user-find-learning-records").auth().oauth2(userAccessToken));
+    }
 }

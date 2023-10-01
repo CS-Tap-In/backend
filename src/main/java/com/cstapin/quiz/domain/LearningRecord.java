@@ -4,9 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -25,6 +27,7 @@ public class LearningRecord {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LearningStatus status;
 
@@ -49,5 +52,12 @@ public class LearningRecord {
 
     public boolean isBefore(LearningRecord learningRecord) {
         return createdAt.isBefore(learningRecord.createdAt);
+    }
+
+    public void updateStatus(Long memberId, LearningStatus learningStatus) {
+        if (!Objects.equals(this.memberId, memberId)) {
+            throw new AccessDeniedException("해당 학습기록에 대한 권한이 없습니다.");
+        }
+        this.status = learningStatus;
     }
 }
