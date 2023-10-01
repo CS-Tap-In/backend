@@ -485,6 +485,19 @@ NONE: 풀지 않음 | 문제 학습 상태 | O
 
 operation::user-update-learning-record-status[snippets='http-response']
 
+=== [유저] 학습한 퀴즈 개수 조회
+
+operation::user-find-learning-records[snippets='http-request']
+
+operation::user-find-learning-records[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| quizCategoryTitle | String | 카테고리 명 | O
+| learningQuizCount | long | 학습한 퀴즈 개수 | O
+| totalQuizCount | long | 총 퀴즈 개수 | O
+|===
+
 [[member]]
 == 멤버
 
