@@ -236,4 +236,17 @@ public class QuizDocumentation extends Documentation {
         문제_풀이_기록_등록(getRequestSpecification("user-update-learning-record-status").auth().oauth2(userAccessToken),
                 1L, LearningStatus.SUCCESS);
     }
+
+    @Test
+    void findLearningRecords() {
+        //given
+        List<LearningRecordsResponse> response = List.of(new LearningRecordsResponse("데이터베이스", 3, 15),
+                new LearningRecordsResponse("운영체제", 4, 12));
+
+        //when
+        when(quizUserService.findLearningRecords(anyString())).thenReturn(response);
+
+        //then
+        학습한_퀴즈_개수_조회(getRequestSpecification("user-find-learning-records").auth().oauth2(userAccessToken));
+    }
 }

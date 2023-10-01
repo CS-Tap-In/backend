@@ -245,4 +245,12 @@ public class QuizSteps {
                 .when().post(PATH_PREFIX_USER + "/daily/learning-records/{learningRecordId}")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 학습한_퀴즈_개수_조회(RequestSpecification requestSpecification) {
+
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH_PREFIX_USER + "/learning-records")
+                .then().log().all().extract();
+    }
 }
