@@ -132,4 +132,21 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         //then
         assertThat(loginResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
+
+    /**
+     * Given: 회원가입을 한다.
+     * When: 탈퇴한다.
+     * Then: 로그인하면 실패한다.
+     */
+    @Test
+    void withdrawMember() {
+        //given
+        일반_회원가입_요청("newUser", "newPassword12@", "newUser");
+
+        //when
+        회원탈퇴_요청(로그인_요청("newUser", "newPassword12@").jsonPath().getString("accessToken"));
+
+        //then
+        assertThat(로그인_요청("newUser", "newPassword12@").statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
 }
