@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 
-import static com.cstapin.auth.acceptance.AuthSteps.관리자_회원가입_요청;
-import static com.cstapin.auth.acceptance.AuthSteps.로그인_요청;
+import static com.cstapin.auth.acceptance.AuthSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthAcceptanceTest extends AcceptanceTest {
@@ -101,5 +100,19 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    /**
+     * When: 일반 회원가입을 한다.
+     * Then: 로그인하면 토큰을 반환한다.
+     */
+    @Test
+    void normalJoin() {
+        //when
+        일반_회원가입_요청("newUser", "newPassword12@", "newUser");
+
+        //then
+        var loginResponse = 로그인_요청("newUser", "newPassword12@");
+        assertThat(loginResponse.jsonPath().getString("accessToken")).isNotEmpty();
     }
 }
