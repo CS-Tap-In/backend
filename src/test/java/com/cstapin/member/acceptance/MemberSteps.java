@@ -44,4 +44,16 @@ public class MemberSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 회원탈퇴_요청(String accessToken) {
+        return 회원탈퇴_요청(RestAssured.given().log().all().auth().oauth2(accessToken));
+    }
+
+    public static ExtractableResponse<Response> 회원탈퇴_요청(RequestSpecification requestSpecification) {
+
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post(PATH_PREFIX_USER + "/withdrawal")
+                .then().log().all().extract();
+    }
+
 }

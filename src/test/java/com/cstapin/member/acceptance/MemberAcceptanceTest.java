@@ -6,9 +6,11 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
-import static com.cstapin.member.acceptance.MemberSteps.프로필_조회;
-import static com.cstapin.member.acceptance.MemberSteps.하루_퀴즈_목표치_변경;
+import static com.cstapin.auth.acceptance.AuthSteps.로그인_요청;
+import static com.cstapin.auth.acceptance.AuthSteps.일반_회원가입_요청;
+import static com.cstapin.member.acceptance.MemberSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MemberAcceptanceTest extends AcceptanceTest {
@@ -49,5 +51,19 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         //then
         ExtractableResponse<Response> 프로필_응답값 = 프로필_조회(accessToken);
         assertThat(프로필_응답값.jsonPath().getInt("dailyGoal")).isEqualTo(20);
+    }
+
+    /**
+     * Given: 회원가입을 한다.
+     * When: 탈퇴한다.
+     * Then: 로그인하면 실패한다.
+     */
+    @Test
+    void withdrawMember() {
+        //when
+        회원탈퇴_요청(로그인_요청("user", "password123@").jsonPath().getString("accessToken"));
+
+        //then
+        assertThat(로그인_요청("user", "password123@").statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }
