@@ -86,6 +86,14 @@ Response body
 | role | USER: 일반 유저 | 유저 권한 | O
 |===
 
+=== [유저] 회원탈퇴
+NOTE: 회원 탈퇴를 하면 토큰을 없애버려 주세요. +
+깃허브 연동 회원이 탈퇴 후 다시 깃허브 로그인을 하면 새로운 깃허브 연동 회원이 됩니다.
+
+operation::user-withdrawal[snippets='http-request']
+
+operation::user-withdrawal[snippets='http-response']
+
 [[quiz]]
 == 퀴즈
 
