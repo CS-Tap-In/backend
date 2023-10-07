@@ -53,6 +53,8 @@ public class QuizResponse {
         return QuizResponse.builder()
                 .authorId(quiz.getAuthor().getId())
                 .authorName(quiz.getAuthor().getUsername())
+                .categoryId(quiz.getQuizCategory().getId())
+                .categoryTitle(quiz.getQuizCategory().getTitle())
                 .id(quiz.getId())
                 .status(quiz.getStatus())
                 .title(quiz.getTitle())
