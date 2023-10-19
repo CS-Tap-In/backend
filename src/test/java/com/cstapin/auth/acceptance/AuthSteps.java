@@ -79,4 +79,12 @@ public class AuthSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 토큰_재발급_요청(RequestSpecification requestSpecification, String refreshToken) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(Map.of("refreshToken", refreshToken))
+                .when().post(PATH_PREFIX + "/reissue")
+                .then().log().all().extract();
+    }
+
 }

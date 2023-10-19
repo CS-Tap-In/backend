@@ -31,6 +31,23 @@ Response body
 ADMIN: 관리자 | 유저 권한 | O
 |===
 
+=== 토큰 재발급
+
+operation::auth-reissue-token[snippets='http-request']
+Request body
+|===
+| key | type | description | required
+| refreshToken | String | 리프레시토큰 | O
+|===
+
+operation::auth-reissue-token[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| refreshToken | String | 리프레시토큰 | O
+| accessToken | String | 어세스토큰 | O
+|===
+
 === [관리자] 관리자 회원가입
 
 operation::join-admin[snippets='http-request']
