@@ -2,7 +2,6 @@ package com.cstapin.exception;
 
 import com.cstapin.exception.notfound.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

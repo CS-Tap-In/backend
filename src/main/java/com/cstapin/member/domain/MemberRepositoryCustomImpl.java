@@ -29,7 +29,10 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
+                .from(member)
                 .where(hasUsername(request.getUsername()));
+
+        System.out.println();
 
         return PageableExecutionUtils.getPage(members, request.getPageable(), countQuery::fetchOne);
     }
