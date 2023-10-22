@@ -4,5 +4,6 @@ public enum LearningStatus {
 
     FAILURE,
     SUCCESS,
-    NONE
+    NONE,
+    RECOVERY
 }
