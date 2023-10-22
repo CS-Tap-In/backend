@@ -44,7 +44,7 @@ public class DailyQuizSelector {
                     dailySelectedQuizzes.addReviewQuiz(quiz);
                 }
                 if (!quizzes.contains(quiz)) {
-                    dailySelectedQuizzes.addReviewQuiz(quiz);
+                    dailySelectedQuizzes.addNewQuiz(quiz);
                 }
             }
             return dailySelectedQuizzes;
