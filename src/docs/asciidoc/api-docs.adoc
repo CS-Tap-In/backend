@@ -501,8 +501,7 @@ Response body
 |===
 | key | type | description | required
 | learningRecordId | Long | 학습 기록 id (pk) | O
-| learningStatus | SUCCESS: 정답을 한 번에 맞춤 +
-FAILURE: 틀림 +
+| learningStatus | FAILURE: 틀림 +
 NONE: 풀지 않음 | 문제 학습 상태 | O
 | quizId | Long | 문제 id (pk) | O
 | quizCategoryTitle | String | 문제 카테고리 명 | O
@@ -519,7 +518,8 @@ Path params
 | key | type | description | required
 | learningStatus | SUCCESS: 정답을 한 번에 맞춤 +
 FAILURE: 틀림 +
-NONE: 풀지 않음 | 문제 학습 상태 | O
+NONE: 풀지 않음 +
+RECOVERY: 틀리고 다시 맞춤| 문제 학습 상태 | O
 |===
 
 operation::user-update-learning-record-status[snippets='http-response']

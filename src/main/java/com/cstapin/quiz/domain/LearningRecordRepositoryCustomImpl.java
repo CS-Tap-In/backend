@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.cstapin.quiz.domain.QLearningRecord.learningRecord;
@@ -19,10 +20,10 @@ public class LearningRecordRepositoryCustomImpl implements LearningRecordReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<LearningRecord> findLatestLearningRecords(Long memberId, int size) {
+    public List<LearningRecord> findLatestLearningRecords(Long memberId, int size, LocalDateTime time) {
         return queryFactory
                 .selectFrom(learningRecord)
-                .where(learningRecord.memberId.eq(memberId))
+                .where(learningRecord.memberId.eq(memberId), learningRecord.createdAt.before(time))
                 .orderBy(learningRecord.createdAt.desc())
                 .limit(size)
                 .fetch();
@@ -84,6 +85,15 @@ public class LearningRecordRepositoryCustomImpl implements LearningRecordReposit
                 .join(learningRecord.quiz, quiz)
                 .join(quiz.quizCategory)
                 .groupBy(quiz.quizCategory.id, learningRecord.quiz)
+                .fetch();
+    }
+
+    @Override
+    public List<LearningRecord> findLearningRecords(Long memberId, LocalDate date) {
+        return queryFactory
+                .selectFrom(learningRecord)
+                .where(learningRecord.memberId.eq(memberId), learningRecord.createdAt.after(date.atStartOfDay()))
+                .orderBy(learningRecord.createdAt.desc())
                 .fetch();
     }
 }

@@ -23,6 +23,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class DailyQuizSelectorMockTest {
 
+    private static final LocalDateTime now = LocalDateTime.of(2023, 2, 10, 11, 11);
+
     @Mock
     private LearningRecordQueryService learningRecordQueryService;
 
@@ -43,11 +45,11 @@ public class DailyQuizSelectorMockTest {
     void setUpFixture() {
         when(learningRecordQueryService.findLatestLearningRecords(anyLong(), anyInt())).thenReturn(
                 List.of(
-                        new LearningRecord(1L, 최근에틀린퀴즈1, LearningStatus.FAILURE, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에틀린퀴즈2, LearningStatus.FAILURE, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.FAILURE, LocalDateTime.now().minusDays(2)),
-                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, LocalDateTime.now().minusDays(1)))
+                        new LearningRecord(1L, 최근에틀린퀴즈1, LearningStatus.FAILURE, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에틀린퀴즈2, LearningStatus.FAILURE, now.minusDays(1)),
+                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.FAILURE, now.minusDays(2)),
+                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, now.minusDays(1)))
         );
 
         dailyQuizSelector = new DailyQuizSelector(learningRecordQueryService);
@@ -75,12 +77,12 @@ public class DailyQuizSelectorMockTest {
     void 사분의삼_비율이_되면_이전에_틀린_문제들을_뽑아오지않는다() {
         when(learningRecordQueryService.findLatestLearningRecords(anyLong(), anyInt())).thenReturn(
                 List.of(
-                        new LearningRecord(1L, 최근에틀린퀴즈1, LearningStatus.FAILURE, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에틀린퀴즈2, LearningStatus.FAILURE, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에틀린퀴즈3, LearningStatus.FAILURE, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.FAILURE, LocalDateTime.now().minusDays(2)))
+                        new LearningRecord(1L, 최근에틀린퀴즈1, LearningStatus.FAILURE, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에틀린퀴즈2, LearningStatus.FAILURE, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에틀린퀴즈3, LearningStatus.FAILURE, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, now.minusDays(1)),
+                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.FAILURE, now.minusDays(2)))
         );
 
         //when
@@ -122,12 +124,12 @@ public class DailyQuizSelectorMockTest {
         //given
         when(learningRecordQueryService.findLatestLearningRecords(anyLong(), anyInt())).thenReturn(
                 List.of(
-                        new LearningRecord(1L, 최근에틀린퀴즈1, LearningStatus.FAILURE, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에틀린퀴즈2, LearningStatus.FAILURE, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, LocalDateTime.now().minusDays(1)),
-                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.FAILURE, LocalDateTime.now().minusDays(2)),
-                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.SUCCESS, LocalDateTime.now().minusDays(1)))
+                        new LearningRecord(1L, 최근에틀린퀴즈1, LearningStatus.FAILURE, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에틀린퀴즈2, LearningStatus.FAILURE, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, now.minusDays(1)),
+                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.FAILURE, now.minusDays(2)),
+                        new LearningRecord(1L, 이전에틀린퀴즈1, LearningStatus.SUCCESS, now.minusDays(1)))
         );
 
         when(learningRecordQueryService.findUnSolvedQuiz(memberId)).thenReturn(

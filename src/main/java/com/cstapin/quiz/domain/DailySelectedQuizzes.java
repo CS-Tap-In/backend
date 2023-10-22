@@ -6,8 +6,17 @@ import java.util.Set;
 public class DailySelectedQuizzes {
     private final Set<Quiz> reviewQuizzes = new HashSet<>();
     private final Set<Quiz> newQuizzes = new HashSet<>();
+    private boolean firstTimeQuestionToday = true;
 
     public DailySelectedQuizzes() {
+    }
+
+    public void setFirstTimeQuestionToday(boolean firstTimeQuestionToday) {
+        this.firstTimeQuestionToday = firstTimeQuestionToday;
+    }
+
+    public boolean isFirstTimeQuestionToday() {
+        return firstTimeQuestionToday;
     }
 
     public void addReviewQuiz(Quiz quiz) {
