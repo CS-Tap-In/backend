@@ -19,7 +19,7 @@ public class DailyQuizSelector {
     private final LearningRecordQueryService learningRecordQueryService;
 
     public DailySelectedQuizzes select(Long memberId, int dailyGoal) {
-        DailySelectedQuizzes dailySelectedQuizzes = new DailySelectedQuizzes(!learningRecordQueryService.hasTodayLearningRecord(memberId));
+        DailySelectedQuizzes dailySelectedQuizzes = new DailySelectedQuizzes();
 
         List<LearningRecord> latestLearningRecords = learningRecordQueryService.findLatestLearningRecords(memberId, dailyGoal * 2);
 

@@ -6,10 +6,8 @@ import java.util.Set;
 public class DailySelectedQuizzes {
     private final Set<Quiz> reviewQuizzes = new HashSet<>();
     private final Set<Quiz> newQuizzes = new HashSet<>();
-    private final boolean firstTimeQuizToday;
 
-    public DailySelectedQuizzes(boolean firstTimeQuizToday) {
-        this.firstTimeQuizToday = firstTimeQuizToday;
+    public DailySelectedQuizzes() {
     }
 
     public void addReviewQuiz(Quiz quiz) {
@@ -30,10 +28,6 @@ public class DailySelectedQuizzes {
 
     public int getTotalQuizzesSize() {
         return getNewQuizzesSize() + getReviewQuizzesSize();
-    }
-
-    public boolean isFirstTimeQuizToday() {
-        return firstTimeQuizToday;
     }
 
     public Set<Quiz> getTotalQuizzes() {
