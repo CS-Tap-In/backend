@@ -60,7 +60,9 @@ public class QuizUserService {
 
     public List<DailyQuizzesResponse> findDailyQuizzes(String username) {
         Member member = memberQueryService.findByUsername(username);
-        return learningRecordRepository.findByMemberIdAndLocalDate(member.getId(), LocalDate.now());
+        return learningRecordRepository.findByMemberIdAndLocalDate(member.getId(), LocalDate.now())
+                .stream().filter(res -> LearningStatus.FAILURE.equals(res.getLearningStatus()) || LearningStatus.NONE.equals(res.getLearningStatus()))
+                .collect(Collectors.toList());
     }
 
     @Transactional
