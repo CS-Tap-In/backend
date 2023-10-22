@@ -48,10 +48,12 @@ public class QuizUserService {
         Member member = memberQueryService.findByUsername(username);
         DailySelectedQuizzes dailySelectedQuizzes = dailyQuizSelector.select(member.getId(), member.getDailyGoal());
 
-        List<LearningRecord> learningRecords = dailySelectedQuizzes.getTotalQuizzes().stream()
-                .map(quiz -> LearningRecord.of(member.getId(), quiz)).collect(Collectors.toList());
+        if (dailySelectedQuizzes.isFirstTimeQuestionToday()) {
+            List<LearningRecord> learningRecords = dailySelectedQuizzes.getTotalQuizzes().stream()
+                    .map(quiz -> LearningRecord.of(member.getId(), quiz)).collect(Collectors.toList());
 
-        learningRecordRepository.saveAll(learningRecords);
+            learningRecordRepository.saveAll(learningRecords);
+        }
 
         return DailyQuizzesSummaryResponse.from(dailySelectedQuizzes);
     }

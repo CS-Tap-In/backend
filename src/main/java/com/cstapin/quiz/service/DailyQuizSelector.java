@@ -7,6 +7,7 @@ import com.cstapin.quiz.service.query.LearningRecordQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,25 @@ public class DailyQuizSelector {
         List<Quiz> failQuizzes = getFailQuizzes(latestLearningRecords, successQuizzes);
 
         int reviewQuizSize = getReviewQuizSize(dailyGoal);
+
+        List<LearningRecord> todayQuestionLearningRecords = learningRecordQueryService.findLearningRecords(memberId, LocalDate.now());
+
+        // 당일에 출제된 기록이 있다면 그대로 반환한다.
+        if (!todayQuestionLearningRecords.isEmpty()) {
+            dailySelectedQuizzes.setFirstTimeQuestionToday(false);
+
+            List<Quiz> quizzes = latestLearningRecords.stream().map(LearningRecord::getQuiz).collect(Collectors.toList());
+            for (LearningRecord learningRecord : todayQuestionLearningRecords) {
+                Quiz quiz = learningRecord.getQuiz();
+                if (quizzes.contains(quiz)) {
+                    dailySelectedQuizzes.addReviewQuiz(quiz);
+                }
+                if (!quizzes.contains(quiz)) {
+                    dailySelectedQuizzes.addReviewQuiz(quiz);
+                }
+            }
+            return dailySelectedQuizzes;
+        }
 
         // 실패한 퀴즈를 daily goal의 3/4 비율 만큼 채운다.
         for (Quiz failQuiz : failQuizzes) {
