@@ -7,6 +7,7 @@ import com.cstapin.quiz.domain.Quiz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,5 +26,11 @@ public class LearningRecordQueryService {
 
     public LearningRecord findById(Long learningRecordId) {
         return learningRecordRepository.findById(learningRecordId).orElseThrow(LearningRecordNotFoundException::new);
+    }
+
+    public boolean hasTodayLearningRecord(Long memberId) {
+        return learningRecordRepository.findLatestLearningRecords(memberId, 1)
+                .stream().findFirst().map(learningRecord -> learningRecord.wasQuestionOnThisDay(LocalDate.now()))
+                .orElse(false);
     }
 }

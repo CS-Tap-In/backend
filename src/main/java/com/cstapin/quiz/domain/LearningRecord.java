@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.access.AccessDeniedException;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -59,5 +60,9 @@ public class LearningRecord {
             throw new AccessDeniedException("해당 학습기록에 대한 권한이 없습니다.");
         }
         this.status = learningStatus;
+    }
+
+    public boolean wasQuestionOnThisDay(LocalDate date) {
+        return createdAt.toLocalDate().equals(date);
     }
 }
