@@ -23,7 +23,11 @@ public class LearningRecordRepositoryCustomImpl implements LearningRecordReposit
     public List<LearningRecord> findLatestLearningRecords(Long memberId, int size, LocalDateTime time) {
         return queryFactory
                 .selectFrom(learningRecord)
-                .where(learningRecord.memberId.eq(memberId), learningRecord.createdAt.before(time))
+                .where(
+                        learningRecord.memberId.eq(memberId),
+                        learningRecord.createdAt.before(time),
+                        learningRecord.status.ne(LearningStatus.NONE)
+                )
                 .orderBy(learningRecord.createdAt.desc())
                 .limit(size)
                 .fetch();
