@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,7 +77,7 @@ public class QuizUserService {
     public List<LearningRecordsResponse> findLearningRecords(String username) {
         Member member = memberQueryService.findByUsername(username);
 
-        Map<Long, Long> quizCountByQuizCategoryMap = learningRecordRepository.findStudyQuizCountByQuizCategory(member.getId())
+        Map<Long, Long> quizCountByQuizCategoryMap = learningRecordQueryService.findLearningRecords(member.getId())
                 .stream().collect(Collectors.toMap(QuizCountByCategoryId::getQuizCategoryId, QuizCountByCategoryId::getCount));
 
         List<QuizCountByCategoryId> allQuizCountByQuizCategoryIds = quizRepository.findQuizCountByQuizCategory();
