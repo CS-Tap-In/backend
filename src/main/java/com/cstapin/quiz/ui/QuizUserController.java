@@ -70,4 +70,11 @@ public class QuizUserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<List<QuizCategoryResponse>> findQuizCategories() {
+        List<QuizCategoryResponse> quizCategories = quizUserService.findQuizCategories();
+
+        return ResponseEntity.ok().body(quizCategories);
+    }
+
 }
