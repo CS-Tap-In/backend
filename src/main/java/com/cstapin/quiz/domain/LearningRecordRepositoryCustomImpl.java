@@ -80,15 +80,16 @@ public class LearningRecordRepositoryCustomImpl implements LearningRecordReposit
                 .select(new QQuizCountByCategoryId(
                         quiz.quizCategory.title,
                         quiz.quizCategory.id,
-                        learningRecord.quiz.countDistinct()))
+                        learningRecord.count()))
                 .from(learningRecord)
                 .where(
                         learningRecord.memberId.eq(memberId),
-                        learningRecord.status.ne(LearningStatus.NONE)
+                        learningRecord.status.ne(LearningStatus.NONE),
+                        learningRecord.status.ne(LearningStatus.FAILURE)
                 )
                 .join(learningRecord.quiz, quiz)
                 .join(quiz.quizCategory)
-                .groupBy(quiz.quizCategory.id, learningRecord.quiz)
+                .groupBy(learningRecord.quiz)
                 .fetch();
     }
 
