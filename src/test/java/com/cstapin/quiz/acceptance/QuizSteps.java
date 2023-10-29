@@ -128,6 +128,13 @@ public class QuizSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 유저가_문제_카테고리_목록_조회(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH_PREFIX_USER + "/categories")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 문제_수정(String accessToken, Map<String, Object> params, Long quizId) {
         return 문제_수정(RestAssured.given().log().all().auth().oauth2(accessToken), params, quizId);
     }

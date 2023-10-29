@@ -249,4 +249,18 @@ public class QuizDocumentation extends Documentation {
         //then
         학습한_퀴즈_개수_조회(getRequestSpecification("user-find-learning-records").auth().oauth2(userAccessToken));
     }
+
+    @Test
+    void findQuizCategoriesByUser() {
+        //given
+        List<QuizCategoryResponse> quizCategoryResponses = List.of(
+                new QuizCategoryResponse(1L, "운영체제", QuizCategoryStatus.PUBLIC),
+                new QuizCategoryResponse(2L, "데이터베이스", QuizCategoryStatus.PRIVATE));
+
+        //when
+        when(quizUserService.findQuizCategories()).thenReturn(quizCategoryResponses);
+
+        //then
+        유저가_문제_카테고리_목록_조회(getRequestSpecification("user-find-quiz-categories").auth().oauth2(userAccessToken));
+    }
 }
