@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class QuizUserService {
 
+    private final QuizCategoryRepository quizCategoryRepository;
     private final LearningRecordQueryService learningRecordQueryService;
     private final LearningRecordRepository learningRecordRepository;
     private final DailyQuizSelector dailyQuizSelector;
@@ -84,5 +85,11 @@ public class QuizUserService {
                 dto.getQuizCategoryTitle(),
                 quizCountByQuizCategoryMap.getOrDefault(dto.getQuizCategoryId(), 0L),
                 dto.getCount())).collect(Collectors.toList());
+    }
+
+    public List<QuizCategoryResponse> findQuizCategories() {
+        return quizCategoryRepository.findAll().stream()
+                .map(QuizCategoryResponse::from)
+                .collect(Collectors.toList());
     }
 }
