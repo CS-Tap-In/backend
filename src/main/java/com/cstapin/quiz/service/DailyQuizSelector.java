@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,8 +25,7 @@ public class DailyQuizSelector {
 
         List<LearningRecord> latestLearningRecords = learningRecordQueryService.findLatestLearningRecords(memberId, dailyGoal * 2);
 
-        Map<Quiz, LearningRecord> successQuizzes = latestLearningRecords.stream().filter(LearningRecord::isSuccess)
-                .collect(Collectors.toMap(LearningRecord::getQuiz, learningRecord -> learningRecord));
+        Map<Quiz, LearningRecord> successQuizzes = getSuccessQuizzes(latestLearningRecords);
 
         List<Quiz> failQuizzes = getFailQuizzes(latestLearningRecords, successQuizzes);
 
@@ -78,6 +78,21 @@ public class DailyQuizSelector {
 
         return dailySelectedQuizzes;
     }
+
+    private Map<Quiz, LearningRecord> getSuccessQuizzes(List<LearningRecord> latestLearningRecords) {
+        Map<Quiz, LearningRecord> successQuizzes = new HashMap<>();
+
+        latestLearningRecords.stream()
+                .filter(LearningRecord::isSuccess)
+                .forEach(learningRecord ->
+                        successQuizzes.computeIfAbsent(learningRecord.getQuiz(),
+                                quiz -> learningRecord.isBefore(successQuizzes.getOrDefault(quiz, learningRecord)) ? successQuizzes.get(quiz) : learningRecord
+                        )
+                );
+
+        return successQuizzes;
+    }
+
 
     private List<Quiz> getFailQuizzes(List<LearningRecord> latestLearningRecords, Map<Quiz, LearningRecord> successQuizzes) {
         // 전에는 맞았는데 최근에는 틀린 문제인 경우 틀린 문제로 간주한다. 반대로 전에는 틀렸는데 최근에는 맞은 문제인 경우 맞은 문제로 간주한다.
