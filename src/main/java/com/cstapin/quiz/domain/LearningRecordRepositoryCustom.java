@@ -17,4 +17,6 @@ public interface LearningRecordRepositoryCustom {
     List<QuizCountByCategoryId> findStudyQuizCountByQuizCategory(Long memberId);
 
     List<LearningRecord> findLearningRecords(Long memberId, LocalDate time);
+
+    List<Quiz> findCompleteQuiz(Long memberId, LocalDate time);
 }

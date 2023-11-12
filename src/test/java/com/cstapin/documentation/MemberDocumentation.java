@@ -40,7 +40,7 @@ public class MemberDocumentation extends Documentation {
     @Test
     void findProfile() {
         //given
-        ProfileResponse response = new ProfileResponse(1L, "user", "http://avatar.com/1", 0, 10);
+        ProfileResponse response = new ProfileResponse(1L, "user", "http://avatar.com/1", 0, 10, false);
 
         //when
         when(memberService.findProfile(anyString())).thenReturn(response);

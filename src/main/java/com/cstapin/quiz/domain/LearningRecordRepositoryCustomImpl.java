@@ -101,4 +101,19 @@ public class LearningRecordRepositoryCustomImpl implements LearningRecordReposit
                 .orderBy(learningRecord.createdAt.desc())
                 .fetch();
     }
+
+    @Override
+    public List<Quiz> findCompleteQuiz(Long memberId, LocalDate date) {
+        return queryFactory
+                .select(quiz)
+                .from(learningRecord)
+                .where(
+                        learningRecord.memberId.eq(memberId),
+                        learningRecord.createdAt.after(date.atStartOfDay()),
+                        learningRecord.status.eq(LearningStatus.SUCCESS)
+                                .or(learningRecord.status.eq(LearningStatus.RECOVERY))
+                )
+                .join(learningRecord.quiz, quiz)
+                .fetch();
+    }
 }

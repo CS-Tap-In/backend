@@ -592,6 +592,7 @@ Response Body
 | avatarUrl | String | 아바타 url | O
 | completeQuizCount | int | 당일 완료한 퀴즈 개수 | O
 | dailyGoal | int | 하루 퀴즈 풀이 목표치 | O
+| dailyLearningComplete | boolean | 당일 학습 완료 여부 | O
 |===
 
 === [유저] 퀴즈 하루 목표치 변경

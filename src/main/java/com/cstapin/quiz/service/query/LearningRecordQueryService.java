@@ -3,16 +3,13 @@ package com.cstapin.quiz.service.query;
 import com.cstapin.exception.notfound.LearningRecordNotFoundException;
 import com.cstapin.quiz.domain.LearningRecord;
 import com.cstapin.quiz.domain.LearningRecordRepository;
+import com.cstapin.quiz.domain.LearningStatus;
 import com.cstapin.quiz.domain.Quiz;
-import com.cstapin.quiz.service.dto.LearningRecordsResponse;
 import com.cstapin.quiz.service.dto.QuizCountByCategoryId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,5 +48,20 @@ public class LearningRecordQueryService {
         return quizCountMap.entrySet().stream()
                 .map(entry -> new QuizCountByCategoryId(quizCategoriesMap.get(entry.getKey()), entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    public int findCompleteQuizCount(Long memberId, LocalDate date) {
+        return learningRecordRepository.findCompleteQuiz(memberId, date).size();
+    }
+
+    public boolean isDailyLearningComplete(Long memberId, LocalDate date) {
+        List<LearningRecord> learningRecords = learningRecordRepository.findLearningRecords(memberId, date);
+
+        boolean isDailyLearningComplete = learningRecords.stream()
+                .allMatch(lr ->
+                        LearningStatus.SUCCESS.equals(lr.getStatus()) || LearningStatus.RECOVERY.equals(lr.getStatus())
+                );
+
+        return learningRecords.size() != 0 && isDailyLearningComplete;
     }
 }
