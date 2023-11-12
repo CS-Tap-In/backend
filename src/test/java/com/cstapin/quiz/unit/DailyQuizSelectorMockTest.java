@@ -144,4 +144,26 @@ public class DailyQuizSelectorMockTest {
         assertThat(quizzes).doesNotContain(이전에틀린퀴즈1);
     }
 
+    @Test
+    void 최근_두번_연속으로_맞은_문제가_있어도_문제가_부족하면_선택된다() {
+        //given
+        when(learningRecordQueryService.findLatestLearningRecords(anyLong(), anyInt())).thenReturn(
+                List.of(
+                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, now.minusDays(2)),
+                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, now.minusDays(2)),
+                        new LearningRecord(1L, 최근에맞은퀴즈1, LearningStatus.SUCCESS, now.minusDays(1)),
+                        new LearningRecord(1L, 최근에맞은퀴즈2, LearningStatus.SUCCESS, now.minusDays(1)))
+        );
+
+        when(learningRecordQueryService.findUnSolvedQuiz(memberId)).thenReturn(
+                List.of()
+        );
+
+        //when
+        Set<Quiz> quizzes = dailyQuizSelector.select(memberId, dailyGoal).getTotalQuizzes();
+
+        //then
+        assertThat(quizzes).contains(최근에맞은퀴즈1, 최근에맞은퀴즈2);
+    }
+
 }
