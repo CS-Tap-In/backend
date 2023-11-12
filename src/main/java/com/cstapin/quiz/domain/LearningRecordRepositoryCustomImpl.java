@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.cstapin.quiz.domain.QLearningRecord.learningRecord;
 import static com.cstapin.quiz.domain.QQuiz.quiz;
+import static com.cstapin.quiz.domain.QQuizCategory.quizCategory;
 
 @RequiredArgsConstructor
 public class LearningRecordRepositoryCustomImpl implements LearningRecordRepositoryCustom {
@@ -60,13 +61,15 @@ public class LearningRecordRepositoryCustomImpl implements LearningRecordReposit
                 .select(new QDailyQuizzesResponse(
                         learningRecord.id,
                         learningRecord.status,
-                        learningRecord.quiz.id,
-                        learningRecord.quiz.quizCategory.title,
-                        learningRecord.quiz.title,
-                        learningRecord.quiz.problem,
-                        learningRecord.quiz.answer
+                        quiz.id,
+                        quizCategory.title,
+                        quiz.title,
+                        quiz.problem,
+                        quiz.answer
                 ))
                 .from(learningRecord)
+                .join(learningRecord.quiz, quiz)
+                .join(quiz.quizCategory, quizCategory)
                 .where(
                         learningRecord.memberId.eq(memberId),
                         learningRecord.createdAt.after(date.atStartOfDay())
