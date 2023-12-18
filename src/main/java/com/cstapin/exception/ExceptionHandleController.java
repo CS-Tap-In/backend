@@ -16,7 +16,7 @@ public class ExceptionHandleController {
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ExceptionResponse> illegalStateExceptionHandle(IllegalStateException e) {
-        log.warn("[ExceptionHandle]: IllegalStateException | msg: {}", e.getMessage());
+        log.warn("[ExceptionHandle]: IllegalStateException | msg: {}", e.getMessage()); // slack 잘되는지 확인 용도
 
         ExceptionResponse exceptionResponse = new ExceptionResponse("BAD", e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -24,7 +24,7 @@ public class ExceptionHandleController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponse> illegalArgumentExceptionHandle(IllegalArgumentException e) {
-        log.warn("[ExceptionHandle]: IllegalArgumentException | msg: {}", e.getMessage());
+        log.info("[ExceptionHandle]: IllegalArgumentException | msg: {}", e.getMessage());
 
         ExceptionResponse exceptionResponse = new ExceptionResponse("BAD", e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -60,6 +60,22 @@ public class ExceptionHandleController {
 
         ExceptionResponse exceptionResponse = new ExceptionResponse("BAD", e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ExceptionResponse> nullPointerExceptionHandler(NullPointerException e) {
+        log.error("[ExceptionHandle]: NullPointerException | msg: {}", e.getMessage());
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse("SERVER_ERROR", "서버 에러가 발생했습니다.");
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> unexpectedExceptionHandler(Exception e) {
+        log.error("[ExceptionHandle]: Exception | msg: {}", e.getMessage());
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse("SERVER_ERROR", "서버 에러가 발생했습니다.");
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
