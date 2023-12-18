@@ -5,6 +5,38 @@
     <property name="LOG_PATTERN"
               value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
 
+    <springProperty name="SLACK_WEBHOOK_URI" source="logging.slack.webhook-uri"/>
+
+    <appender name="SLACK_WARN" class="com.github.maricn.logback.SlackAppender">
+        <webhookUri>${SLACK_WEBHOOK_URI}</webhookUri>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [WARN] %msg%n</pattern>
+        </layout>
+        <username>Cs-tap-in-Server-log</username>
+        <iconEmoji>:warning:</iconEmoji>
+        <colorCoding>true</colorCoding>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="SLACK_ERROR" class="com.github.maricn.logback.SlackAppender">
+        <webhookUri>${SLACK_WEBHOOK_URI}</webhookUri>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ERROR] %msg%n</pattern>
+        </layout>
+        <username>Cs-tap-in-Server-log</username>
+        <iconEmoji>:rotating_light:</iconEmoji>
+        <colorCoding>true</colorCoding>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
     <springProfile name="!prod">
         <include resource="console-appender.xml"/>
 
@@ -22,6 +54,8 @@
             <appender-ref ref="FILE-INFO"/>
             <appender-ref ref="FILE-WARN"/>
             <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="SLACK_WARN"/>
+            <appender-ref ref="SLACK_ERROR"/>
         </root>
     </springProfile>
 </configuration>
