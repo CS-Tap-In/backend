@@ -7,10 +7,7 @@ import com.cstapin.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -54,6 +51,11 @@ public class AuthController {
     public ResponseEntity<Void> joinUser(@Valid @RequestBody JoinRequest request) {
 
         authService.join(request, Member.MemberRole.USER);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/health-check")
+    public ResponseEntity<Void> checkIsHealth() {
         return ResponseEntity.ok().build();
     }
 

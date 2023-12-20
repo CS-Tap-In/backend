@@ -16,7 +16,7 @@ public class ExceptionHandleController {
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ExceptionResponse> illegalStateExceptionHandle(IllegalStateException e) {
-        log.warn("[ExceptionHandle]: IllegalStateException | msg: {}", e.getMessage()); // slack 잘되는지 확인 용도
+        log.info("[ExceptionHandle]: IllegalStateException | msg: {}", e.getMessage()); // slack 잘되는지 확인 용도
 
         ExceptionResponse exceptionResponse = new ExceptionResponse("BAD", e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -24,7 +24,7 @@ public class ExceptionHandleController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponse> illegalArgumentExceptionHandle(IllegalArgumentException e) {
-        log.info("[ExceptionHandle]: IllegalArgumentException | msg: {}", e.getMessage());
+        log.warn("[ExceptionHandle]: IllegalArgumentException | msg: {}", e.getMessage());
 
         ExceptionResponse exceptionResponse = new ExceptionResponse("BAD", e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
