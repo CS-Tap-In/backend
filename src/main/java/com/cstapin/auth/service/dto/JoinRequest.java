@@ -1,6 +1,11 @@
 package com.cstapin.auth.service.dto;
 
+import com.cstapin.member.domain.Credentials;
+import com.cstapin.member.domain.Member;
+import com.cstapin.member.domain.MemberRole;
+import com.cstapin.member.domain.Profiles;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -24,4 +29,10 @@ public class JoinRequest {
     private String nickname;
 
     private String secretKey;
+
+    public Member toMember(PasswordEncoder passwordEncoder, MemberRole role) {
+        return Member.builder()
+                .credentials(new Credentials(username, passwordEncoder.encode(password), role))
+                .profiles(new Profiles(nickname)).build();
+    }
 }

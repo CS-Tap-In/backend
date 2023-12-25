@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class MemberDocumentation extends Documentation {
+public class MemberEntityDocumentation extends Documentation {
 
     @MockBean
     private MemberService memberService;

@@ -1,7 +1,8 @@
 package com.cstapin.quiz.service;
 
 import com.cstapin.member.domain.Member;
-import com.cstapin.member.service.query.MemberQueryService;
+import com.cstapin.member.persistence.MemberEntity;
+import com.cstapin.member.service.MemberRepository;
 import com.cstapin.quiz.domain.*;
 import com.cstapin.quiz.service.dto.*;
 import com.cstapin.quiz.service.query.LearningRecordQueryService;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,24 +31,24 @@ public class QuizUserService {
     private final QuizQueryService quizQueryService;
     private final QuizRepository quizRepository;
     private final QuizCategoryQueryService quizCategoryQueryService;
-    private final MemberQueryService memberQueryService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public QuizResponse createQuiz(QuizRequest request, String username) {
-        Member author = memberQueryService.findByUsername(username);
-        Quiz quiz = quizRepository.save(request.toQuiz(author, quizCategoryQueryService.findById(request.getCategoryId())));
+        Member author = memberRepository.getByUsername(username);
+        Quiz quiz = quizRepository.save(request.toQuiz(author.toMemberEntity(), quizCategoryQueryService.findById(request.getCategoryId())));
         return QuizResponse.from(quiz);
     }
 
     public Page<QuizzesResponse> findQuizzesByAuthor(String username, Pageable pageable) {
-        Member author = memberQueryService.findByUsername(username);
+        Member author = memberRepository.getByUsername(username);
         return quizQueryService.findQuizzesByAuthor(author.getId(), pageable);
     }
 
     @Transactional
     public DailyQuizzesSummaryResponse selectDailyQuizzes(String username) {
-        Member member = memberQueryService.findByUsername(username);
-        DailySelectedQuizzes dailySelectedQuizzes = dailyQuizSelector.select(member.getId(), member.getDailyGoal());
+        Member member = memberRepository.getByUsername(username);
+        DailySelectedQuizzes dailySelectedQuizzes = member.selectQuizzes(dailyQuizSelector);
 
         if (dailySelectedQuizzes.isFirstTimeQuestionToday()) {
             List<LearningRecord> learningRecords = dailySelectedQuizzes.getTotalQuizzes().stream()
@@ -61,7 +61,7 @@ public class QuizUserService {
     }
 
     public List<DailyQuizzesResponse> findDailyQuizzes(String username) {
-        Member member = memberQueryService.findByUsername(username);
+        Member member = memberRepository.getByUsername(username);
         return learningRecordRepository.findByMemberIdAndLocalDate(member.getId(), LocalDate.now())
                 .stream().filter(res -> LearningStatus.FAILURE.equals(res.getLearningStatus()) || LearningStatus.NONE.equals(res.getLearningStatus()))
                 .collect(Collectors.toList());
@@ -69,13 +69,13 @@ public class QuizUserService {
 
     @Transactional
     public void updateLearningRecordStatus(String username, Long learningRecordId, LearningRecordStatusRequest request) {
-        Member member = memberQueryService.findByUsername(username);
+        Member member = memberRepository.getByUsername(username);
         LearningRecord learningRecord = learningRecordQueryService.findById(learningRecordId);
         learningRecord.updateStatus(member.getId(), request.getLearningStatus());
     }
 
     public List<LearningRecordsResponse> findLearningRecords(String username) {
-        Member member = memberQueryService.findByUsername(username);
+        Member member = memberRepository.getByUsername(username);
 
         Map<Long, Long> quizCountByQuizCategoryMap = learningRecordQueryService.findLearningRecords(member.getId())
                 .stream().collect(Collectors.toMap(QuizCountByCategoryId::getQuizCategoryId, QuizCountByCategoryId::getCount));

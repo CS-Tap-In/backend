@@ -1,6 +1,8 @@
 package com.cstapin.member.service.dto;
 
 import com.cstapin.member.domain.Member;
+import com.cstapin.member.domain.Profiles;
+import com.cstapin.member.persistence.MemberEntity;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -28,13 +30,16 @@ public class ProfileResponse {
         this.isDailyLearningComplete = isDailyLearningComplete;
     }
 
-    public static ProfileResponse of(Member member, int completeQuizCount, boolean isDailyLearningComplete) {
+    public static ProfileResponse of(Long memberId,
+                                     Profiles profiles,
+                                     int completeQuizCount,
+                                     boolean isDailyLearningComplete) {
         return ProfileResponse.builder()
-                .memberId(member.getId())
-                .nickname(member.getNickname())
-                .avatarUrl(member.getAvatarUrl())
+                .memberId(memberId)
+                .nickname(profiles.getNickname())
+                .avatarUrl(profiles.getAvatarUrl())
                 .completeQuizCount(completeQuizCount)
-                .dailyGoal(member.getDailyGoal())
+                .dailyGoal(profiles.getDailyGoal())
                 .isDailyLearningComplete(isDailyLearningComplete)
                 .build();
     }

@@ -13,7 +13,7 @@ import static com.cstapin.auth.acceptance.AuthSteps.일반_회원가입_요청;
 import static com.cstapin.member.acceptance.MemberSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MemberAcceptanceTest extends AcceptanceTest {
+public class MemberEntityAcceptanceTest extends AcceptanceTest {
 
     private String accessToken;
 

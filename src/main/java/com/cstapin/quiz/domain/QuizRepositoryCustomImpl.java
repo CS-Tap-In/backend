@@ -14,7 +14,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static com.cstapin.member.domain.QMember.member;
+import static com.cstapin.member.persistence.QMember.member;
 import static com.cstapin.quiz.domain.QQuiz.quiz;
 import static com.cstapin.quiz.domain.QQuizCategory.quizCategory;
 

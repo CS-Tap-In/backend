@@ -1,9 +1,8 @@
 package com.cstapin.quiz.domain;
 
-import com.cstapin.member.domain.Member;
+import com.cstapin.member.persistence.MemberEntity;
 import com.cstapin.quiz.service.dto.QuizRequest;
 import com.cstapin.support.domain.AbstractEntity;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,7 @@ public class Quiz extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
-    private Member author;
+    private MemberEntity author;
 
     @Column(nullable = false, length = 50)
     private String title;
@@ -43,7 +42,7 @@ public class Quiz extends AbstractEntity {
     private QuizStatus status;
 
     @Builder
-    public Quiz(QuizCategory quizCategory, Member author, String title, String problem, String answer, QuizStatus status) {
+    public Quiz(QuizCategory quizCategory, MemberEntity author, String title, String problem, String answer, QuizStatus status) {
         validateAnswerLength(answer);
         this.quizCategory = quizCategory;
         this.author = author;

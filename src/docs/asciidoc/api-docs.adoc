@@ -548,7 +548,7 @@ Response body
 
 === [관리자] 회원 목록 조회
 
-operation::admin-find-members[snippets='http-request']
+operation::admin-find-memberEntities[snippets='http-request']
 Request params
 |===
 | key | type | description | required
@@ -560,7 +560,7 @@ Request params
 기본값: 10 | X
 |===
 
-operation::admin-find-members[snippets='http-response']
+operation::admin-find-memberEntities[snippets='http-response']
 Response body
 |===
 | key | type | description | required

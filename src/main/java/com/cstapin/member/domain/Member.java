@@ -1,75 +1,116 @@
 package com.cstapin.member.domain;
 
-import com.cstapin.support.domain.AbstractEntity;
-import lombok.AccessLevel;
+import com.cstapin.auth.oauth2.github.GithubProfileResponse;
+import com.cstapin.member.persistence.MemberEntity;
+import com.cstapin.quiz.domain.DailySelectedQuizzes;
+import com.cstapin.quiz.service.DailyQuizSelector;
+import com.cstapin.support.domain.AbstractDomain;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "member")
-@Getter
-@DynamicUpdate
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends AbstractEntity {
+public class Member extends AbstractDomain {
 
-    public enum MemberRole {USER, ADMIN}
+    private final Credentials credentials;
 
-    @Column(name = "username", length = 50, nullable = false, unique = true)
-    private String username;
-
-    @Column(name = "password", length = 100, nullable = false)
-    private String password;
-
-    @Column(name = "nickname", length = 30, nullable = false)
-    private String nickname;
-
-    @Column(name = "avatar_url", length = 500)
-    private String avatarUrl;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", length = 20, nullable = false)
-    private MemberRole role;
-
-    @Column(name = "daily_goal")
-    private int dailyGoal = 10;
-
-    @Column(name = "token_id", unique = true)
-    private Long tokenId;
-
-    public boolean matchPassword(PasswordEncoder passwordEncoder, String password) {
-        return passwordEncoder.matches(password, this.password);
-    }
-
-    public Member(String username, String password, String nickname, MemberRole role) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.role = role;
-    }
+    private final Profiles profiles;
 
     @Builder
-    public Member(String username, String password, String nickname, MemberRole role, String avatarUrl) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.role = role;
-        this.avatarUrl = avatarUrl;
+    public Member(Long id,
+                  LocalDateTime createdAt,
+                  LocalDateTime updatedAt,
+                  Credentials credentials,
+                  Profiles profiles) {
+        super(id, createdAt, updatedAt);
+        this.credentials = credentials;
+        this.profiles = profiles;
     }
 
-    public void withdraw() {
-        this.username = "withdrawal_" + this.username;
+    public static Member from(MemberEntity memberEntity) {
+        return Member.builder()
+                .id(memberEntity.getId())
+                .credentials(new Credentials(memberEntity.getUsername(), memberEntity.getPassword(),
+                        memberEntity.getTokenId(), memberEntity.getRole()))
+                .profiles(new Profiles(memberEntity.getNickname(),
+                        memberEntity.getAvatarUrl(), memberEntity.getDailyGoal()))
+                .createdAt(memberEntity.getCreatedAt())
+                .updatedAt(memberEntity.getUpdatedAt())
+                .build();
     }
 
-    public void updateToken(Long tokenId) {
-        this.tokenId = tokenId;
+    public static Member githubMember(String githubUsernamePrefix, GithubProfileResponse githubProfile) {
+        return Member.builder()
+                .credentials(new Credentials(githubUsernamePrefix + githubProfile.getId(), "",
+                        null, MemberRole.USER))
+                .profiles(new Profiles(githubProfile.getName(), githubProfile.getAvatarUrl()))
+                .build();
     }
 
-    public void changeDailyGoal(int dailyGoal) {
-        this.dailyGoal = dailyGoal;
+    public MemberEntity toMemberEntity() {
+        return MemberEntity.builder()
+                .id(id)
+                .username(credentials.getUsername())
+                .password(credentials.getPassword())
+                .nickname(profiles.getNickname())
+                .avatarUrl(profiles.getAvatarUrl())
+                .dailyGoal(profiles.getDailyGoal())
+                .tokenId(credentials.getTokenId())
+                .role(credentials.getRole())
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
+
+    public Member changeDailyGoal(int dailyGoal) {
+        return Member.builder()
+                .id(id)
+                .credentials(credentials)
+                .profiles(profiles.changeDailyGoal(dailyGoal))
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
+
+    public Member withdraw() {
+        return Member.builder()
+                .id(id)
+                .credentials(credentials.withdraw())
+                .profiles(profiles)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
+
+    public DailySelectedQuizzes selectQuizzes(DailyQuizSelector dailyQuizSelector) {
+        return dailyQuizSelector.select(id, profiles.getDailyGoal());
+    }
+
+    public Profiles getProfiles() {
+        return profiles;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public void validatePassword(PasswordEncoder passwordEncoder, String password) {
+        if (!credentials.matchPassword(passwordEncoder, password)) {
+            throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
+        }
+    }
+
+    public Member updateToken(Long tokenId) {
+        return Member.builder()
+                .id(id)
+                .credentials(credentials.updateToken(tokenId))
+                .profiles(profiles)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
+
+    public MemberRole getRole() {
+        return credentials.getRole();
     }
 }
