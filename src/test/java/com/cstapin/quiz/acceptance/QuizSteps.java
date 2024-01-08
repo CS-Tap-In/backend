@@ -15,6 +15,7 @@ public class QuizSteps {
 
     private static final String PATH_PREFIX_ADMIN = "/api/v1/admin/quizzes";
     private static final String PATH_PREFIX_USER = "/api/v1/user/quizzes";
+    private static final String PATH_PREFIX_WEB_USER = "/api/v1/web/user/quizzes";
 
     public static ExtractableResponse<Response> 문제_생성(String accessToken, Map<String, Object> params) {
         return 문제_생성(RestAssured.given().log().all().auth().oauth2(accessToken), params);
@@ -72,11 +73,11 @@ public class QuizSteps {
                 .pathParam("id", id)
                 .when().get(PATH_PREFIX_ADMIN + "/{id}")
                 .then().log().all().extract();
-     }
+    }
 
-     public static ExtractableResponse<Response> 문제_카테고리_생성(String accessToken, Map<String, String> params) {
-         return 문제_카테고리_생성(RestAssured.given().log().all().auth().oauth2(accessToken), params);
-     }
+    public static ExtractableResponse<Response> 문제_카테고리_생성(String accessToken, Map<String, String> params) {
+        return 문제_카테고리_생성(RestAssured.given().log().all().auth().oauth2(accessToken), params);
+    }
 
     public static ExtractableResponse<Response> 문제_카테고리_생성(RequestSpecification requestSpecification, Map<String, String> params) {
         return requestSpecification
@@ -260,4 +261,18 @@ public class QuizSteps {
                 .when().get(PATH_PREFIX_USER + "/learning-records")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 랜덤_문제_선정(List<Long> categoryIds) {
+        return 랜덤_문제_선정(RestAssured.given().log().all(), categoryIds);
+    }
+
+    public static ExtractableResponse<Response> 랜덤_문제_선정(RequestSpecification requestSpecification,
+                                                         List<Long> categoryIds) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(Map.of("learningStatus", categoryIds))
+                .when().get(PATH_PREFIX_WEB_USER + "/random")
+                .then().log().all().extract();
+    }
 }
+

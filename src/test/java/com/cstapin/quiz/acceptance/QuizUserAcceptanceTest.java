@@ -120,4 +120,22 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
 
     }
 
+    /**
+     * GIVEN: 문제를 등록한다.
+     * WHEN: 카테고리를 3~5개 사이로 정하고 문제를 선정한다.
+     * THEN: 선택한 카테고리에 속하는 문제가 출제된다.
+     */
+    @Test
+    void selectRandomQuizzesByCategory() {
+        //given
+        문제_카테고리_생성(adminAccessToken, 문제_카테고리_요청값("네트워크"));
+        문제_카테고리_생성(adminAccessToken, 문제_카테고리_요청값("운영체제"));
+
+        //when
+        ExtractableResponse<Response> 랜덤_문제_선정 = 랜덤_문제_선정(List.of(1L, 2L, 3L));
+
+        //then
+        assertThat(랜덤_문제_선정.jsonPath().getString("[0].categoryTitle"))
+                .contains("데이터베이스", "네트워크", "운영체제");
+    }
 }
