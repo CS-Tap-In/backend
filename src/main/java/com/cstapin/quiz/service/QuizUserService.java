@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +33,7 @@ public class QuizUserService {
     private final QuizRepository quizRepository;
     private final QuizCategoryQueryService quizCategoryQueryService;
     private final MemberQueryService memberQueryService;
+    private final RandomQuizSelector randomQuizSelector;
 
     @Transactional
     public QuizResponse createQuiz(QuizRequest request, String username) {
@@ -92,5 +94,22 @@ public class QuizUserService {
         return quizCategoryRepository.findAll().stream()
                 .map(QuizCategoryResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    public List<RandomQuizzesResponse> getRandomQuizzes(RandomQuizzesRequest request) {
+        return randomQuizSelector.select(request.getQuizCategoryIds(), (quizzes, count) -> {
+            if (quizzes.isEmpty()) {
+                return Collections.emptyList();
+            }
+                    return new Random().ints(0, quizzes.size())
+                            .distinct()
+                            .limit(Math.min(count, quizzes.size()))
+                            .mapToObj(quizzes::get)
+                            .collect(Collectors.toList());
+                })
+                .stream()
+                .map(RandomQuizzesResponse::from)
+                .collect(Collectors.toList());
+
     }
 }

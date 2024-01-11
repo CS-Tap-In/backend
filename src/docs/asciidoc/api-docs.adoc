@@ -543,6 +543,26 @@ Response body
 | totalQuizCount | long | 총 퀴즈 개수 | O
 |===
 
+=== [유저-WEB] 랜덤 문제 선정
+
+operation::web-user-find-random-quizzes[snippets='http-request']
+Request body
+|===
+| key | type | description | required
+| quizCategoryIds | List<Long> | 퀴즈 카테고리 id | O
+|===
+
+operation::web-user-find-random-quizzes[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| quizId | Long | 문제 id (pk) | O
+| quizCategoryTitle | String | 문제 카테고리 명 | O
+| quizTitle | String | 퀴즈 제목 | O
+| problem | String | 퀴즈 문제 | O
+| answer | List<String> | 퀴즈 정답 들 | O
+|===
+
 [[member]]
 == 멤버
 
