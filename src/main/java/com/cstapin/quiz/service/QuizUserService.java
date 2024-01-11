@@ -93,4 +93,8 @@ public class QuizUserService {
                 .map(QuizCategoryResponse::from)
                 .collect(Collectors.toList());
     }
+
+    public Page<RandomQuizzesResponse> getRandomQuizzes(RandomQuizzesRequest request) {
+        return null;
+    }
 }
