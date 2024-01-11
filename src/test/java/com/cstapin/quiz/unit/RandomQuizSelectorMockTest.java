@@ -4,18 +4,18 @@ import com.cstapin.quiz.domain.Quiz;
 import com.cstapin.quiz.domain.QuizCategory;
 import com.cstapin.quiz.domain.QuizRepository;
 import com.cstapin.quiz.service.RandomQuizSelector;
-import com.cstapin.quiz.service.RandomSelector;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +65,22 @@ public class RandomQuizSelectorMockTest {
 
     @Test
     void 문제는_중복되서_선택되지_않는다() {
+        //given
+        Long 데이터베이스_카테고리_id = 1L;
+        Long 네트워크_카테고리_id = 2L;
+        Long 운영체제_카테고리_id = 3L;
 
+        when(quizRepository.findByQuizCategoryId(데이터베이스_카테고리_id))
+                .thenReturn(List.of(데이터베이스_퀴즈1, 데이터베이스_퀴즈2));
+        when(quizRepository.findByQuizCategoryId(네트워크_카테고리_id))
+                .thenReturn(List.of(네트워크_퀴즈1, 네트워크_퀴즈2));
+        when(quizRepository.findByQuizCategoryId(운영체제_카테고리_id))
+                .thenReturn(List.of(운영체제_퀴즈1, 운영체제_퀴즈2));
+
+        //when
+        List<Quiz> selectedQuizzes = randomQuizSelector.select(List.of(1L, 2L, 3L), (objects, count) -> objects);
+
+        //then
+        assertThat(selectedQuizzes.size()).isEqualTo(new HashSet<>(selectedQuizzes).size());
     }
 }
