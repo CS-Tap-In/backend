@@ -19,7 +19,6 @@ public class RandomQuizSelector {
     public List<Quiz> select(List<Long> quizCategoryIds, RandomSelector<Quiz> randomSelector) {
 
         int countOfEachQuizCategory = Math.round((float) TOTAL_QUIZ_COUNT / quizCategoryIds.size());
-        int overCount = (countOfEachQuizCategory * quizCategoryIds.size()) - TOTAL_QUIZ_COUNT;
 
         List<Quiz> selectedQuizzes = quizCategoryIds.stream()
                 .map(quizRepository::findByQuizCategoryId)
@@ -27,14 +26,14 @@ public class RandomQuizSelector {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        removeExcessQuizzes(selectedQuizzes, overCount);
+        removeExcessQuizzes(selectedQuizzes);
 
         return selectedQuizzes;
     }
 
-    private void removeExcessQuizzes(List<Quiz> selectedQuizzes, int overCount) {
-        while (overCount != 0 && !selectedQuizzes.isEmpty()) {
-            selectedQuizzes.remove(overCount--);
+    private void removeExcessQuizzes(List<Quiz> selectedQuizzes) {
+        while (selectedQuizzes.size() > TOTAL_QUIZ_COUNT) {
+            selectedQuizzes.remove(0);
         }
     }
 }

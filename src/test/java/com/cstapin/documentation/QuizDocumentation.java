@@ -277,7 +277,7 @@ public class QuizDocumentation extends Documentation {
         );
 
         //when
-        when(quizUserService.getRandomQuizzes(any())).thenReturn(new PageImpl<>(response, PageRequest.of(0, 10), 1L));
+        when(quizUserService.getRandomQuizzes(any())).thenReturn(response);
 
         //then
         랜덤_문제_선정(getRequestSpecification("web-user-find-random-quizzes"), List.of(1L, 2L, 3L));

@@ -22,7 +22,7 @@ public interface QuizRepository extends JpaRepository<Quiz, Long>, QuizRepositor
     @Query("update Quiz q set q.status = :status where q.id in :quizIds")
     void changeStatus(@Param(value = "quizIds") List<Long> quizIds, @Param(value = "status") QuizStatus status);
 
-    @Query("select q from Quiz q join fetch QuizCategory qc" +
+    @Query("select q from Quiz q join fetch q.quizCategory qc" +
             " where qc.id = :quizCategoryId and q.status = 'PUBLIC' and qc.status = 'PUBLIC'")
     List<Quiz> findByQuizCategoryId(@Param(value = "quizCategoryId") Long quizCategoryId);
 }

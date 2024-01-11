@@ -135,7 +135,7 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 랜덤_문제_선정 = 랜덤_문제_선정(List.of(1L, 2L, 3L));
 
         //then
-        assertThat(랜덤_문제_선정.jsonPath().getString("[0].categoryTitle"))
-                .contains("데이터베이스", "네트워크", "운영체제");
+        assertThat(랜덤_문제_선정.jsonPath().getString("[0].quizCategoryTitle"))
+                .containsAnyOf("데이터베이스", "네트워크", "운영체제");
     }
 }
