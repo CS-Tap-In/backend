@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.cstapin.member.persistence.QMember.member;
+import static com.cstapin.member.persistence.QMemberEntity.memberEntity;
 
 @RequiredArgsConstructor
 public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
@@ -21,15 +21,15 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     @Override
     public Page<MemberEntity> findMembers(MembersRequest request) {
         List<MemberEntity> memberEntities = queryFactory
-                .selectFrom(member)
+                .selectFrom(memberEntity)
                 .where(hasUsername(request.getUsername()))
                 .offset(request.getPageable().getOffset())
                 .limit(request.getPageable().getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
-                .select(member.count())
-                .from(member)
+                .select(memberEntity.count())
+                .from(memberEntity)
                 .where(hasUsername(request.getUsername()));
 
         System.out.println();
@@ -39,7 +39,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 
     private BooleanExpression hasUsername(String username) {
         if (StringUtils.hasText(username)) {
-            return member.username.contains(username);
+            return memberEntity.username.contains(username);
         }
         return null;
     }

@@ -14,7 +14,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static com.cstapin.member.persistence.QMember.member;
+import static com.cstapin.member.persistence.QMemberEntity.memberEntity;
 import static com.cstapin.quiz.domain.QQuiz.quiz;
 import static com.cstapin.quiz.domain.QQuizCategory.quizCategory;
 
@@ -35,7 +35,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                         quiz.createdAt))
                 .from(quiz)
                 .join(quiz.quizCategory, quizCategory)
-                .join(quiz.author, member)
+                .join(quiz.author, memberEntity)
                 .where(
                         QuizSearchType.getConditionBySearchType(params.getSearchType(), params.getKeyword()),
                         eqCategoryId(params.getCategoryId()),
@@ -47,7 +47,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(quiz.count())
                 .from(quiz)
-                .join(quiz.author, member)
+                .join(quiz.author, memberEntity)
                 .where(
                         QuizSearchType.getConditionBySearchType(params.getSearchType(), params.getKeyword()),
                         eqCategoryId(params.getCategoryId()),
