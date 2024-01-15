@@ -9,6 +9,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Map;
@@ -157,5 +158,28 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
                 .isEqualTo("010-****-1234");
         assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("[0].correctCount"))
                 .isEqualTo("50");
+    }
+
+    /**
+     * When: 핸드폰 번호가 순수한 숫자가 아니다.
+     * Then: 400 에러가 발생한다.
+     * When: 이름이 한글이 아니다.
+     * Then: 400 에러가 발생한다.
+     */
+    @Test
+    void validateInputSubmitRandomQuizResult() {
+        //when
+        ExtractableResponse<Response> 순수숫자가아닌핸드폰번호 =
+                랜덤_문제_결과_등록(50, "010-1234-1234", "유기훈");
+
+        //then
+        assertThat(순수숫자가아닌핸드폰번호.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+
+        //when
+        ExtractableResponse<Response> 한글이아닌이름 =
+                랜덤_문제_결과_등록(50, "01012341234", "youkihoon");
+
+        //then
+        assertThat(한글이아닌이름.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }
