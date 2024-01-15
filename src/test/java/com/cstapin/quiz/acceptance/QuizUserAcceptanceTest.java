@@ -138,4 +138,24 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         assertThat(랜덤_문제_선정.jsonPath().getString("[0].quizCategoryTitle"))
                 .containsAnyOf("데이터베이스", "네트워크", "운영체제");
     }
+
+    /**
+     * Given: 문제를 풀고 맞춘 개수를 받는다.
+     * When: 자신의 이름, 핸드폰 번호와 함께 맞춘 문제의 개수를 등록한다.
+     * Then: 유저 순위 목록을 조회하면 조회된다.
+     */
+    @Test
+    void submitRandomQuizResult() {
+        //given
+        int correctCount = 50;
+
+        //when
+        랜덤_문제_결과_등록(correctCount, "01012341234", "유기훈");
+
+        //then
+        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("[0].phoneNumber"))
+                .isEqualTo("010-****-1234");
+        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("[0].correctCount"))
+                .isEqualTo("50");
+    }
 }
