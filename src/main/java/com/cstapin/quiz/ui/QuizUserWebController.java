@@ -2,15 +2,14 @@ package com.cstapin.quiz.ui;
 
 
 import com.cstapin.quiz.service.QuizUserService;
-import com.cstapin.quiz.service.dto.QuizCategoryResponse;
-import com.cstapin.quiz.service.dto.RandomQuizzesRequest;
-import com.cstapin.quiz.service.dto.RandomQuizzesResponse;
+import com.cstapin.quiz.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -33,5 +32,12 @@ public class QuizUserWebController {
         List<QuizCategoryResponse> quizCategoryResponses = quizUserService.findQuizCategories();
 
         return ResponseEntity.ok().body(quizCategoryResponses);
+    }
+
+    @PostMapping("/random/results")
+    public ResponseEntity<QuizParticipantsResponse> saveOrUpdateQuizParticipants(@Valid @RequestBody QuizParticipantsRequest request) {
+        QuizParticipantsResponse response = quizUserService.saveOrUpdateQuizParticipants(request, LocalDate.now());
+
+        return ResponseEntity.ok().body(response);
     }
 }

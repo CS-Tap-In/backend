@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +31,7 @@ public class QuizUserService {
     private final QuizCategoryQueryService quizCategoryQueryService;
     private final MemberRepository memberRepository;
     private final RandomQuizSelector randomQuizSelector;
+    private final QuizParticipantsRepository quizParticipantsRepository;
 
     @Transactional
     public QuizResponse createQuiz(QuizRequest request, String username) {
@@ -111,5 +109,15 @@ public class QuizUserService {
                 .map(RandomQuizzesResponse::from)
                 .collect(Collectors.toList());
 
+    }
+
+    public QuizParticipantsResponse saveOrUpdateQuizParticipants(QuizParticipantsRequest request, LocalDate date) {
+        QuizParticipants newQuizParticipants = request.toQuizParticipants();
+
+        return quizParticipantsRepository.findByPhoneNumberAndSameYearMonth(request.getPhoneNumber(), date)
+                .map(quizParticipants -> quizParticipants.update(newQuizParticipants))
+                .map(quizParticipantsRepository::save)
+                .map(QuizParticipantsResponse::from)
+                .orElseGet(() -> QuizParticipantsResponse.from(quizParticipantsRepository.save(newQuizParticipants)));
     }
 }

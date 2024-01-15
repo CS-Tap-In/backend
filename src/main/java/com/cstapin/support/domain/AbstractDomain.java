@@ -1,7 +1,10 @@
 package com.cstapin.support.domain;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public abstract class AbstractDomain {
 
     protected final Long id;
@@ -16,7 +19,4 @@ public abstract class AbstractDomain {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
-    }
 }
