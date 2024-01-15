@@ -69,7 +69,7 @@ public class Quiz extends AbstractEntity {
     }
 
     private static void validateAnswerLength(String answer) {
-        if (answer.length() > ANSWER_LENGTH) {
+        if (Objects.nonNull(answer) && answer.length() > ANSWER_LENGTH) {
             throw new IllegalArgumentException("답의 길이가 너무 깁니다.");
         }
     }

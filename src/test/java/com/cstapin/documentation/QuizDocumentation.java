@@ -263,4 +263,23 @@ public class QuizDocumentation extends Documentation {
         //then
         유저가_문제_카테고리_목록_조회(getRequestSpecification("user-find-quiz-categories").auth().oauth2(userAccessToken));
     }
+
+    @Test
+    void getRandomQuizzes() {
+        //given
+        List<RandomQuizzesResponse> response = List.of(
+                new RandomQuizzesResponse(1L, "데이터베이스",
+                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", "pk,기본키,기본 키"),
+                new RandomQuizzesResponse(2L, "운영체제",
+                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", "pk,기본키,기본 키"),
+                new RandomQuizzesResponse(3L, "네트워크",
+                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", "pk,기본키,기본 키")
+        );
+
+        //when
+        when(quizUserService.getRandomQuizzes(any())).thenReturn(response);
+
+        //then
+        랜덤_문제_선정(getRequestSpecification("web-user-find-random-quizzes"), List.of(1L, 2L, 3L));
+    }
 }

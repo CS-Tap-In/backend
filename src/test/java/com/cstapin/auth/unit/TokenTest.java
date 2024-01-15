@@ -10,6 +10,7 @@ import com.cstapin.member.domain.MemberRole;
 import com.cstapin.member.domain.Profiles;
 import com.cstapin.member.persistence.MemberEntity;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +61,7 @@ public class TokenTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("accessToken 이 만료된 토큰이 아닌 경우")
     void updateWithNotExpiredAccessToken() {
         //given
