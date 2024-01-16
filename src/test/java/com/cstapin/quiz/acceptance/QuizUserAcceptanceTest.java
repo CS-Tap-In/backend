@@ -154,9 +154,9 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         랜덤_문제_결과_등록(correctCount, "01012341234", "유기훈");
 
         //then
-        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("[0].phoneNumber"))
+        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("content[0].phoneNumber"))
                 .isEqualTo("010-****-1234");
-        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("[0].correctCount"))
+        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("content[0].correctCount"))
                 .isEqualTo("50");
     }
 

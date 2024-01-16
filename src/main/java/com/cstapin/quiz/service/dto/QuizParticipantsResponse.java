@@ -28,7 +28,8 @@ public class QuizParticipantsResponse {
     }
 
     public static QuizParticipantsResponse from(QuizParticipants quizParticipants) {
-        return new QuizParticipantsResponse(quizParticipants.getId(), quizParticipants.getPhoneNumber(),
-                quizParticipants.getUsername(), quizParticipants.getCorrectCount(), quizParticipants.getCreatedAt());
+        return new QuizParticipantsResponse(quizParticipants.getId(), quizParticipants.getMaskedPhoneNumber(),
+                quizParticipants.getMaskedUsername(), quizParticipants.getCorrectCount(),
+                quizParticipants.getCreatedAt());
     }
 }

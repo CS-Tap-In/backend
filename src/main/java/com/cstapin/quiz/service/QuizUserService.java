@@ -111,6 +111,7 @@ public class QuizUserService {
 
     }
 
+    @Transactional
     public QuizParticipantsResponse saveOrUpdateQuizParticipants(QuizParticipantsRequest request, LocalDate date) {
         QuizParticipants newQuizParticipants = request.toQuizParticipants();
 
@@ -119,5 +120,10 @@ public class QuizUserService {
                 .map(quizParticipantsRepository::save)
                 .map(QuizParticipantsResponse::from)
                 .orElseGet(() -> QuizParticipantsResponse.from(quizParticipantsRepository.save(newQuizParticipants)));
+    }
+
+    public Page<QuizParticipantsResponse> getQuizParticipants(QuizParticipantsListRequest request) {
+        return quizParticipantsRepository.getQuizParticipants(request)
+                .map(QuizParticipantsResponse::from);
     }
 }

@@ -67,4 +67,17 @@ public class QuizParticipants extends AbstractDomain {
         return this.correctCount > correctCount;
     }
 
+    public String getMaskedPhoneNumber() {
+        return phoneNumber.substring(0, 3) + "-****-" + phoneNumber.substring(7);
+    }
+
+    public String getMaskedUsername() {
+        if (username.length() == 1) {
+            return username;
+        }
+        if (username.length() < 2) {
+            return username.substring(0, 1) + "*";
+        }
+        return username.substring(0, 1) + "*".repeat(username.length() - 2) + username.substring(username.length() - 2);
+    }
 }

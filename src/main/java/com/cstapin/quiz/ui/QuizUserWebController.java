@@ -3,8 +3,11 @@ package com.cstapin.quiz.ui;
 
 import com.cstapin.quiz.service.QuizUserService;
 import com.cstapin.quiz.service.dto.*;
+import com.cstapin.support.service.dto.PageRequest;
+import com.cstapin.support.service.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +42,13 @@ public class QuizUserWebController {
         QuizParticipantsResponse response = quizUserService.saveOrUpdateQuizParticipants(request, LocalDate.now());
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/random/results")
+    public ResponseEntity<PageResponse<QuizParticipantsResponse>> getQuizParticipants(@Valid QuizParticipantsListRequest request) {
+
+        Page<QuizParticipantsResponse> quizCategoryResponses = quizUserService.getQuizParticipants(request);
+
+        return ResponseEntity.ok().body(new PageResponse<>(quizCategoryResponses));
     }
 }
