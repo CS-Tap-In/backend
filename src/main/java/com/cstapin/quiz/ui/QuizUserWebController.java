@@ -3,7 +3,6 @@ package com.cstapin.quiz.ui;
 
 import com.cstapin.quiz.service.QuizUserService;
 import com.cstapin.quiz.service.dto.*;
-import com.cstapin.support.service.dto.PageRequest;
 import com.cstapin.support.service.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @Slf4j
@@ -39,7 +38,7 @@ public class QuizUserWebController {
 
     @PostMapping("/random/results")
     public ResponseEntity<QuizParticipantsResponse> saveOrUpdateQuizParticipants(@Valid @RequestBody QuizParticipantsRequest request) {
-        QuizParticipantsResponse response = quizUserService.saveOrUpdateQuizParticipants(request, LocalDate.now());
+        QuizParticipantsResponse response = quizUserService.saveOrUpdateQuizParticipants(request, YearMonth.now());
 
         return ResponseEntity.ok().body(response);
     }

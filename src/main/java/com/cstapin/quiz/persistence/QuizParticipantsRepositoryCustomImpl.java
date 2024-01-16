@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +19,12 @@ public class QuizParticipantsRepositoryCustomImpl implements QuizParticipantsRep
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<QuizParticipantsEntity> findByPhoneNumberAndSameYearMonth(String phoneNumber, LocalDate date) {
+    public Optional<QuizParticipantsEntity> findByPhoneNumberAndSameYearMonth(String phoneNumber, YearMonth yearMonth) {
         QuizParticipantsEntity entity = queryFactory.selectFrom(quizParticipantsEntity)
                 .where(
                         quizParticipantsEntity.phoneNumber.eq(phoneNumber),
-                        quizParticipantsEntity.createdAt.month().eq(date.getMonth().getValue()),
-                        quizParticipantsEntity.createdAt.year().eq(date.getYear())
+                        quizParticipantsEntity.createdAt.month().eq(yearMonth.getMonthValue()),
+                        quizParticipantsEntity.createdAt.year().eq(yearMonth.getYear())
                 )
                 .fetchFirst();
 

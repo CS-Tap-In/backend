@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Optional;
 
 @Repository
@@ -17,8 +17,8 @@ public class QuizParticipantsRepositoryImpl implements QuizParticipantsRepositor
     private final QuizParticipantsJpaRepository quizParticipantsJpaRepository;
 
     @Override
-    public Optional<QuizParticipants> findByPhoneNumberAndSameYearMonth(String phoneNumber, LocalDate date) {
-        return quizParticipantsJpaRepository.findByPhoneNumberAndSameYearMonth(phoneNumber, date)
+    public Optional<QuizParticipants> findByPhoneNumberAndSameYearMonth(String phoneNumber, YearMonth yearMonth) {
+        return quizParticipantsJpaRepository.findByPhoneNumberAndSameYearMonth(phoneNumber, yearMonth)
                 .map(QuizParticipants::from);
     }
 
