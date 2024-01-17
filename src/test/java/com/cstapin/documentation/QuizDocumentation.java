@@ -286,6 +286,13 @@ public class QuizDocumentation extends Documentation {
 
     @Test
     void submitRandomQuizResult() {
+        //given
+        QuizParticipantsResponse 유기훈 = new QuizParticipantsResponse(1L, "010-****-5678",
+                "유기훈", 49, LocalDateTime.of(2024, 1, 1, 12, 12, 12));
+
+        //when
+        when(quizUserService.saveOrUpdateQuizParticipants(any(), any())).thenReturn(유기훈);
+
         //then
         랜덤_문제_결과_등록(getRequestSpecification("web-user-submit-random-quiz-result"),
                 49, "01012345678", "유기훈");

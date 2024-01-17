@@ -576,8 +576,16 @@ operation::web-user-submit-random-quiz-result[snippets='http-request']
 |===
 
 operation::web-user-submit-random-quiz-result[snippets='http-response']
+Response body
 |===
 | key | type | description | required
+| id | Long | 참여자 id (pk) | O
+| phoneNumber | String | 마스킹된 핸드폰 번호 | O
+| username | String | 마스킹된 이름 +
+첫글자, 마지막 글자를 제외하고 마스킹 | O
+| correctCount | int | 문제 맞춘 개수 | O
+| updatedAt | String | 등록일 +
+패턴: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
 
 === [유저-WEB] 랜덤 문제 결과 목록 조회
@@ -617,7 +625,7 @@ QuizParticipantsResponse
 | username | String | 마스킹된 이름 +
 첫글자, 마지막 글자를 제외하고 마스킹 | O
 | correctCount | int | 문제 맞춘 개수 | O
-| createdAt | String | 등록일 +
+| updatedAt | String | 등록일 +
 패턴: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
 
