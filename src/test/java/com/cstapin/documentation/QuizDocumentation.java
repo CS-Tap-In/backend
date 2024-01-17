@@ -304,6 +304,6 @@ public class QuizDocumentation extends Documentation {
                 PageRequest.of(1, 10), 2L));
 
         //then
-        랜덤_문제_유저_순위_목록_조회(getRequestSpecification("web-user-find-random-quiz-results"));
+        랜덤_문제_유저_순위_목록_조회(getRequestSpecification("web-user-find-random-quiz-results"), "2024-01");
     }
 }

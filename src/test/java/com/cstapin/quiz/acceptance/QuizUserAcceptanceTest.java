@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -154,9 +156,11 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         랜덤_문제_결과_등록(correctCount, "01012341234", "유기훈");
 
         //then
-        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("content[0].phoneNumber"))
+        assertThat(랜덤_문제_유저_순위_목록_조회(YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM")))
+                .jsonPath().getString("content[0].phoneNumber"))
                 .isEqualTo("010-****-1234");
-        assertThat(랜덤_문제_유저_순위_목록_조회().jsonPath().getString("content[0].correctCount"))
+        assertThat(랜덤_문제_유저_순위_목록_조회(YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM")))
+                .jsonPath().getString("content[0].correctCount"))
                 .isEqualTo("50");
     }
 
