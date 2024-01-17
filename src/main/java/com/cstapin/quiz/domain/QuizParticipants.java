@@ -72,12 +72,10 @@ public class QuizParticipants extends AbstractDomain {
     }
 
     public String getMaskedUsername() {
-        if (username.length() == 1) {
-            return username;
-        }
-        if (username.length() < 2) {
+        if (username.length() < 3) {
             return username.substring(0, 1) + "*";
         }
-        return username.substring(0, 1) + "*".repeat(username.length() - 2) + username.substring(username.length() - 2);
+        return username.substring(0, 1) + "*".repeat(username.length() - 2) +
+                username.substring(username.length() - 1);
     }
 }
