@@ -42,7 +42,7 @@ public class QuizParticipantsRepositoryCustomImpl implements QuizParticipantsRep
                 .limit(pageable.getPageSize())
                 .orderBy(
                         quizParticipantsEntity.correctCount.desc(),
-                        quizParticipantsEntity.createdAt.asc()
+                        quizParticipantsEntity.updatedAt.asc()
                 )
                 .fetch();
 

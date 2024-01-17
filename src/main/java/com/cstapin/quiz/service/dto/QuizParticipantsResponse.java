@@ -13,23 +13,23 @@ public class QuizParticipantsResponse {
     private final String username;
     private final int correctCount;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public QuizParticipantsResponse(Long id,
                                     String phoneNumber,
                                     String username,
                                     int correctCount,
-                                    LocalDateTime createdAt) {
+                                    LocalDateTime updatedAt) {
         this.id = id;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.correctCount = correctCount;
-        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public static QuizParticipantsResponse from(QuizParticipants quizParticipants) {
         return new QuizParticipantsResponse(quizParticipants.getId(), quizParticipants.getMaskedPhoneNumber(),
                 quizParticipants.getMaskedUsername(), quizParticipants.getCorrectCount(),
-                quizParticipants.getCreatedAt());
+                quizParticipants.getUpdatedAt());
     }
 }
