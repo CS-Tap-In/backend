@@ -1,6 +1,8 @@
 package com.cstapin.auth.domain;
 
+import com.cstapin.member.domain.Credentials;
 import com.cstapin.member.domain.Member;
+import com.cstapin.member.persistence.MemberEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,31 +11,27 @@ import java.util.Collection;
 
 public class PrincipalDetails implements UserDetails {
 
-    private final Member member;
+    private final Credentials credentials;
 
-    public PrincipalDetails(Member member) {
-        this.member = member;
-    }
-
-    public Member getMember() {
-        return member;
+    public PrincipalDetails(Credentials credentials) {
+        this.credentials = credentials;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(() -> member.getRole().toString());
+        authorities.add(() -> credentials.getRole().toString());
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return credentials.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getUsername();
+        return credentials.getUsername();
     }
 
     @Override

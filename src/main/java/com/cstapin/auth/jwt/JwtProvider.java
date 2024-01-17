@@ -1,6 +1,7 @@
 package com.cstapin.auth.jwt;
 
 import com.cstapin.auth.jwt.properties.JwtProperties;
+import com.cstapin.member.domain.Credentials;
 import com.cstapin.member.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,10 +18,10 @@ public class JwtProvider {
 
     private final JwtProperties jwtProperties;
 
-    public String createAccessToken(Member member) {
+    public String createAccessToken(Credentials credentials) {
         return createToken(
-                member.getUsername(),
-                member.getRole().name(),
+                credentials.getUsername(),
+                credentials.getRole().name(),
                 jwtProperties.getAccessTokenExpirationPeriod(),
                 jwtProperties.getAccessTokenSecretKey()
         );

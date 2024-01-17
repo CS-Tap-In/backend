@@ -7,9 +7,10 @@ import com.cstapin.auth.oauth2.github.GithubCodeRequest;
 import com.cstapin.auth.oauth2.github.GithubProfileResponse;
 import com.cstapin.auth.service.dto.*;
 import com.cstapin.auth.service.query.TokenQueryService;
+import com.cstapin.exception.notfound.MemberNotFoundException;
 import com.cstapin.member.domain.Member;
-import com.cstapin.member.domain.MemberRepository;
-import com.cstapin.member.service.query.MemberQueryService;
+import com.cstapin.member.domain.MemberRole;
+import com.cstapin.member.service.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,59 +32,77 @@ public class AuthService implements UserDetailsService {
     private String githubUsernamePrefix;
     private final GithubClient githubClient;
     private final JoinValidator joinValidator;
-    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final TokenQueryService tokenQueryService;
     private final TokenRepository tokenRepository;
     private final JwtReissueValidator jwtReissueValidator;
-    private final MemberQueryService memberQueryService;
+    private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberQueryService.findByUsername(username);
-        return new PrincipalDetails(member);
+        Member member = memberRepository.getByUsername(username);
+        return new PrincipalDetails(member.getCredentials());
     }
 
     @Transactional
     public LoginResponse login(LoginRequest request) {
-        Member member = memberRepository.findByUsername(request.getUsername())
-                .filter(m -> m.matchPassword(passwordEncoder, request.getPassword()))
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 아이디와 비밀번호 입니다."));
+        try {
+            Member member = memberRepository.getByUsername(request.getUsername());
+            member.validatePassword(passwordEncoder, request.getPassword());
+            Token token = tokenRepository.save(
+                    new Token(jwtProvider.createAccessToken(member.getCredentials()), jwtProvider.createRefreshToken())
+            );
+            Member savedMember = memberRepository.save(member.updateToken(token.getId()));
 
-        return updateToken(member);
+            return new LoginResponse(token, savedMember.getRole());
+        } catch (MemberNotFoundException e) {
+            throw new IllegalArgumentException("잘못된 아이디 입니다.");
+        }
     }
 
     @Transactional
     public LoginResponse loginFromGithub(GithubCodeRequest request) {
+
         String accessTokenFromGithub = githubClient.getAccessTokenFromGithub(request.getCode());
         GithubProfileResponse githubProfile = githubClient.getGithubProfileFromGithub(accessTokenFromGithub);
 
-        Member member = memberRepository.findByUsername(githubUsernamePrefix + githubProfile.getId())
-                .orElseGet(() -> memberRepository.save(Member.builder().username(githubUsernamePrefix + githubProfile.getId())
-                        .nickname(githubProfile.getName()).password("").role(Member.MemberRole.USER)
-                        .avatarUrl(githubProfile.getAvatarUrl()).build()));
+        try {
+            Member member = memberRepository.getByUsername(githubUsernamePrefix + githubProfile.getId());
 
-        return updateToken(member);
+            Token token = tokenRepository.save(
+                    new Token(jwtProvider.createAccessToken(member.getCredentials()), jwtProvider.createRefreshToken())
+            );
+            Member savedMember = memberRepository.save(member.updateToken(token.getId()));
+
+            return new LoginResponse(token, savedMember.getRole());
+        } catch (MemberNotFoundException e) {
+            Member member = Member.githubMember(githubUsernamePrefix, githubProfile);
+
+            Token token = tokenRepository.save(
+                    new Token(jwtProvider.createAccessToken(member.getCredentials()), jwtProvider.createRefreshToken())
+            );
+
+            Member savedMember = memberRepository.save(member.updateToken(token.getId()));
+
+            return new LoginResponse(token, savedMember.getRole());
+        }
     }
 
     @Transactional
-    public void join(JoinRequest request, Member.MemberRole memberRole) {
+    public void join(JoinRequest request, MemberRole memberRole) {
         joinValidator.validate(request, memberRole);
-        memberRepository.save(
-                Member.builder().username(request.getUsername()).nickname(request.getNickname())
-                        .password(passwordEncoder.encode(request.getPassword())).role(memberRole).build()
-        );
+        memberRepository.save(request.toMember(passwordEncoder, memberRole));
     }
 
     @Transactional
     public TokenResponse reissueToken(ReissueTokenRequest request) {
 
         Token token = tokenQueryService.findByRefreshToken(request.getRefreshToken());
-        Member member = memberQueryService.findByTokenId(token.getId());
+        Member member = memberRepository.getByTokenId(token.getId());
         token.update(
                 jwtReissueValidator,
-                jwtProvider.createAccessToken(member),
+                jwtProvider.createAccessToken(member.getCredentials()),
                 jwtProvider.createRefreshToken(),
                 LocalDateTime.now()
         );
@@ -91,12 +110,4 @@ public class AuthService implements UserDetailsService {
         return new TokenResponse(token);
     }
 
-    private LoginResponse updateToken(Member member) {
-        Token token = tokenRepository.save(
-                new Token(jwtProvider.createAccessToken(member), jwtProvider.createRefreshToken())
-        );
-        member.updateToken(token.getId());
-
-        return new LoginResponse(token, member.getRole());
-    }
 }

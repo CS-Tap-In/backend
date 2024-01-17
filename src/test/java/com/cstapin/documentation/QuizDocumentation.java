@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
@@ -281,5 +282,35 @@ public class QuizDocumentation extends Documentation {
 
         //then
         랜덤_문제_선정(getRequestSpecification("web-user-find-random-quizzes"), List.of(1L, 2L, 3L));
+    }
+
+    @Test
+    void submitRandomQuizResult() {
+        //given
+        QuizParticipantsResponse 유기훈 = new QuizParticipantsResponse(1L, "010-****-5678",
+                "유기훈", 49, LocalDateTime.of(2024, 1, 1, 12, 12, 12));
+
+        //when
+        when(quizUserService.saveOrUpdateQuizParticipants(any(), any())).thenReturn(유기훈);
+
+        //then
+        랜덤_문제_결과_등록(getRequestSpecification("web-user-submit-random-quiz-result"),
+                49, "01012345678", "유기훈");
+    }
+
+    @Test
+    void getQuizParticipants() {
+        //given
+        QuizParticipantsResponse 유기룬 = new QuizParticipantsResponse(1L, "010-****-5678",
+                "유*룬", 49, LocalDateTime.of(2024, 1, 1, 12, 12, 12));
+        QuizParticipantsResponse 김만자 = new QuizParticipantsResponse(1L, "010-****-1234",
+                "김*자", 49, LocalDateTime.of(2024, 1, 1, 12, 12, 12));
+
+        //when
+        when(quizUserService.getQuizParticipants(any())).thenReturn(new PageImpl<>(List.of(유기룬, 김만자),
+                PageRequest.of(1, 10), 2L));
+
+        //then
+        랜덤_문제_유저_순위_목록_조회(getRequestSpecification("web-user-find-random-quiz-results"), "2024-01");
     }
 }

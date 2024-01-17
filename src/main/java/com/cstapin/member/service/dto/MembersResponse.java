@@ -1,6 +1,6 @@
 package com.cstapin.member.service.dto;
 
-import com.cstapin.member.domain.Member;
+import com.cstapin.member.persistence.MemberEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
@@ -22,7 +22,7 @@ public class MembersResponse {
         this.createdAt = createdAt;
     }
 
-    public static MembersResponse from(Member member) {
-        return new MembersResponse(member.getId(), member.getUsername(), member.getNickname(), member.getCreatedAt());
+    public static MembersResponse from(MemberEntity memberEntity) {
+        return new MembersResponse(memberEntity.getId(), memberEntity.getUsername(), memberEntity.getNickname(), memberEntity.getCreatedAt());
     }
 }

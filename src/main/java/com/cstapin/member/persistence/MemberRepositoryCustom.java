@@ -1,8 +1,8 @@
-package com.cstapin.member.domain;
+package com.cstapin.member.persistence;
 
 import com.cstapin.member.service.dto.MembersRequest;
 import org.springframework.data.domain.Page;
 
 public interface MemberRepositoryCustom {
-    Page<Member> findMembers(MembersRequest request);
+    Page<MemberEntity> findMembers(MembersRequest request);
 }

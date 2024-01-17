@@ -1,7 +1,8 @@
 package com.cstapin.quiz.service;
 
 import com.cstapin.member.domain.Member;
-import com.cstapin.member.service.query.MemberQueryService;
+import com.cstapin.member.persistence.MemberEntity;
+import com.cstapin.member.service.MemberRepository;
 import com.cstapin.quiz.domain.Quiz;
 import com.cstapin.quiz.domain.QuizCategory;
 import com.cstapin.quiz.domain.QuizCategoryRepository;
@@ -25,13 +26,13 @@ public class QuizAdminService {
     private final QuizRepository quizRepository;
     private final QuizCategoryRepository quizCategoryRepository;
     private final QuizQueryService quizQueryService;
-    private final MemberQueryService memberQueryService;
+    private final MemberRepository memberRepository;
     private final QuizCategoryQueryService quizCategoryQueryService;
 
     @Transactional
     public QuizResponse createQuiz(QuizRequest request, String username) {
-        Member author = memberQueryService.findByUsername(username);
-        Quiz quiz = quizRepository.save(request.toQuiz(author, quizCategoryQueryService.findById(request.getCategoryId())));
+        Member author = memberRepository.getByUsername(username);
+        Quiz quiz = quizRepository.save(request.toQuiz(author.toMemberEntity(), quizCategoryQueryService.findById(request.getCategoryId())));
         return QuizResponse.from(quiz);
     }
 

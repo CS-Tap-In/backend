@@ -1,4 +1,4 @@
-package com.cstapin.member.domain;
+package com.cstapin.member.persistence;
 
 import com.cstapin.member.service.dto.MembersRequest;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.cstapin.member.domain.QMember.member;
+import static com.cstapin.member.persistence.QMemberEntity.memberEntity;
 
 @RequiredArgsConstructor
 public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
@@ -19,27 +19,27 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Member> findMembers(MembersRequest request) {
-        List<Member> members = queryFactory
-                .selectFrom(member)
+    public Page<MemberEntity> findMembers(MembersRequest request) {
+        List<MemberEntity> memberEntities = queryFactory
+                .selectFrom(memberEntity)
                 .where(hasUsername(request.getUsername()))
                 .offset(request.getPageable().getOffset())
                 .limit(request.getPageable().getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
-                .select(member.count())
-                .from(member)
+                .select(memberEntity.count())
+                .from(memberEntity)
                 .where(hasUsername(request.getUsername()));
 
         System.out.println();
 
-        return PageableExecutionUtils.getPage(members, request.getPageable(), countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(memberEntities, request.getPageable(), countQuery::fetchOne);
     }
 
     private BooleanExpression hasUsername(String username) {
         if (StringUtils.hasText(username)) {
-            return member.username.contains(username);
+            return memberEntity.username.contains(username);
         }
         return null;
     }

@@ -4,7 +4,8 @@ import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.auth.service.dto.LoginResponse;
 import com.cstapin.auth.service.dto.TokenResponse;
-import com.cstapin.member.domain.Member;
+import com.cstapin.member.domain.MemberRole;
+import com.cstapin.member.persistence.MemberEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -24,7 +25,7 @@ public class AuthDocumentation extends Documentation {
     @Test
     void login() {
         //given
-        LoginResponse response = new LoginResponse("adf132abadf023fdfa", "adfaklgadjgadi", Member.MemberRole.ADMIN);
+        LoginResponse response = new LoginResponse("adf132abadf023fdfa", "adfaklgadjgadi", MemberRole.ADMIN);
 
         //when
         when(authService.login(any())).thenReturn(response);
@@ -42,7 +43,7 @@ public class AuthDocumentation extends Documentation {
     @Test
     void loginFromGithub() {
         //given
-        LoginResponse response = new LoginResponse("adf132abadf023fdfa", "adfaklgadjgadi", Member.MemberRole.USER);
+        LoginResponse response = new LoginResponse("adf132abadf023fdfa", "adfaklgadjgadi", MemberRole.USER);
 
         //when
         when(authService.loginFromGithub(any())).thenReturn(response);

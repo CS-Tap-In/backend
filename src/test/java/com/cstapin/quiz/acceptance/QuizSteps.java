@@ -274,5 +274,31 @@ public class QuizSteps {
                 .when().post(PATH_PREFIX_WEB_USER + "/random")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 랜덤_문제_결과_등록(int correctCount, String phoneNumber, String username) {
+        return 랜덤_문제_결과_등록(RestAssured.given().log().all(), correctCount, phoneNumber, username);
+    }
+
+    public static ExtractableResponse<Response> 랜덤_문제_결과_등록(RequestSpecification requestSpecification,
+                                                            int correctCount, String phoneNumber, String username) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(Map.of("correctCount", correctCount, "phoneNumber", phoneNumber, "username", username))
+                .when().post(PATH_PREFIX_WEB_USER + "/random/results")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 랜덤_문제_유저_순위_목록_조회(String yearMonth) {
+        return 랜덤_문제_유저_순위_목록_조회(RestAssured.given().log().all(), yearMonth);
+    }
+
+    public static ExtractableResponse<Response> 랜덤_문제_유저_순위_목록_조회(RequestSpecification requestSpecification,
+                                                                  String yearMonth) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .params(Map.of("ym", yearMonth, "page", 1, "size", 10))
+                .when().get(PATH_PREFIX_WEB_USER + "/random/results")
+                .then().log().all().extract();
+    }
 }
 

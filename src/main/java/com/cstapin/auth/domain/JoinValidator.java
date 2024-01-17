@@ -1,8 +1,8 @@
 package com.cstapin.auth.domain;
 
 import com.cstapin.auth.service.dto.JoinRequest;
-import com.cstapin.member.domain.Member;
-import com.cstapin.member.domain.MemberRepository;
+import com.cstapin.member.domain.MemberRole;
+import com.cstapin.member.service.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,11 +20,11 @@ public class JoinValidator {
     @Value("${props.join.admin}")
     private String joinAdminSecretKey;
 
-    public void validate(JoinRequest request, Member.MemberRole memberRole) {
+    public void validate(JoinRequest request, MemberRole memberRole) {
         if (memberRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new IllegalArgumentException(DUPLICATE_USERNAME);
         }
-        if (Member.MemberRole.ADMIN.equals(memberRole) && !Objects.equals(joinAdminSecretKey, request.getSecretKey())) {
+        if (MemberRole.ADMIN.equals(memberRole) && !Objects.equals(joinAdminSecretKey, request.getSecretKey())) {
             throw new IllegalArgumentException(NOT_EQUAL_JOIN_ADMIN_SECRET_KEY);
         }
     }

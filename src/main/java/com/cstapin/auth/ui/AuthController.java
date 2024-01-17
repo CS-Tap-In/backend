@@ -3,7 +3,8 @@ package com.cstapin.auth.ui;
 import com.cstapin.auth.oauth2.github.GithubCodeRequest;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.auth.service.dto.*;
-import com.cstapin.member.domain.Member;
+import com.cstapin.member.domain.MemberRole;
+import com.cstapin.member.persistence.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class AuthController {
     @PostMapping("/join/admin")
     public ResponseEntity<Void> joinAdmin(@Valid @RequestBody JoinRequest request) {
 
-        authService.join(request, Member.MemberRole.ADMIN);
+        authService.join(request, MemberRole.ADMIN);
         return ResponseEntity.ok().build();
     }
 
@@ -50,7 +51,7 @@ public class AuthController {
     @PostMapping("/join/user")
     public ResponseEntity<Void> joinUser(@Valid @RequestBody JoinRequest request) {
 
-        authService.join(request, Member.MemberRole.USER);
+        authService.join(request, MemberRole.USER);
         return ResponseEntity.ok().build();
     }
 

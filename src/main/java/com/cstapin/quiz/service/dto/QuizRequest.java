@@ -1,6 +1,6 @@
 package com.cstapin.quiz.service.dto;
 
-import com.cstapin.member.domain.Member;
+import com.cstapin.member.persistence.MemberEntity;
 import com.cstapin.quiz.domain.Quiz;
 import com.cstapin.quiz.domain.QuizCategory;
 import com.cstapin.quiz.domain.QuizStatus;
@@ -37,7 +37,7 @@ public class QuizRequest {
         this.answer = answer;
     }
 
-    public Quiz toQuiz(Member author, QuizCategory quizCategory) {
+    public Quiz toQuiz(MemberEntity author, QuizCategory quizCategory) {
         return Quiz.builder()
                 .quizCategory(quizCategory)
                 .author(author)
