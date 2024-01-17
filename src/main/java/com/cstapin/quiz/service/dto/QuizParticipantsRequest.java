@@ -30,4 +30,12 @@ public class QuizParticipantsRequest {
                 .build();
     }
 
+    public QuizParticipantsRequest(String username, String phoneNumber, int correctCount) {
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.correctCount = correctCount;
+    }
+
+    public QuizParticipantsRequest() {
+    }
 }
