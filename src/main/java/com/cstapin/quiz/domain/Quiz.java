@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -57,11 +58,15 @@ public class Quiz extends AbstractEntity {
     }
 
     public void update(QuizRequest request) {
-        String answer = String.join(",", request.getAnswer());
+        String answer = answerListToString(request.getAnswer());
         validateAnswerLength(answer);
         this.title = request.getTitle();
         this.problem = request.getProblem();
         this.answer = answer;
+    }
+
+    public static String answerListToString(List<String> answers) {
+        return String.join(",", answers).toLowerCase().replaceAll(" ", "");
     }
 
     public void update(QuizCategory quizCategory) {

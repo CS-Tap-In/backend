@@ -43,7 +43,7 @@ public class QuizRequest {
                 .author(author)
                 .title(title)
                 .problem(problem)
-                .answer(String.join(",", answer))
+                .answer(Quiz.answerListToString(answer))
                 .status(status)
                 .build();
     }
