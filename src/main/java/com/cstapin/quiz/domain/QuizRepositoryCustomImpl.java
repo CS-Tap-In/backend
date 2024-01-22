@@ -42,6 +42,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                         getStatusCondition(params.getStatus(), params.getRejected()))
                 .limit(params.getPageable().getPageSize())
                 .offset(params.getPageable().getOffset())
+                .orderBy(quiz.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
