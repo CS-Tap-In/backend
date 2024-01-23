@@ -270,11 +270,11 @@ public class QuizDocumentation extends Documentation {
         //given
         List<RandomQuizzesResponse> response = List.of(
                 new RandomQuizzesResponse(1L, "데이터베이스",
-                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", "pk,기본키,기본 키"),
+                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("cGs=", "6riw67O47YKk")),
                 new RandomQuizzesResponse(2L, "운영체제",
-                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", "pk,기본키,기본 키"),
+                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("cGs=", "6riw67O47YKk")),
                 new RandomQuizzesResponse(3L, "네트워크",
-                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", "pk,기본키,기본 키")
+                        "인덱스", "+++은 기본 인덱스일 수도 있고 아닐 수도 있습니다.", List.of("cGs=", "6riw67O47YKk"))
         );
 
         //when

@@ -1,9 +1,6 @@
 package com.cstapin.quiz.service.dto;
 
-import com.cstapin.quiz.domain.LearningStatus;
 import com.cstapin.quiz.domain.Quiz;
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
@@ -20,16 +17,16 @@ public class RandomQuizzesResponse {
                                  String quizCategoryTitle,
                                  String quizTitle,
                                  String problem,
-                                 String answer) {
+                                 List<String> answer) {
         this.quizId = quizId;
         this.quizCategoryTitle = quizCategoryTitle;
         this.quizTitle = quizTitle;
         this.problem = problem;
-        this.answer = List.of(answer.split(","));
+        this.answer = answer;
     }
 
     public static RandomQuizzesResponse from(Quiz quiz) {
         return new RandomQuizzesResponse(quiz.getId(), quiz.getQuizCategory().getTitle(), quiz.getTitle(),
-                quiz.getProblem(), quiz.getAnswer());
+                quiz.getProblem(), quiz.getEncodedAnswers());
     }
 }
