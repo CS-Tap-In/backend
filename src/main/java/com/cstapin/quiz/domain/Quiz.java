@@ -9,8 +9,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "quiz")
@@ -85,5 +89,11 @@ public class Quiz extends AbstractEntity {
 
     public void changeStatus(QuizStatus status) {
         this.status = status;
+    }
+
+    public List<String> getEncodedAnswers() {
+        return Arrays.stream(answer.split(","))
+                .map(a -> Base64.getEncoder().encodeToString(a.getBytes(StandardCharsets.UTF_8)))
+                .collect(Collectors.toList());
     }
 }
