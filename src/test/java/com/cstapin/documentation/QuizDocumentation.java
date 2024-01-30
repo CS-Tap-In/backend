@@ -313,4 +313,18 @@ public class QuizDocumentation extends Documentation {
         //then
         랜덤_문제_유저_순위_목록_조회(getRequestSpecification("web-user-find-random-quiz-results"), "2024-01");
     }
+
+    @Test
+    void findQuizCategoriesInWeb() {
+        //given
+        List<QuizCategoryResponse> quizCategoryResponses = List.of(
+                new QuizCategoryResponse(1L, "운영체제", QuizCategoryStatus.PUBLIC),
+                new QuizCategoryResponse(2L, "데이터베이스", QuizCategoryStatus.PRIVATE));
+
+        //when
+        when(quizUserService.findQuizCategories()).thenReturn(quizCategoryResponses);
+
+        //then
+        유저가_문제_카테고리_목록_조회(getRequestSpecification("web-user-find-quiz-categories"));
+    }
 }
