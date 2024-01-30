@@ -300,5 +300,17 @@ public class QuizSteps {
                 .when().get(PATH_PREFIX_WEB_USER + "/random/results")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 웹에서_카테고리_목록_조회() {
+        return 웹에서_카테고리_목록_조회(RestAssured.given().log().all());
+    }
+
+    public static ExtractableResponse<Response> 웹에서_카테고리_목록_조회(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH_PREFIX_WEB_USER + "/categories")
+                .then().log().all().extract();
+    }
+
 }
 

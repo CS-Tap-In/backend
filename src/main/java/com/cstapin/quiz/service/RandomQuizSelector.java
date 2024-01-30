@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,8 @@ public class RandomQuizSelector {
                 .collect(Collectors.toList());
 
         removeExcessQuizzes(selectedQuizzes);
+
+        Collections.shuffle(selectedQuizzes);
 
         return selectedQuizzes;
     }

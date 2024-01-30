@@ -144,6 +144,7 @@ operation::admin-find-quiz-categories[snippets='http-response']
 Response body - array
 |===
 | key | type | description | required
+| id | Long | 카테고리 id (pk) | O
 | title | String | 카테고리 명 | O
 | status | PUBLIC: 공개 +
 PRIVATE: 숨김 | 카테고리 상태 +
@@ -541,6 +542,22 @@ Response body
 | quizCategoryTitle | String | 카테고리 명 | O
 | learningQuizCount | long | 학습한 퀴즈 개수 | O
 | totalQuizCount | long | 총 퀴즈 개수 | O
+|===
+
+=== [유저-WEB] 퀴즈 카테고리 목록 조회
+
+operation::web-user-find-quiz-categories[snippets='http-request']
+
+operation::web-user-find-quiz-categories[snippets='http-response']
+Response body - array
+|===
+| key | type | description | required
+| id | Long | 카테고리 id (pk) | O
+| title | String | 카테고리 명 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 | 카테고리 상태 +
+숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
+이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
 |===
 
 === [유저-WEB] 랜덤 문제 선정
