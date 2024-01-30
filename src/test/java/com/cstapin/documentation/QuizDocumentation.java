@@ -325,6 +325,6 @@ public class QuizDocumentation extends Documentation {
         when(quizUserService.findQuizCategories()).thenReturn(quizCategoryResponses);
 
         //then
-        유저가_문제_카테고리_목록_조회(getRequestSpecification("web-user-find-quiz-categories"));
+        웹에서_카테고리_목록_조회(getRequestSpecification("web-user-find-quiz-categories"));
     }
 }

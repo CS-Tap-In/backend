@@ -144,6 +144,7 @@ operation::admin-find-quiz-categories[snippets='http-response']
 Response body - array
 |===
 | key | type | description | required
+| id | Long | 카테고리 id (pk) | O
 | title | String | 카테고리 명 | O
 | status | PUBLIC: 공개 +
 PRIVATE: 숨김 | 카테고리 상태 +
@@ -545,22 +546,18 @@ Response body
 
 === [유저-WEB] 퀴즈 카테고리 목록 조회
 
-operation::web-user-find-random-quizzes[snippets='http-request']
-Request body
-|===
-| key | type | description | required
-| quizCategoryIds | List<Long> | 퀴즈 카테고리 id | O
-|===
+operation::web-user-find-quiz-categories[snippets='http-request']
 
-operation::web-user-find-random-quizzes[snippets='http-response']
-Response body
+operation::web-user-find-quiz-categories[snippets='http-response']
+Response body - array
 |===
 | key | type | description | required
-| quizId | Long | 문제 id (pk) | O
-| quizCategoryTitle | String | 문제 카테고리 명 | O
-| quizTitle | String | 퀴즈 제목 | O
-| problem | String | 퀴즈 문제 | O
-| answer | List<String> | 퀴즈 정답 들 | O
+| id | Long | 카테고리 id (pk) | O
+| title | String | 카테고리 명 | O
+| status | PUBLIC: 공개 +
+PRIVATE: 숨김 | 카테고리 상태 +
+숨김 상태이면 해당 카테고리에 속하는 문제가 출제되지 않도록 할 예정인데
+이거는 v1에 포함되지 않아도 될 기능 같아서 뺐습니다.| O
 |===
 
 === [유저-WEB] 랜덤 문제 선정
