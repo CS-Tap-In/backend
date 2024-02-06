@@ -18,7 +18,7 @@ public class QuizParticipantsRequest {
     @Size(min = 11, max = 11)
     private String phoneNumber;
 
-    @Min(1)
+    @Min(0)
     @NotNull
     private int correctCount;
 
