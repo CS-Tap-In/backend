@@ -270,7 +270,7 @@ public class QuizSteps {
                                                          List<Long> categoryIds) {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(Map.of("quizCategoryIds", categoryIds))
+                .body(Map.of("quizCategoryIds", categoryIds, "size", "50"))
                 .when().post(PATH_PREFIX_WEB_USER + "/random")
                 .then().log().all().extract();
     }

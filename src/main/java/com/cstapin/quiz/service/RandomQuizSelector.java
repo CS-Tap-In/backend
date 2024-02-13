@@ -14,12 +14,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RandomQuizSelector {
 
-    private static final int TOTAL_QUIZ_COUNT = 50;
     private final QuizRepository quizRepository;
 
-    public List<Quiz> select(List<Long> quizCategoryIds, RandomSelector<Quiz> randomSelector) {
+    public List<Quiz> select(List<Long> quizCategoryIds, RandomSelector<Quiz> randomSelector, int size) {
 
-        int countOfEachQuizCategory = Math.round((float) TOTAL_QUIZ_COUNT / quizCategoryIds.size());
+        int countOfEachQuizCategory = Math.round((float) size / quizCategoryIds.size());
 
         List<Quiz> selectedQuizzes = quizCategoryIds.stream()
                 .map(quizRepository::findByQuizCategoryId)
@@ -27,15 +26,15 @@ public class RandomQuizSelector {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        removeExcessQuizzes(selectedQuizzes);
+        removeExcessQuizzes(selectedQuizzes, size);
 
         Collections.shuffle(selectedQuizzes);
 
         return selectedQuizzes;
     }
 
-    private void removeExcessQuizzes(List<Quiz> selectedQuizzes) {
-        while (selectedQuizzes.size() > TOTAL_QUIZ_COUNT) {
+    private void removeExcessQuizzes(List<Quiz> selectedQuizzes, int quizCount) {
+        while (selectedQuizzes.size() > quizCount) {
             selectedQuizzes.remove(0);
         }
     }

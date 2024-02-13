@@ -108,7 +108,7 @@ public class QuizUserService {
                             .limit(Math.min(count, quizzes.size()))
                             .mapToObj(quizzes::get)
                             .collect(Collectors.toList());
-                })
+                }, request.getSize())
                 .stream()
                 .map(RandomQuizzesResponse::from)
                 .collect(Collectors.toList());
