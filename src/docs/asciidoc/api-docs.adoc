@@ -567,6 +567,8 @@ Request body
 |===
 | key | type | description | required
 | quizCategoryIds | List<Long> | 퀴즈 카테고리 id | O
+| size | int | 퀴즈 개수 +
+기본 값: 50| X
 |===
 
 operation::web-user-find-random-quizzes[snippets='http-response']
