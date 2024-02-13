@@ -12,4 +12,6 @@ public class RandomQuizzesRequest {
     @NotNull
     @Size(min = 3, max = 5)
     private List<Long> quizCategoryIds;
+
+    private int size = 50;
 }

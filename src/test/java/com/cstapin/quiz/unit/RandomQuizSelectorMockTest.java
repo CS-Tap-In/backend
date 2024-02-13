@@ -55,7 +55,7 @@ public class RandomQuizSelectorMockTest {
                 .thenReturn(List.of(운영체제_퀴즈1, 운영체제_퀴즈2));
 
         //when
-        List<Quiz> selectedQuizzes = randomQuizSelector.select(List.of(1L, 2L, 3L), (objects, count) -> objects);
+        List<Quiz> selectedQuizzes = randomQuizSelector.select(List.of(1L, 2L, 3L), (objects, count) -> objects, 6);
 
         //then
         List<QuizCategory> selectedQuizCategories = selectedQuizzes.stream().map(Quiz::getQuizCategory)
@@ -78,9 +78,30 @@ public class RandomQuizSelectorMockTest {
                 .thenReturn(List.of(운영체제_퀴즈1, 운영체제_퀴즈2));
 
         //when
-        List<Quiz> selectedQuizzes = randomQuizSelector.select(List.of(1L, 2L, 3L), (objects, count) -> objects);
+        List<Quiz> selectedQuizzes = randomQuizSelector.select(List.of(1L, 2L, 3L), (objects, count) -> objects, 6);
 
         //then
         assertThat(selectedQuizzes.size()).isEqualTo(new HashSet<>(selectedQuizzes).size());
+    }
+
+    @Test
+    void 문제는_정한_개수만_선택된다() {
+        //given
+        Long 데이터베이스_카테고리_id = 1L;
+        Long 네트워크_카테고리_id = 2L;
+        Long 운영체제_카테고리_id = 3L;
+
+        when(quizRepository.findByQuizCategoryId(데이터베이스_카테고리_id))
+                .thenReturn(List.of(데이터베이스_퀴즈1, 데이터베이스_퀴즈2));
+        when(quizRepository.findByQuizCategoryId(네트워크_카테고리_id))
+                .thenReturn(List.of(네트워크_퀴즈1, 네트워크_퀴즈2));
+        when(quizRepository.findByQuizCategoryId(운영체제_카테고리_id))
+                .thenReturn(List.of(운영체제_퀴즈1, 운영체제_퀴즈2));
+
+        //when
+        List<Quiz> selectedQuizzes = randomQuizSelector.select(List.of(1L, 2L, 3L), (objects, count) -> objects, 3);
+
+        //then
+        assertThat(selectedQuizzes.size()).isEqualTo(3);
     }
 }
