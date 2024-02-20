@@ -100,9 +100,9 @@ public class QuizUserService {
 
     public List<RandomQuizzesResponse> getRandomQuizzes(RandomQuizzesRequest request) {
         return randomQuizSelector.select(request.getQuizCategoryIds(), (quizzes, count) -> {
-            if (quizzes.isEmpty()) {
-                return Collections.emptyList();
-            }
+                    if (quizzes.isEmpty()) {
+                        return Collections.emptyList();
+                    }
                     return new Random().ints(0, quizzes.size())
                             .distinct()
                             .limit(Math.min(count, quizzes.size()))

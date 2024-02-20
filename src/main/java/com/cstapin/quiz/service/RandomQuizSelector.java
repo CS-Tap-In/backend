@@ -18,7 +18,7 @@ public class RandomQuizSelector {
 
     public List<Quiz> select(List<Long> quizCategoryIds, RandomSelector<Quiz> randomSelector, int size) {
 
-        int countOfEachQuizCategory = Math.round((float) size / quizCategoryIds.size());
+        int countOfEachQuizCategory = (int) Math.ceil((double) size / quizCategoryIds.size());
 
         List<Quiz> selectedQuizzes = quizCategoryIds.stream()
                 .map(quizRepository::findByQuizCategoryId)
@@ -26,9 +26,9 @@ public class RandomQuizSelector {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        removeExcessQuizzes(selectedQuizzes, size);
-
         Collections.shuffle(selectedQuizzes);
+
+        removeExcessQuizzes(selectedQuizzes, size);
 
         return selectedQuizzes;
     }
