@@ -1,5 +1,6 @@
 package com.cstapin.quiz.persistence;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,7 @@ public class QuizParticipantsRepositoryCustomImpl implements QuizParticipantsRep
         QuizParticipantsEntity entity = queryFactory.selectFrom(quizParticipantsEntity)
                 .where(
                         quizParticipantsEntity.phoneNumber.eq(phoneNumber),
-                        quizParticipantsEntity.createdAt.month().eq(yearMonth.getMonthValue()),
-                        quizParticipantsEntity.createdAt.year().eq(yearMonth.getYear())
+                        sameYearMonth(yearMonth)
                 )
                 .fetchFirst();
 
@@ -34,10 +34,7 @@ public class QuizParticipantsRepositoryCustomImpl implements QuizParticipantsRep
     @Override
     public Page<QuizParticipantsEntity> findByYearMonth(YearMonth yearMonth, Pageable pageable) {
         List<QuizParticipantsEntity> content = queryFactory.selectFrom(quizParticipantsEntity)
-                .where(
-                        quizParticipantsEntity.createdAt.month().eq(yearMonth.getMonthValue()),
-                        quizParticipantsEntity.createdAt.year().eq(yearMonth.getYear())
-                )
+                .where(sameYearMonth(yearMonth))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(
@@ -48,11 +45,13 @@ public class QuizParticipantsRepositoryCustomImpl implements QuizParticipantsRep
 
         JPAQuery<Long> countQuery = queryFactory.select(quizParticipantsEntity.count())
                 .from(quizParticipantsEntity)
-                .where(
-                        quizParticipantsEntity.createdAt.month().eq(yearMonth.getMonthValue()),
-                        quizParticipantsEntity.createdAt.year().eq(yearMonth.getYear())
-                );
+                .where(sameYearMonth(yearMonth));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression sameYearMonth(YearMonth yearMonth) {
+        return quizParticipantsEntity.createdAt.month().eq(yearMonth.getMonthValue())
+                .and(quizParticipantsEntity.createdAt.year().eq(yearMonth.getYear()));
     }
 }

@@ -119,11 +119,15 @@ public class QuizUserService {
     public QuizParticipantsResponse saveOrUpdateQuizParticipants(QuizParticipantsRequest request, YearMonth yearMonth) {
         QuizParticipants newQuizParticipants = request.toQuizParticipants();
 
-        return quizParticipantsRepository.findByPhoneNumberAndSameYearMonth(request.getPhoneNumber(), yearMonth)
-                .map(quizParticipants -> quizParticipants.update(newQuizParticipants))
+        QuizParticipants quizParticipants = quizParticipantsRepository
+                .findByPhoneNumberAndSameYearMonth(request.getPhoneNumber(), yearMonth)
+                .map(qp -> qp.update(newQuizParticipants))
                 .map(quizParticipantsRepository::save)
-                .map(QuizParticipantsResponse::from)
-                .orElseGet(() -> QuizParticipantsResponse.from(quizParticipantsRepository.save(newQuizParticipants)));
+                .orElseGet(() -> quizParticipantsRepository.save(newQuizParticipants));
+
+        long rank = quizParticipantsRepository.getRank(quizParticipants.getId(), yearMonth);
+
+        return QuizParticipantsResponse.of(quizParticipants, rank);
     }
 
     public Page<QuizParticipantsResponse> getQuizParticipants(QuizParticipantsListRequest request) {
