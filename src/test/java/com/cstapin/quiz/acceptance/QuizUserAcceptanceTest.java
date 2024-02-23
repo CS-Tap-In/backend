@@ -186,4 +186,41 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         //then
         assertThat(한글이아닌이름.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
+
+    /**
+     * When: 50문제를 푼 유저가 이름, 핸드폰 번호와 함께 맞춘 문제의 개수를 등록한다.
+     * Then: 반환된 순위 값은 1이다.
+     * When: 49문제를 푼 유저가 이름, 핸드폰 번호와 함께 맞춘 문제의 개수를 등록한다.
+     * Then: 반환된 순위 값은 2이다.
+     * When: 50문제를 푼 유저가 이름, 핸드폰 번호와 함께 맞춘 문제의 개수를 등록한다.
+     * Then: 반환된 순위 값은 2이다.
+     * Then: 순위를 조회하면 유저의 등수에 맞게 순서대로 반환된다.
+     */
+    @Test
+    void submitRandomQuizResults() {
+        //when
+        ExtractableResponse<Response> 첫번째_유저 = 랜덤_문제_결과_등록(50, "01012341234", "첫사람");
+
+        //then
+        assertThat(첫번째_유저.jsonPath().getLong("rank")).isEqualTo(1L);
+
+        //when
+        ExtractableResponse<Response> 두번째_유저 = 랜덤_문제_결과_등록(49, "01012344321", "두사람");
+
+        //then
+        assertThat(두번째_유저.jsonPath().getLong("rank")).isEqualTo(2L);
+
+        //when
+        ExtractableResponse<Response> 세번째_유저 = 랜덤_문제_결과_등록(50, "01012345678", "세사람");
+
+        //then
+        assertThat(세번째_유저.jsonPath().getLong("rank")).isEqualTo(2L);
+
+        //then
+        ExtractableResponse<Response> 순위_목록 = 랜덤_문제_유저_순위_목록_조회(YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
+
+        assertThat(순위_목록.jsonPath().getString("content[0].username")).isEqualTo("첫*람");
+        assertThat(순위_목록.jsonPath().getString("content[1].username")).isEqualTo("세*람");
+        assertThat(순위_목록.jsonPath().getString("content[2].username")).isEqualTo("두*람");
+    }
 }
