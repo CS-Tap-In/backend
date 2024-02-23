@@ -603,6 +603,8 @@ Response body
 | username | String | 마스킹된 이름 +
 첫글자, 마지막 글자를 제외하고 마스킹 | O
 | correctCount | int | 문제 맞춘 개수 | O
+| rank | long | 현재 순위 +
+찾지 못한 경우 0 반환| O
 | updatedAt | String | 등록일 +
 패턴: "yyyy-MM-dd'T'HH:mm:ss" | O
 |===
