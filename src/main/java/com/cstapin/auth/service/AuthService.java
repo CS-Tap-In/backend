@@ -135,6 +135,7 @@ public class AuthService implements UserDetailsService {
         return new WebTokenResponse(authentication.getWebToken());
     }
 
+    @Transactional
     public void validateWebTokenAuthentication(String encryptedWebToken) {
         try {
             Cipher cipher = Cipher.getInstance(webTokenAlgorithm);
@@ -149,9 +150,10 @@ public class AuthService implements UserDetailsService {
             // 평문으로 변환하여 출력
             String webToken = new String(decryptedBytes);
 
-            if (authenticationRepository.findByWebToken(webToken).isEmpty()) {
-                throw new AccessDeniedException("유효하지 않은 토큰입니다.");
-            }
+            Authentication authentication = authenticationRepository.findByWebToken(webToken)
+                    .orElseThrow(() -> new AccessDeniedException("유효하지 않은 토큰입니다."));
+
+            authenticationRepository.delete(authentication);
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
             throw new AccessDeniedException("잘못된 접근입니다.");
