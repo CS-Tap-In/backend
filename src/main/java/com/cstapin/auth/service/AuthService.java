@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -38,6 +39,7 @@ public class AuthService implements UserDetailsService {
     private final TokenRepository tokenRepository;
     private final JwtReissueValidator jwtReissueValidator;
     private final MemberRepository memberRepository;
+    private final AuthenticationRepository authenticationRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -110,4 +112,10 @@ public class AuthService implements UserDetailsService {
         return new TokenResponse(token);
     }
 
+    @Transactional
+    public WebTokenResponse issueWebToken() {
+        Authentication authentication = authenticationRepository.save(new Authentication(UUID.randomUUID().toString()));
+
+        return new WebTokenResponse(authentication.getWebToken());
+    }
 }
