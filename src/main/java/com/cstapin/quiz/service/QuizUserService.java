@@ -1,5 +1,6 @@
 package com.cstapin.quiz.service;
 
+import com.cstapin.auth.service.AuthService;
 import com.cstapin.member.domain.Member;
 import com.cstapin.member.service.MemberRepository;
 import com.cstapin.quiz.domain.*;
@@ -36,6 +37,7 @@ public class QuizUserService {
     private final MemberRepository memberRepository;
     private final RandomQuizSelector randomQuizSelector;
     private final QuizParticipantsRepository quizParticipantsRepository;
+    private final AuthService authService;
 
     @Transactional
     public QuizResponse createQuiz(QuizRequest request, String username) {
@@ -117,6 +119,8 @@ public class QuizUserService {
 
     @Transactional
     public QuizParticipantsResponse saveOrUpdateQuizParticipants(QuizParticipantsRequest request, YearMonth yearMonth) {
+        authService.validateWebTokenAuthentication(request.getEncryptedWebToken());
+
         QuizParticipants newQuizParticipants = request.toQuizParticipants();
 
         QuizParticipants quizParticipants = quizParticipantsRepository

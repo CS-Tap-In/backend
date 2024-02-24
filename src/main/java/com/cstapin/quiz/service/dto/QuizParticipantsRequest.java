@@ -22,6 +22,9 @@ public class QuizParticipantsRequest {
     @NotNull
     private int correctCount;
 
+    @NotBlank
+    private String encryptedWebToken;
+
     public QuizParticipants toQuizParticipants() {
         return QuizParticipants.builder()
                 .phoneNumber(phoneNumber)
