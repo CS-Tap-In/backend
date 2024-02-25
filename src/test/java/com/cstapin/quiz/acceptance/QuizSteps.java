@@ -275,15 +275,16 @@ public class QuizSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 랜덤_문제_결과_등록(int correctCount, String phoneNumber, String username) {
-        return 랜덤_문제_결과_등록(RestAssured.given().log().all(), correctCount, phoneNumber, username);
+    public static ExtractableResponse<Response> 랜덤_문제_결과_등록(String webToken, int correctCount,
+                                                            String phoneNumber, String username) {
+        return 랜덤_문제_결과_등록(RestAssured.given().log().all(), webToken, correctCount, phoneNumber, username);
     }
 
-    public static ExtractableResponse<Response> 랜덤_문제_결과_등록(RequestSpecification requestSpecification,
+    public static ExtractableResponse<Response> 랜덤_문제_결과_등록(RequestSpecification requestSpecification, String webToken,
                                                             int correctCount, String phoneNumber, String username) {
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(Map.of("correctCount", correctCount, "phoneNumber", phoneNumber, "username", username))
+                .body(Map.of("encryptedWebToken", webToken, "correctCount", correctCount, "phoneNumber", phoneNumber, "username", username))
                 .when().post(PATH_PREFIX_WEB_USER + "/random/results")
                 .then().log().all().extract();
     }

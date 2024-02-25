@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "quiz_participants")
@@ -41,5 +42,9 @@ public class QuizParticipantsEntity extends AbstractEntity {
         this.username = username;
         this.phoneNumber = phoneNumber;
         this.correctCount = correctCount;
+    }
+
+    public boolean matchId(Long quizParticipantsId) {
+        return Objects.equals(this.id, quizParticipantsId);
     }
 }

@@ -295,7 +295,7 @@ public class QuizDocumentation extends Documentation {
 
         //then
         랜덤_문제_결과_등록(getRequestSpecification("web-user-submit-random-quiz-result"),
-                49, "01012345678", "유기훈");
+                "Dafdsfa12adf=",49, "01012345678", "유기훈");
     }
 
     @Test

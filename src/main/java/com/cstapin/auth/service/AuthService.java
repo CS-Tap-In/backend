@@ -14,6 +14,7 @@ import com.cstapin.member.service.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +22,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -30,6 +40,13 @@ public class AuthService implements UserDetailsService {
 
     @Value("${props.github.username.prefix}")
     private String githubUsernamePrefix;
+
+    @Value("${props.web-token.alg}")
+    private String webTokenAlgorithm;
+
+    @Value("${props.web-token.secret-key}")
+    private String webTokenSecretKey;
+
     private final GithubClient githubClient;
     private final JoinValidator joinValidator;
     private final PasswordEncoder passwordEncoder;
@@ -38,6 +55,7 @@ public class AuthService implements UserDetailsService {
     private final TokenRepository tokenRepository;
     private final JwtReissueValidator jwtReissueValidator;
     private final MemberRepository memberRepository;
+    private final AuthenticationRepository authenticationRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -110,4 +128,37 @@ public class AuthService implements UserDetailsService {
         return new TokenResponse(token);
     }
 
+    @Transactional
+    public WebTokenResponse issueWebToken() {
+        Authentication authentication = authenticationRepository.save(new Authentication(UUID.randomUUID().toString()));
+
+        return new WebTokenResponse(authentication.getWebToken());
+    }
+
+    @Transactional
+    public void validateWebTokenAuthentication(String encryptedWebToken) {
+        try {
+            Cipher cipher = Cipher.getInstance(webTokenAlgorithm);
+
+            SecretKeySpec secretKey = new SecretKeySpec(webTokenSecretKey.getBytes(), webTokenAlgorithm);
+
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+            // 암호문을 복호화
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedWebToken));
+
+            // 평문으로 변환하여 출력
+            String webToken = new String(decryptedBytes);
+
+            Authentication authentication = authenticationRepository.findByWebToken(webToken)
+                    .orElseThrow(() -> new AccessDeniedException("유효하지 않은 토큰입니다."));
+
+            authenticationRepository.delete(authentication);
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
+            throw new AccessDeniedException("잘못된 접근입니다.");
+        } catch (IllegalBlockSizeException | BadPaddingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

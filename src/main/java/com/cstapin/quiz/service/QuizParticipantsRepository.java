@@ -14,4 +14,6 @@ public interface QuizParticipantsRepository {
     QuizParticipants save(QuizParticipants quizParticipants);
 
     Page<QuizParticipants> getQuizParticipants(QuizParticipantsListRequest request);
+
+    long getRank(Long quizParticipantsId, YearMonth yearMonth);
 }
