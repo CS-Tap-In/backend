@@ -4,8 +4,8 @@ import com.cstapin.auth.acceptance.AuthSteps;
 import com.cstapin.auth.service.AuthService;
 import com.cstapin.auth.service.dto.LoginResponse;
 import com.cstapin.auth.service.dto.TokenResponse;
+import com.cstapin.auth.service.dto.WebTokenResponse;
 import com.cstapin.member.domain.MemberRole;
-import com.cstapin.member.persistence.MemberEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -68,5 +68,17 @@ public class AuthDocumentation extends Documentation {
 
         //then
         AuthSteps.토큰_재발급_요청(getRequestSpecification("auth-reissue-token"), "fadsfadsfasd");
+    }
+
+    @Test
+    void issueWebToken(){
+        //given
+        WebTokenResponse response = new WebTokenResponse("asdfasd-123fafdsa-jhltyrutyj-hgfdb");
+
+        //when
+        when(authService.issueWebToken()).thenReturn(response);
+
+        //then
+        AuthSteps.웹토큰_발행(getRequestSpecification("auth-issue-web-token"));
     }
 }
