@@ -26,9 +26,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.UUID;
@@ -44,8 +47,8 @@ public class AuthService implements UserDetailsService {
     @Value("${props.web-token.alg}")
     private String webTokenAlgorithm;
 
-    @Value("${props.web-token.secret-key}")
-    private String webTokenSecretKey;
+    @Value("${props.web-token.private-key}")
+    private String webTokenPrivateKey;
 
     private final GithubClient githubClient;
     private final JoinValidator joinValidator;
@@ -138,11 +141,13 @@ public class AuthService implements UserDetailsService {
     @Transactional
     public void validateWebTokenAuthentication(String encryptedWebToken) {
         try {
+            KeyFactory keyFactory = KeyFactory.getInstance(webTokenAlgorithm);
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(webTokenPrivateKey));
+            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+
             Cipher cipher = Cipher.getInstance(webTokenAlgorithm);
 
-            SecretKeySpec secretKey = new SecretKeySpec(webTokenSecretKey.getBytes(), webTokenAlgorithm);
-
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
 
             // 암호문을 복호화
             byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedWebToken));
@@ -157,7 +162,7 @@ public class AuthService implements UserDetailsService {
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
             throw new AccessDeniedException("잘못된 접근입니다.");
-        } catch (IllegalBlockSizeException | BadPaddingException e) {
+        } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }

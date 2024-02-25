@@ -17,9 +17,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
@@ -36,8 +39,8 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
     @Value("${props.web-token.alg}")
     private String webTokenAlgorithm;
 
-    @Value("${props.web-token.secret-key}")
-    private String webTokenSecretKey;
+    @Value("${props.web-token.public-key}")
+    private String webTokenPublicKey;
 
     private String accessToken;
     private String adminAccessToken;
@@ -279,9 +282,11 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         try {
             Cipher cipher = Cipher.getInstance(webTokenAlgorithm);
 
-            SecretKeySpec secretKey = new SecretKeySpec(webTokenSecretKey.getBytes(), webTokenAlgorithm);
+            KeyFactory keyFactory = KeyFactory.getInstance(webTokenAlgorithm);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(webTokenPublicKey));
+            PublicKey publicKey = keyFactory.generatePublic(keySpec);
 
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
             // 평문 암호화
             byte[] encryptedBytes = cipher.doFinal(webToken.getBytes());
@@ -290,9 +295,8 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
             return Base64.getEncoder().encodeToString(encryptedBytes);
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
-            e.printStackTrace();
             throw new AccessDeniedException("잘못된 접근입니다.");
-        } catch (IllegalBlockSizeException | BadPaddingException e) {
+        } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
 

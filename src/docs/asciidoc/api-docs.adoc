@@ -607,7 +607,7 @@ Request body
 2자리 이상 10자리 이하 순수 한글만 가능 | O
 |===
 
-NOTE: 내부정으로 정해진 암호화 알고리즘과 시크릿 키를 사용하여 암호화 합니다. +
+NOTE: 비대칭키 인증 방식을 사용합니다. +
 암호화된 문자열은 BASE64로 인코딩 하여야 합니다.
 
 operation::web-user-submit-random-quiz-result[snippets='http-response']
