@@ -111,6 +111,17 @@ operation::user-withdrawal[snippets='http-request']
 
 operation::user-withdrawal[snippets='http-response']
 
+=== [유저-WEB] 웹 토큰 발행
+
+operation::auth-issue-web-token[snippets='http-request']
+
+operation::auth-issue-web-token[snippets='http-response']
+Response body
+|===
+| key | type | description | required
+| webToken | String | 두드려CS 웹 버전에서 사용하는 토큰 | O
+|===
+
 [[quiz]]
 == 퀴즈
 
@@ -585,14 +596,19 @@ Response body
 === [유저-WEB] 랜덤 문제 결과 등록
 
 operation::web-user-submit-random-quiz-result[snippets='http-request']
+Request body
 |===
 | key | type | description | required
+| encryptedWebToken | String | 암호화된 웹 토큰 | O
 | phoneNumber | String | 전화번호 +
 11자리 순수 숫자만 가능| O
 | correctCount | int | 맞춘 문제 개수 | O
 | username | String | 이름 +
 2자리 이상 10자리 이하 순수 한글만 가능 | O
 |===
+
+NOTE: 내부정으로 정해진 암호화 알고리즘과 시크릿 키를 사용하여 암호화 합니다. +
+암호화된 문자열은 BASE64로 인코딩 하여야 합니다.
 
 operation::web-user-submit-random-quiz-result[snippets='http-response']
 Response body
