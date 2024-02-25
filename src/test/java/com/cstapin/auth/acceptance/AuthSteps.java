@@ -12,6 +12,7 @@ import java.util.Map;
 public class AuthSteps {
 
     private static final String PATH_PREFIX = "/api/v1/auth";
+    private static final String PATH_PREFIX_WEB = "/api/v1/web/auth";
 
     public static ExtractableResponse<Response> 관리자_회원가입_요청(String username, String password, String nickname, String secretKey) {
         return 관리자_회원가입_요청(RestAssured.given().log().all(), username, password, nickname, secretKey);
@@ -84,6 +85,17 @@ public class AuthSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(Map.of("refreshToken", refreshToken))
                 .when().post(PATH_PREFIX + "/reissue")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 웹토큰_발행() {
+        return 웹토큰_발행(RestAssured.given().log().all());
+    }
+
+    public static ExtractableResponse<Response> 웹토큰_발행(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post(PATH_PREFIX_WEB + "/token")
                 .then().log().all().extract();
     }
 

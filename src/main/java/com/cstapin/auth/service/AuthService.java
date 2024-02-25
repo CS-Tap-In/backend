@@ -44,7 +44,7 @@ public class AuthService implements UserDetailsService {
     @Value("${props.web-token.alg}")
     private String webTokenAlgorithm;
 
-    @Value("${props.web-token.secret-key")
+    @Value("${props.web-token.secret-key}")
     private String webTokenSecretKey;
 
     private final GithubClient githubClient;

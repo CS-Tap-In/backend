@@ -9,17 +9,35 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+import static com.cstapin.auth.acceptance.AuthSteps.*;
 import static com.cstapin.quiz.acceptance.QuizSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuizUserAcceptanceTest extends AcceptanceTest {
+
+
+    @Value("${props.web-token.alg}")
+    private String webTokenAlgorithm;
+
+    @Value("${props.web-token.secret-key}")
+    private String webTokenSecretKey;
 
     private String accessToken;
     private String adminAccessToken;
@@ -153,7 +171,9 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         int correctCount = 50;
 
         //when
-        랜덤_문제_결과_등록(correctCount, "01012341234", "유기훈");
+        String webToken = 웹토큰_발행().jsonPath().getString("webToken");
+
+        랜덤_문제_결과_등록(웹토큰_암호화(webToken), correctCount, "01012341234", "유기훈");
 
         //then
         assertThat(랜덤_문제_유저_순위_목록_조회(YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM")))
@@ -173,15 +193,19 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
     @Test
     void validateInputSubmitRandomQuizResult() {
         //when
+        String 웹토큰1 = 웹토큰_발행().jsonPath().getString("webToken");
+
         ExtractableResponse<Response> 순수숫자가아닌핸드폰번호 =
-                랜덤_문제_결과_등록(50, "010-1234-1234", "유기훈");
+                랜덤_문제_결과_등록(웹토큰_암호화(웹토큰1), 50, "010-1234-1234", "유기훈");
 
         //then
         assertThat(순수숫자가아닌핸드폰번호.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
         //when
+        String 웹토큰2 = 웹토큰_발행().jsonPath().getString("webToken");
+
         ExtractableResponse<Response> 한글이아닌이름 =
-                랜덤_문제_결과_등록(50, "01012341234", "youkihoon");
+                랜덤_문제_결과_등록(웹토큰_암호화(웹토큰2), 50, "01012341234", "youkihoon");
 
         //then
         assertThat(한글이아닌이름.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -199,19 +223,25 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
     @Test
     void submitRandomQuizResults() {
         //when
-        ExtractableResponse<Response> 첫번째_유저 = 랜덤_문제_결과_등록(50, "01012341234", "첫사람");
+        String 웹토큰1 = 웹토큰_발행().jsonPath().getString("webToken");
+
+        ExtractableResponse<Response> 첫번째_유저 = 랜덤_문제_결과_등록(웹토큰_암호화(웹토큰1), 50, "01012341234", "첫사람");
 
         //then
         assertThat(첫번째_유저.jsonPath().getLong("rank")).isEqualTo(1L);
 
         //when
-        ExtractableResponse<Response> 두번째_유저 = 랜덤_문제_결과_등록(49, "01012344321", "두사람");
+        String 웹토큰2 = 웹토큰_발행().jsonPath().getString("webToken");
+
+        ExtractableResponse<Response> 두번째_유저 = 랜덤_문제_결과_등록(웹토큰_암호화(웹토큰2), 49, "01012344321", "두사람");
 
         //then
         assertThat(두번째_유저.jsonPath().getLong("rank")).isEqualTo(2L);
 
         //when
-        ExtractableResponse<Response> 세번째_유저 = 랜덤_문제_결과_등록(50, "01012345678", "세사람");
+        String 웹토큰3 = 웹토큰_발행().jsonPath().getString("webToken");
+
+        ExtractableResponse<Response> 세번째_유저 = 랜덤_문제_결과_등록(웹토큰_암호화(웹토큰3), 50, "01012345678", "세사람");
 
         //then
         assertThat(세번째_유저.jsonPath().getLong("rank")).isEqualTo(2L);
@@ -223,4 +253,28 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         assertThat(순위_목록.jsonPath().getString("content[1].username")).isEqualTo("세*람");
         assertThat(순위_목록.jsonPath().getString("content[2].username")).isEqualTo("두*람");
     }
+
+    public String 웹토큰_암호화(String webToken) {
+        try {
+            Cipher cipher = Cipher.getInstance(webTokenAlgorithm);
+
+            SecretKeySpec secretKey = new SecretKeySpec(webTokenSecretKey.getBytes(), webTokenAlgorithm);
+
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+            // 평문 암호화
+            byte[] encryptedBytes = cipher.doFinal(webToken.getBytes());
+
+            // Base64로 인코딩하여 암호화된 데이터 출력
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
+            e.printStackTrace();
+            throw new AccessDeniedException("잘못된 접근입니다.");
+        } catch (IllegalBlockSizeException | BadPaddingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
