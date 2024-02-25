@@ -26,7 +26,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-import static com.cstapin.auth.acceptance.AuthSteps.*;
+import static com.cstapin.auth.acceptance.AuthSteps.웹토큰_발행;
 import static com.cstapin.quiz.acceptance.QuizSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -253,6 +253,27 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
         assertThat(순위_목록.jsonPath().getString("content[1].username")).isEqualTo("세*람");
         assertThat(순위_목록.jsonPath().getString("content[2].username")).isEqualTo("두*람");
     }
+
+    /**
+     * Given: 웹 토큰을 발급한다.
+     * When: 동일한 웹 웹토큰으로 결과 등록을 두 번 하면
+     * Then: 두번째 결과는 등록되지 않는다.
+     */
+    @Test
+    void 웹토큰_재사용() {
+        //given
+        String 웹토큰 = 웹토큰_발행().jsonPath().getString("webToken");
+
+        //when
+        랜덤_문제_결과_등록(웹토큰_암호화(웹토큰), 25, "01012341234", "유기훈");
+        랜덤_문제_결과_등록(웹토큰_암호화(웹토큰), 30, "01012341234", "유기훈");
+
+        //then
+        ExtractableResponse<Response> 순위_목록 = 랜덤_문제_유저_순위_목록_조회(YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
+
+        assertThat(순위_목록.jsonPath().getInt("content[0].correctCount")).isEqualTo(25);
+    }
+
 
     public String 웹토큰_암호화(String webToken) {
         try {
