@@ -39,9 +39,6 @@ public class QuizUserAcceptanceTest extends AcceptanceTest {
     @Value("${props.web-token.alg}")
     private String webTokenAlgorithm;
 
-    @Value("${props.web-token.secret-key}")
-    private String webTokenSecretKey;
-
     @Value("${props.web-token.public-key}")
     private String webTokenPublicKey;
 

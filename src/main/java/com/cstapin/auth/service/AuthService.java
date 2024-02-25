@@ -47,8 +47,8 @@ public class AuthService implements UserDetailsService {
     @Value("${props.web-token.alg}")
     private String webTokenAlgorithm;
 
-    @Value("${props.web-token.secret-key}")
-    private String webTokenSecretKey;
+    @Value("${props.web-token.private-key}")
+    private String webTokenPrivateKey;
 
     private final GithubClient githubClient;
     private final JoinValidator joinValidator;
@@ -142,7 +142,7 @@ public class AuthService implements UserDetailsService {
     public void validateWebTokenAuthentication(String encryptedWebToken) {
         try {
             KeyFactory keyFactory = KeyFactory.getInstance(webTokenAlgorithm);
-            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(webTokenSecretKey));
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(webTokenPrivateKey));
             PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
 
             Cipher cipher = Cipher.getInstance(webTokenAlgorithm);
@@ -162,9 +162,7 @@ public class AuthService implements UserDetailsService {
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
             throw new AccessDeniedException("잘못된 접근입니다.");
-        } catch (IllegalBlockSizeException | BadPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeySpecException e) {
+        } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }
